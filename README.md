@@ -12,3 +12,12 @@ thyroid cancer patient;	healthy conrtrol;	thyroid nodules patient
 ### 进展
 已经完成SRP388727该项目的phyloseq生成  
 
+## NCBI_SRP151288
+[-]文章来源   
+Alterations in the gut microbiota and metabolite profiles of thyroid carcinoma patients
+[-]数据来源  
+https://trace.ncbi.nlm.nih.gov/Traces/sra?study=SRP151288
+[-]分组  
+Control;TC  
+
+
