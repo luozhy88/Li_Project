@@ -29,8 +29,9 @@ https://trace.ncbi.nlm.nih.gov/Traces/sra?study=SRP151288
 [-]分组  
 Control;TC  
 
-/data/zhiyu/software/nfcore/V2.7.0/nextflow run nf-core/ampliseq -r 2.7.0 -profile docker    --input_folder  /data/zhiyu/software/nfcore/V2.7.0/rawdata   --FW_primer ACTCCTACGGGAGGCAGCA   --RV_primer GGACTACHVGGGTWTCTAAT  --email 479321347@qq.com --picrust   -- --kraken2_ref_tax_custom --kraken2_assign_taxlevels "D,P,C,O,F,G,S"  --extension "/*_R{1,2}_001.fastq.gz" --outdir results
+/data/zhiyu/software/nfcore/V2.7.0/nextflow run nf-core/ampliseq -r 2.7.0 -profile docker    --input_folder  /data/zhiyu/software/nfcore/V2.7.0/rawdata   --FW_primer ACTCCTACGGGAGGCAGCA   --RV_primer GGACTACHVGGGTWTCTAAT  --email 479321347@qq.com --picrust   --kraken2_ref_tax_custom --kraken2_assign_taxlevels "D,P,C,O,F,G,S"  --extension "/*_R{1,2}_001.fastq.gz" --outdir results
 
+/data/zhiyu/software/nfcore/V2.7.0/nextflow run nf-core/ampliseq -r 2.7.0 -profile docker    --input_folder  /data/zhiyu/software/nfcore/V2.7.0/rawdata   --FW_primer ACTCCTACGGGAGGCAGCA   --RV_primer GGACTACHVGGGTWTCTAAT  --email 479321347@qq.com --picrust   --kraken2_ref_tax_custom /data/changrong/save_220T_user/changrong/databases_nfcore-taxprofilers_nfcore-mag/Kraken2_database/k2_standard_20230605  --kraken2_assign_taxlevels "D,P,C,O,F,G,S"  --extension "/*_R{1,2}_001.fastq.gz" --outdir results
 
 
 
