@@ -8,6 +8,8 @@ Saliva microbiome changes in thyroid cancer and thyroid nodules patients；
 https://trace.ncbi.nlm.nih.gov/Traces/sra?study=SRP388727  
 [-]分组  
 thyroid cancer patient;	healthy conrtrol;	thyroid nodules patient  
+[-]bash
+/data/zhiyu/software/nfcore/V2.7.0/nextflow run nf-core/ampliseq -r 2.7.0 -profile docker    --input_folder  /data/zhiyu/rawdata/16S/NCBI_SRP388727   --FW_primer ACTCCTACGGGAGGCAGCA   --RV_primer GGACTACHVGGGTWTCTAAT  --email 479321347@qq.com --picrust  --kraken2_ref_taxonomy silva=138  --extension "/*_{1,2}.fastq.gz" --outdir results
 
 ### 进展
 已经完成SRP388727该项目的phyloseq生成  
