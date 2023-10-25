@@ -19,6 +19,8 @@ https://onlinelibrary.wiley.com/doi/10.1002/ijc.32007
 Bacterial genomic DNA was amplified with primers 341F (CCTAYGGGRBGCASCAG) and 806R (GGACTACNNGGGTATCTAAT) specific to the V3-V4 hypervariable regions of the 16S rRNA gene.
 [-]数据来源    
 https://trace.ncbi.nlm.nih.gov/Traces/sra?study=SRP151288  
+[-]bash
+/data/zhiyu/software/nfcore/V2.7.0/nextflow run nf-core/ampliseq -r 2.7.0 -profile docker    --input_folder  /data_bk/zhiyu/Rawdata/16S/NCBI_SRP151288/rawdata   --FW_primer CCTAYGGGRBGCASCAG --RV_primer GGACTACNNGGGTATCTAAT --email 479321347@qq.com --picrust  --kraken2_ref_taxonomy silva=138  --extension "/*_{1,2}.fastq.gz" --outdir results
 
 [-]分组  
 Control;TC  
