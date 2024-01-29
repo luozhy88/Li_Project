@@ -19,8 +19,8 @@ phy <- readRDS("../../Kraken/input/output/Batch2_phy_meta.rds")
 # Meta=meta(phy)
 phy
 
-BATCH="SRP388727"
-pseq = phyloseq::subset_samples(phy,grepl(BATCH,Batch )  &grepl("HC|TC",GROUP ))
+BATCH="SRP388727" #SRP151288 SRP388727
+pseq = phyloseq::subset_samples(phy,grepl(BATCH,Batch )  & grepl("HC|TC",GROUP ) )
 pseq
 Meta=meta(pseq)
 
@@ -99,7 +99,7 @@ for (i in 1:(length(pair) / 2)) {
       norm_para = list(),
       method = c("white.test"),
       p_adjust = c("none"),
-      pvalue_cutoff = 0.05,
+      pvalue_cutoff = 0.1,
       diff_mean_cutoff = NULL,
       ratio_cutoff = NULL,
       conf_level = 0.95,
@@ -108,7 +108,7 @@ for (i in 1:(length(pair) / 2)) {
 
 
     sum_res <- data.frame(sum_res_ttest@marker_table)
-    
+    print(sum_res)
     
     if (length(sum_res) > 0) {
 
@@ -116,7 +116,7 @@ for (i in 1:(length(pair) / 2)) {
 
     rownames(sum_res) <- sum_res$feature
     ## we can take only the significantly differential taxa
-    sig_ttest <- subset(sum_res, padj < 0.05)
+    sig_ttest <- subset(sum_res, pvalue < 0.05)
     # Adding taxonomic labels
     taxa_info <- data.frame(tax_table(pseq.new))
     rownames(taxa_info) <- make.unique(taxa_info[, my_rank])
@@ -151,10 +151,10 @@ for (i in 1:(length(pair) / 2)) {
     openxlsx::write.xlsx(sig_ttest, file = paste0(path, fil.names.new, my_rank, "__sig_ttest_cal.xlsx"))
 
     ## reformat the ../output for barplot
-    sig_ttest$P.adj <-
-      ifelse(sig_ttest$padj <= 0.05,
+    sig_ttest$Pvalue <-
+      ifelse(sig_ttest$pvalue <= 0.05,
         "< 0.05",
-        ifelse(sig_ttest$padj <= 0.1 & sig_ttest$padj > 0.05,
+        ifelse(sig_ttest$pvalue <= 0.1 & sig_ttest$pvalue > 0.05,
           "0.05 - 0.1",
           "0.1 - 0.2 "
         )
@@ -166,7 +166,7 @@ for (i in 1:(length(pair) / 2)) {
       ##
       openxlsx::write.xlsx(sig_ttest, file = paste0(path, fil.names.new, my_rank, "__sig_ttest_cal.xlsx"))
       sig_ttest$taxa <- sig_ttest$Row.names
-      ## one can also plot the results based on log fold change LFC but colored by padj range
+      ## one can also plot the results based on log fold change LFC but colored by pvalue range
       ggpubr::ggbarplot(sig_ttest,
         x = "taxa", y = "ef_diff_mean",
         fill = "enrich_group",
