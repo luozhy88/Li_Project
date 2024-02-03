@@ -15,7 +15,7 @@ phy <- readRDS("../../Kraken/input/output/Batch2_phy_meta.rds")
 # Meta=meta(phy)
 
 BATCH="SRP388727"
-pseq = phyloseq::subset_samples(phy,grepl(BATCH,Batch )  &grepl("HC|TC",GROUP ))
+pseq = phyloseq::subset_samples(phy,grepl(BATCH,Batch )  &grepl("HC|TN",GROUP ))
 Meta=meta(pseq)
 
 

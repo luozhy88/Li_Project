@@ -25,7 +25,7 @@ phy
 
 
 BATCH="SRP388727"
-pseq = phyloseq::subset_samples(phy,grepl(BATCH,Batch )  &grepl("HC|TC",GROUP ))
+pseq = phyloseq::subset_samples(phy,grepl(BATCH,Batch )  &grepl("HC|TN",GROUP ))
 pseq
 Meta=meta(pseq)
 

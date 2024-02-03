@@ -17,9 +17,9 @@ phy <- readRDS("../../Kraken/input/output/Batch2_phy_meta.rds")
 phy
 
 
-BATCH="SRP388727"
+BATCH="SRP151288"
 REF="HC"
-notREF="TN"
+notREF="TC"
 
 pseq = phyloseq::subset_samples(phy,grepl(BATCH,Batch )  &grepl( paste(REF,notREF,sep  = "|")  ,GROUP ))
 pseq
