@@ -1,0 +1,114 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{}
+\date{\vspace{-2.5em}}
+
+\begin{document}
+
+\hypertarget{ux6d41ux7a0bux56fe}{%
+\section{流程图}\label{ux6d41ux7a0bux56fe}}
+
+\hypertarget{ux7ed3ux679cux90e8ux5206}{%
+\section{结果部分}\label{ux7ed3ux679cux90e8ux5206}}
+
+\hypertarget{ux57faux4e8eux5c5eux6c34ux5e73ux7684ux673aux5668ux5b66ux4e60ux7279ux5f81ux9009ux62e9}{%
+\subsection{基于属水平的机器学习特征选择}\label{ux57faux4e8eux5c5eux6c34ux5e73ux7684ux673aux5668ux5b66ux4e60ux7279ux5f81ux9009ux62e9}}
+
+\hypertarget{ux57faux4e8eux591aux79cdux6a21ux578bux7279ux5f81ux7684ux6a21ux578bux8bc4ux4ef7}{%
+\subsubsection{基于多种模型特征的模型评价}\label{ux57faux4e8eux591aux79cdux6a21ux578bux7279ux5f81ux7684ux6a21ux578bux8bc4ux4ef7}}
+
+\hypertarget{ux57faux4e8eux591aux79cdux6a21ux578bux7279ux5f81ux7684ux91cdux8981ux6027ux70edux56fe}{%
+\subsubsection{基于多种模型特征的重要性热图}\label{ux57faux4e8eux591aux79cdux6a21ux578bux7279ux5f81ux7684ux91cdux8981ux6027ux70edux56fe}}
+
+\hypertarget{ux57faux4e8eux591aux79cdux6a21ux578bux5171ux6709ux7279ux5f81ux7684boxplot}{%
+\subsubsection{基于多种模型共有特征的boxplot}\label{ux57faux4e8eux591aux79cdux6a21ux578bux5171ux6709ux7279ux5f81ux7684boxplot}}
+
+\hypertarget{ux57faux4e8eux6700ux4f18ux6a21ux578bux7684rocux66f2ux7ebf}{%
+\subsubsection{基于最优模型的ROC曲线}\label{ux57faux4e8eux6700ux4f18ux6a21ux578bux7684rocux66f2ux7ebf}}
+
+\hypertarget{ux57faux4e8eux6700ux4f18ux6a21ux578bux7684ux70edux56feux91cdux8981ux6027ux6392ux5e8f}{%
+\subsubsection{基于最优模型的热图重要性排序}\label{ux57faux4e8eux6700ux4f18ux6a21ux578bux7684ux70edux56feux91cdux8981ux6027ux6392ux5e8f}}
+
+\hypertarget{ux57faux4e8eux79cdux6c34ux5e73ux7684ux673aux5668ux5b66ux4e60ux7279ux5f81ux9009ux62e9}{%
+\subsection{基于种水平的机器学习特征选择}\label{ux57faux4e8eux79cdux6c34ux5e73ux7684ux673aux5668ux5b66ux4e60ux7279ux5f81ux9009ux62e9}}
+
+\hypertarget{ux57faux4e8eux591aux79cdux6a21ux578bux7279ux5f81ux7684ux6a21ux578bux8bc4ux4ef7-1}{%
+\subsubsection{基于多种模型特征的模型评价}\label{ux57faux4e8eux591aux79cdux6a21ux578bux7279ux5f81ux7684ux6a21ux578bux8bc4ux4ef7-1}}
+
+\hypertarget{ux57faux4e8eux591aux79cdux6a21ux578bux7279ux5f81ux7684ux91cdux8981ux6027ux70edux56fe-1}{%
+\subsubsection{基于多种模型特征的重要性热图}\label{ux57faux4e8eux591aux79cdux6a21ux578bux7279ux5f81ux7684ux91cdux8981ux6027ux70edux56fe-1}}
+
+\hypertarget{ux57faux4e8eux591aux79cdux6a21ux578bux5171ux6709ux7279ux5f81ux7684boxplot-1}{%
+\subsubsection{基于多种模型共有特征的boxplot}\label{ux57faux4e8eux591aux79cdux6a21ux578bux5171ux6709ux7279ux5f81ux7684boxplot-1}}
+
+\hypertarget{ux57faux4e8eux6700ux4f18ux6a21ux578bux7684rocux66f2ux7ebf-1}{%
+\subsubsection{基于最优模型的ROC曲线}\label{ux57faux4e8eux6700ux4f18ux6a21ux578bux7684rocux66f2ux7ebf-1}}
+
+\hypertarget{ux57faux4e8eux6700ux4f18ux6a21ux578bux7684ux70edux56feux91cdux8981ux6027ux6392ux5e8f-1}{%
+\subsubsection{基于最优模型的热图重要性排序}\label{ux57faux4e8eux6700ux4f18ux6a21ux578bux7684ux70edux56feux91cdux8981ux6027ux6392ux5e8f-1}}
+
+\end{document}
