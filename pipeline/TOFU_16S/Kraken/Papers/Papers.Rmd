@@ -4,6 +4,9 @@ output:
   pdf_document: default
   html_document: default
 ---
+```{r include=FALSE}
+library(kableExtra)
+```
 
 
 # 流程图
@@ -14,35 +17,42 @@ output:
 
 ### 基于多种模型特征的模型评价
 
+![](../../Kraken/output/H20/SRP151288_HC_vs_TC.Genus/df_scores_model.png-1.png){width=100% height=100%}
+
+
+
 ### 基于多种模型特征的重要性热图
 
-![](../../Kraken/output/H20/SRP151288_HC_vs_TC.Genus/H20_feature_importance_heatmap_plot.png-1.png){width=50% height=50%}
+![](../../Kraken/output/H20/SRP151288_HC_vs_TC.Genus/H20_feature_importance_heatmap_plot.png-1.png){width=100% height=100%}
 
 ### 基于多种模型共有特征的boxplot
 
 
 ### 基于最优模型的ROC曲线
 
-![](../../Kraken/output/H20/SRP151288_HC_vs_TC.Genus/H20_ROC_test_plot.png-1.png){width=50% height=50%}
+![](../../Kraken/output/H20/SRP151288_HC_vs_TC.Genus/H20_ROC_test_plot.png-1.png){width=100% height=100%}
+
 ### 基于最优模型的热图重要性排序
 
-![](../../Kraken/output/H20/SRP151288_HC_vs_TC.Genus/H20_featur_importance_plot.png-1.png){width=50% height=50%}
+![](../../Kraken/output/H20/SRP151288_HC_vs_TC.Genus/H20_featur_importance_plot.png-1.png){width=100% height=100%}
 
 ## 基于种水平的机器学习特征选择
 
 ### 基于多种模型特征的模型评价
 
+![](../../Kraken/output/H20/SRP151288_HC_vs_TC.Species/df_scores_model.png-1.png){width=100% height=100%}
+
 ### 基于多种模型特征的重要性热图
 
-![](../../Kraken/output/H20/SRP151288_HC_vs_TC.Species/H20_feature_importance_heatmap_plot.png-1.png){width=50% height=50%}
+![](../../Kraken/output/H20/SRP151288_HC_vs_TC.Species/H20_feature_importance_heatmap_plot.png-1.png){width=100% height=100%}
 
 
 ### 基于多种模型共有特征的boxplot
 
 ### 基于最优模型的ROC曲线
 
-![](../../Kraken/output/H20/SRP151288_HC_vs_TC.Species/H20_ROC_test_plot.png-1.png){width=50% height=50%}
+![](../../Kraken/output/H20/SRP151288_HC_vs_TC.Species/H20_ROC_test_plot.png-1.png){width=100% height=100%}
 
 ### 基于最优模型的热图重要性排序
 
-![](../../Kraken/output/H20/SRP151288_HC_vs_TC.Species/H20_featur_importance_plot.png-1.png){width=50% height=50%}
+![](../../Kraken/output/H20/SRP151288_HC_vs_TC.Species/H20_featur_importance_plot.png-1.png){width=100% height=100%}

@@ -1,0 +1,1 @@
+find . -type f -name "*.pdf" -execdir bash -c 'pdftoppm "$1" "${1%.pdf}.png" -png' _ '{}' \;
