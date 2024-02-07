@@ -9,10 +9,10 @@ output:
 ```{r include=FALSE}
 library(kableExtra)
 gen_title <- function(i,c="图片标题") {
-  paste0("图", i, ": ", c) 
+  paste0("Figure", i, ": ", c) 
 }
-gen_title_table <- function(i) {
-  paste0("表", i, ": ", "表标题") 
+gen_title_table <- function(i,c="表标题") {
+  paste0("Table", i, ": ", c) 
 }
 ```
 
@@ -26,7 +26,7 @@ gen_title_table <- function(i) {
 
 # 方法学
 
-本研究首先从NCBI数据库检索并下载了SRP151288号项目的原始fastq序列文件及其相应的元数据(meta信息)。随后，利用TOFU软件包中的Kraken2工具对这些fastq序列进行了分类处理，生成了操作分类单元(OTU)表。此OTU表接着被导入到phyloseq包中，以构建phyloseq对象，便于后续分析。在phyloseq环境下，我们分别在属(Genus)和种(Species)两个分类级别上，提取了微生物群落的关键特征。为了对这些关键特征进行深入分析，我们采用了H2o平台，通过多种机器学习模型，包括广义线性模型(Generalized Linear Model)、分布式随机森林(Distributed Random Forest)、极端随机树(eXtremely Randomized Trees)和深度学习(DeepLearning)，进行了模型训练，旨在筛选出最优模型。此外，我们还识别了在这些模型中共同显著的微生物特征，并对这些一致性特征进行了非参数Kruskal-Wallis检验，结果以箱线图(boxplot)形式展示，以便于进一步的统计学分析和解释。
+本研究首先从NCBI数据库检索并下载了SRP151288号项目的原始fastq序列文件及其相应的元数据(meta信息)。随后，利用TOFU软件包中的Kraken2工具对这些fastq序列进行了分类处理，生成了操作分类单元(OTU)表。此OTU表接着被导入到phyloseq包中，以构建phyloseq对象，便于后续分析。在phyloseq环境下，我们分别在属(Genus)和种(Species)两个分类级别上，提取了微生物群落的关键特征。为了对这些关键特征进行深入分析，我们采用了H2o平台，通过多种机器学习模型，包括广义线性模型(Generalized Linear Model)、分布式随机森林(Distributed Random Forest)、极端随机树(eXtremely Randomized Trees)和深度学习(DeepLearning)，进行了模型训练，旨在筛选出最优模型。此外，我们还识别了在这些模型中共同显著的微生物特征，并对这些一致性特征进行了非参数Wilcoxon检验，结果以箱线图(boxplot)形式展示，以便于进一步的统计学分析和解释。
 
 # 流程图
 
@@ -38,7 +38,7 @@ gen_title_table <- function(i) {
 
 ### 基于多种模型特征的模型评价
 
-![`r gen_title_table(1)`](../../Kraken/output/H20/SRP151288_HC_vs_TC.Genus/df_scores_model.png-1.png){width="100%" height="100%"}
+![`r gen_title_table(1,"AutoML生成的机器学习模型性能指标。模型基于AUC和平均每类错误率进行评估，排名首位的模型AUC约为0.996。")`](../../Kraken/output/H20/SRP151288_HC_vs_TC.Genus/df_scores_model.png-1.png){width="100%" height="100%"}
 
 ### 基于多种模型特征的重要性热图
 
@@ -58,13 +58,13 @@ The Receiver Operating Characteristic (ROC) curve reflects the performance of th
 ### 基于最优模型的热图重要性排序
 
 ![`r gen_title(5,"Heatmap of Feature Importance Based on the Optimal Model
-This heatmap shows the importance ranking of various features in the optimal prediction model. It visually indicates which features have the greatest impact on the predictive performance of the model.")`](../../Kraken/output/H20/SRP151288_HC_vs_TC.Genus/H20_featur_importance_plot.png-1.png){width="100%" height="100%"}
+This heatmap shows the importance ranking of various features in the optimal prediction model. The y-axis shows the names of the variables/features. The x-axis displays the variable importance scores for each variable, with the score values ranging from 0.00 to 1.00. It visually indicates which features have the greatest impact on the predictive performance of the model.")`](../../Kraken/output/H20/SRP151288_HC_vs_TC.Genus/H20_featur_importance_plot.png-1.png){width="100%" height="100%"}
 
 ## 基于种水平的机器学习特征选择
 
 ### 基于多种模型特征的模型评价
 
-![`r gen_title_table(2)`](../../Kraken/output/H20/SRP151288_HC_vs_TC.Species/df_scores_model.png-1.png){width="100%" height="100%"}
+![`r gen_title_table(2,"AutoML生成的机器学习模型性能指标。模型基于AUC和平均每类错误率进行评估，排名首位的模型AUC约为0.996。")`](../../Kraken/output/H20/SRP151288_HC_vs_TC.Species/df_scores_model.png-1.png){width="100%" height="100%"}
 
 ### 基于多种模型特征的重要性热图
 
@@ -84,4 +84,4 @@ The Receiver Operating Characteristic (ROC) curve reflects the performance of th
 ### 基于最优模型的热图重要性排序
 
 ![`r gen_title(9,"Heatmap of Feature Importance Based on the Optimal Model at Species Level
-This heatmap shows the importance ranking of various features in the optimal prediction model at the species level. It visually indicates which features have the greatest impact on the predictive performance of the model at this level")`](../../Kraken/output/H20/SRP151288_HC_vs_TC.Species/H20_featur_importance_plot.png-1.png){width="100%" height="100%"}
+This heatmap shows the importance ranking of various features in the optimal prediction model at the species level. The y-axis shows the names of the variables/features. The x-axis displays the variable importance scores for each variable, with the score values ranging from 0.00 to 1.00. It visually indicates which features have the greatest impact on the predictive performance of the model at this level")`](../../Kraken/output/H20/SRP151288_HC_vs_TC.Species/H20_featur_importance_plot.png-1.png){width="100%" height="100%"}
