@@ -8,6 +8,12 @@ output:
 
 ```{r include=FALSE}
 library(kableExtra)
+gen_title <- function(i,c="图片标题") {
+  paste0("图", i, ": ", c) 
+}
+gen_title_table <- function(i) {
+  paste0("表", i, ": ", "表标题") 
+}
 ```
 
 # 前言
@@ -24,7 +30,7 @@ library(kableExtra)
 
 # 流程图
 
-![](../input/流程图/Litao_流程图.png){width="100%" height="100%"}
+![`r gen_title(1)`](../input/流程图/Litao_流程图.png){width="100%" height="100%"}
 
 # 结果部分
 
@@ -32,40 +38,50 @@ library(kableExtra)
 
 ### 基于多种模型特征的模型评价
 
-![](../../Kraken/output/H20/SRP151288_HC_vs_TC.Genus/df_scores_model.png-1.png){width="100%" height="100%"}
+![`r gen_title_table(1)`](../../Kraken/output/H20/SRP151288_HC_vs_TC.Genus/df_scores_model.png-1.png){width="100%" height="100%"}
 
 ### 基于多种模型特征的重要性热图
 
-![](../../Kraken/output/H20/SRP151288_HC_vs_TC.Genus/H20_feature_importance_heatmap_plot.png-1.png){width="100%" height="100%"}
+![`r gen_title(2,"Heatmap of Feature Importance Based on Multiple Models
+This heatmap displays the importance ranking of various features in different machine learning models for predicting thyroid cancer. The darker the color, the higher the importance of the feature in the model. ")`](../../Kraken/output/H20/SRP151288_HC_vs_TC.Genus/H20_feature_importance_heatmap_plot.png-1.png){width="100%" height="100%"}
 
 ### 基于多种模型共有特征的boxplot
 
-![](../../Kraken/output/H20/SRP151288_HC_vs_TC.Genus/Genus_boxplot.png-1.png){width="100%" height="100%"}
+![`r gen_title(3,"Boxplot of Shared Features Based on Multiple Models
+The boxplot compares the expression differences of important shared features between the healthy control group and the thyroid cancer patient group across multiple models. The plot reveals significant differences in some key features between the two groups, providing a basis for subsequent statistical analysis.")`](../../Kraken/output/H20/SRP151288_HC_vs_TC.Genus/Genus_boxplot.png-1.png){width="100%" height="100%"}
 
 ### 基于最优模型的ROC曲线
 
-![](../../Kraken/output/H20/SRP151288_HC_vs_TC.Genus/H20_ROC_test_plot.png-1.png){width="100%" height="100%"}
+![`r gen_title(4,"ROC Curve Based on the Optimal Model
+The Receiver Operating Characteristic (ROC) curve reflects the performance of the chosen optimal model in the task of predicting thyroid cancer. An Area Under the Curve (AUC) value close to 1 indicates that the model can effectively distinguish between the healthy population and patients.")`](../../Kraken/output/H20/SRP151288_HC_vs_TC.Genus/H20_ROC_test_plot.png-1.png){width="100%" height="100%"}
 
 ### 基于最优模型的热图重要性排序
 
-![](../../Kraken/output/H20/SRP151288_HC_vs_TC.Genus/H20_featur_importance_plot.png-1.png){width="100%" height="100%"}
+![`r gen_title(5,"Heatmap of Feature Importance Based on the Optimal Model
+This heatmap shows the importance ranking of various features in the optimal prediction model. It visually indicates which features have the greatest impact on the predictive performance of the model.")`](../../Kraken/output/H20/SRP151288_HC_vs_TC.Genus/H20_featur_importance_plot.png-1.png){width="100%" height="100%"}
 
 ## 基于种水平的机器学习特征选择
 
 ### 基于多种模型特征的模型评价
 
-![](../../Kraken/output/H20/SRP151288_HC_vs_TC.Species/df_scores_model.png-1.png){width="100%" height="100%"}
+![`r gen_title_table(2)`](../../Kraken/output/H20/SRP151288_HC_vs_TC.Species/df_scores_model.png-1.png){width="100%" height="100%"}
 
 ### 基于多种模型特征的重要性热图
 
-![](../../Kraken/output/H20/SRP151288_HC_vs_TC.Species/H20_feature_importance_heatmap_plot.png-1.png){width="100%" height="100%"}
+![`r gen_title(6,"Heatmap of Feature Selection Importance Based on Species Level
+Figure 6 displays the evaluation of feature importance by different models at the species level. In the heatmap, the darker the color, the higher the importance of the feature in the model. This helps us understand which features are important at the species level")`](../../Kraken/output/H20/SRP151288_HC_vs_TC.Species/H20_feature_importance_heatmap_plot.png-1.png){width="100%" height="100%"}
 
 ### 基于多种模型共有特征的boxplot
 
+![`r gen_title(7,"Boxplot of Shared Features Based on Multiple Models at Species Level
+This boxplot shows the expression differences of important shared features between the healthy control group and the thyroid cancer patient group across multiple models at the species level.")`](../../Kraken/output/H20/SRP151288_HC_vs_TC.Species/Species_boxplot.png-1.png){width="100%" height="100%"}
+
 ### 基于最优模型的ROC曲线
 
-![](../../Kraken/output/H20/SRP151288_HC_vs_TC.Species/H20_ROC_test_plot.png-1.png){width="100%" height="100%"} ![](../../Kraken/output/H20/SRP151288_HC_vs_TC.Species/Species_boxplot.png-1.png){width="100%" height="100%"}
+![`r gen_title(8,"ROC Curve Based on the Optimal Model at Species Level
+The Receiver Operating Characteristic (ROC) curve reflects the performance of the chosen optimal model at the species level in the task of predicting thyroid cancer. An Area Under the Curve (AUC) value close to 1 indicates that the model can effectively distinguish between the healthy population and patients at the species level.")`](../../Kraken/output/H20/SRP151288_HC_vs_TC.Species/H20_ROC_test_plot.png-1.png){width="100%" height="100%"}
 
 ### 基于最优模型的热图重要性排序
 
-![](../../Kraken/output/H20/SRP151288_HC_vs_TC.Species/H20_featur_importance_plot.png-1.png){width="100%" height="100%"}
+![`r gen_title(9,"Heatmap of Feature Importance Based on the Optimal Model at Species Level
+This heatmap shows the importance ranking of various features in the optimal prediction model at the species level. It visually indicates which features have the greatest impact on the predictive performance of the model at this level")`](../../Kraken/output/H20/SRP151288_HC_vs_TC.Species/H20_featur_importance_plot.png-1.png){width="100%" height="100%"}
