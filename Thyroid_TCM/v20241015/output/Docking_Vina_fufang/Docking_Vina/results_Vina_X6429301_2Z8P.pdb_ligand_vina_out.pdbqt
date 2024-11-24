@@ -1,0 +1,44 @@
+MODEL 1
+REMARK VINA RESULT:    12.641      0.000      0.000
+REMARK INTER + INTRA:          17.291
+REMARK INTER:                  17.075
+REMARK INTRA:                   0.216
+REMARK UNBOUND:                 0.216
+REMARK SMILES C=C1CCC=C(C)CC[C@H]2[C@H]1CC2(C)C
+REMARK SMILES IDX 11 1 12 2 13 3 10 4 14 5 15 6 9 7 8 8 6 9 7 10 5 11 2 13
+REMARK SMILES IDX 1 14 3 15 4 16
+REMARK H PARENT
+REMARK Flexibility Score: 70.00
+ROOT
+ATOM      1  C   UNL     1      -0.197   4.581 -10.564  1.00  0.00     0.018 C 
+ATOM      2  C   UNL     1      -0.344   4.253 -12.054  1.00  0.00     0.015 C 
+ATOM      3  C   UNL     1      -1.044   5.601 -12.290  1.00  0.00    -0.031 C 
+ATOM      4  C   UNL     1      -0.725   6.002 -10.829  1.00  0.00     0.002 C 
+ATOM      5  C   UNL     1      -2.538   5.433 -12.635  1.00  0.00     0.011 C 
+ATOM      6  C   UNL     1      -0.322   6.475 -13.331  1.00  0.00     0.011 C 
+ENDROOT
+BRANCH   4   7
+ATOM      7  C   UNL     1      -1.882   6.429  -9.902  1.00  0.00     0.009 C 
+BRANCH   7   8
+ATOM      8  C   UNL     1      -1.598   6.077  -8.426  1.00  0.00     0.030 C 
+BRANCH   8   9
+ATOM      9  C   UNL     1      -0.742   7.132  -7.750  1.00  0.00    -0.077 C 
+ATOM     10  C   UNL     1      -1.391   8.441  -7.375  1.00  0.00     0.039 C 
+ATOM     11  C   UNL     1       0.557   6.950  -7.410  1.00  0.00    -0.028 CG0
+ATOM     12  G   UNL     1       1.421   5.760  -7.766  1.00  0.00     0.000 G0
+ENDBRANCH   8   9
+ENDBRANCH   7   8
+ENDBRANCH   4   7
+BRANCH   1  13
+ATOM     13  C   UNL     1       1.211   4.476  -9.992  1.00  0.00    -0.074 C 
+ATOM     14  C   UNL     1       1.805   3.272  -9.947  1.00  0.00     0.008 C 
+BRANCH  13  15
+ATOM     15  C   UNL     1       1.854   5.639  -9.248  1.00  0.00     0.035 C 
+BRANCH  15  16
+ATOM     16  C   UNL     1       1.428   5.769  -7.771  1.00  0.00     0.032 CG0
+ATOM     17  G   UNL     1       0.552   6.953  -7.423  1.00  0.00     0.000 G0
+ENDBRANCH  15  16
+ENDBRANCH  13  15
+ENDBRANCH   1  13
+TORSDOF 0
+ENDMDL

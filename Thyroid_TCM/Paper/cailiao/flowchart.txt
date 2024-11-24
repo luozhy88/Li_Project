@@ -1,0 +1,15 @@
+
+
+
+利用DiagrammeR/flowchart进行流程图绘图，里面采药涉及三种，浙贝母，夏枯草，中药复方，参考方法学进行绘图（#### 2.1. Metabolite Compound Information Collection
+Metabolite compound information was retrieved from the Traditional Chinese Medicine Systems Pharmacology (TCMSP) database. The corresponding compound identifiers (CIDs) for the metabolites were obtained from PubChem. Using these CIDs, gene information related to the metabolites was collected from Meta_Bat, BindingDB, and GuideToPharmacology databases. Additionally, thyroid nodule-related genes were retrieved from GeneCards. The intersection of genes associated with traditional Chinese medicine (TCM) metabolites and thyroid nodule-related genes was then identified for downstream analysis.
+
+#### 2.2. Functional Enrichment Analysis
+Gene Ontology (GO) and Kyoto Encyclopedia of Genes and Genomes (KEGG) enrichment analyses were performed on the intersecting genes using the `enrichGO` and `enrichKEGG` functions from the "clusterProfiler" package in R. The results of these analyses were visualized to display the enriched biological processes, pathways, and functions associated with the metabolites and diseases (Figures 1 and 2). A p-value threshold of less than 0.05 was used to determine significant enrichment.
+
+#### 2.3. Molecular Docking Preparation
+For molecular docking studies, the CID-derived mySMILES data were converted into Structure Data Format (SDF) files using `scrub.py`. These SDF files served as input ligand files for docking simulations. Protein structures corresponding to the intersecting genes were obtained through the Protein Data Bank (PDB) using the RCSB website (https://search.rcsb.org). AutoDock Vina was then utilized for local docking calculations to predict binding affinities between metabolites and target proteins.
+
+#### 2.4. Visualization of Results
+The results of GO and KEGG enrichment analyses were visualized using bar plots, as shown in Figures 1 and 2. These visualizations highlight key biological processes and pathways involved in metabolite-disease interactions, aiding in understanding the potential mechanisms of action.
+）

@@ -1,0 +1,122 @@
+---
+output:
+  html_document: default
+  pdf_document: default
+  word_document: 
+    number_sections: true
+header-includes:
+  - \usepackage{fontspec}
+  - \setmainfont{Noto Sans CJK SC}  # 或者其他支持中文的字体
+title: "Integrative Analysis of TCM Metabolites in Thyroid Nodule Pathogenesis: Insights from Network Pharmacology and Molecular Docking"
+bibliography: references.bib
+csl: algorithms.csl
+---
+
+```{r include=FALSE}
+library(kableExtra)
+gen_title <- function(i,c="图片标题") {
+  paste0("Figure", i, ": ", c) 
+}
+gen_title_table <- function(i,c="表标题") {
+  paste0("Table", i, ": ", c) 
+}
+```
+
+# Abstract
+
+
+
+# Introduction
+
+
+
+# Methods
+
+Metabolite information for *Fritillaria thunbergii* (ZBM), *Prunella vulgaris* (XKC), and the Xiao Ying Tang formula (XYT) was collected from the Traditional Chinese Medicine Systems Pharmacology (TCMSP) database. The corresponding compound identifiers (CIDs) for these metabolites were retrieved from PubChem. Using these CIDs, gene information related to the metabolites was obtained from the Meta_Bat, BindingDB, and GuideToPharmacology databases. Additionally, thyroid nodule-related genes were sourced from GeneCards. The intersection of genes associated with traditional Chinese medicine (TCM) metabolites and thyroid nodule-related genes was then identified for downstream analysis.
+
+Gene Ontology (GO) and Kyoto Encyclopedia of Genes and Genomes (KEGG) enrichment analyses were conducted on the intersecting genes using the `enrichGO` and `enrichKEGG` functions from the "clusterProfiler" package in R. The results of these analyses were visualized to display the enriched biological processes, pathways, and functions associated with the metabolites and thyroid nodules (Figures 1 and 2). A significance threshold of p < 0.05 was applied to identify significantly enriched terms.
+
+For molecular docking studies, the CID-derived mySMILES data were converted into Structure Data Format (SDF) files using `scrub.py`. These SDF files served as input ligand files for docking simulations. Protein structures corresponding to the intersecting genes were obtained from the Protein Data Bank (PDB) via the RCSB website (https://search.rcsb.org). AutoDock Vina was then employed for local docking calculations to predict binding affinities between metabolites and target proteins.
+
+The results of GO and KEGG enrichment analyses were visualized using bar plots, as shown in Figures 3 and 4. These visualizations highlight key biological processes and pathways involved in metabolite-disease interactions, providing insights into potential mechanisms of action.
+
+
+   
+# Workflow
+
+![`r gen_title(1,"Network pharmacology workflow for investigating the mechanism of traditional Chinese medicine in treating thyroid nodules")`](output/flowchart.png){width="100%" height="100%"}
+
+
+
+# Results
+
+To identify potential biomarkers within the gut microbiome associated with thyroid cancer, we conducted an in-depth analysis of microbial community data at two taxonomic levels: genus and species.  This comprehensive approach allows for a more nuanced understanding of the microbial landscape and its potential implications in thyroid cancer pathogenesis.  In the following sections, we present the results of our machine learning feature selection process at both the genus and species levels, offering valuable insights into the most relevant microbial taxa associated with thyroid cancer.
+
+## Screening of Disease-Related Targets
+
+
+For the three traditional Chinese medicine (TCM) formulas ZBM, XKC, and XYT, Venn diagrams were generated to compare disease-related genes with TCM-related genes. In the case of ZBM (Figure2 A), 12,909 disease-related genes and 29 TCM-related genes were identified, with 78 overlapping genes, accounting for 1% of the total. For XKC (Figure2 B), 12,145 disease-related genes and 252 TCM-related genes were identified, with 842 overlapping genes, representing 6% of the total. Lastly, for XYT (Figure2 C), 11,392 disease-related genes and 536 TCM-related genes were identified, with 1,595 overlapping genes, making up 12% of the total. These overlapping genes may represent potential therapeutic targets associated with the respective TCM formulas.
+
+![`r gen_title(2,"疾病与草药的Venny ")`](../v20241015/output/02_combined_venn_plot.png){width="100%" height="100%"}
+
+
+
+###  功能注释-GO
+
+![`r gen_title(3,"疾病与药物的GO ")`](../v20241015/output/03.2_combined_GO_plot.png){width="100%" height="100%"}
+
+
+为了全面了解ZBM、XKC和XYT三组在功能注释中的差异，基于GO富集分析结果对三组进行了比较，并从生物过程（BP）、分子功能（MF）和细胞成分（CC）三个方面进行描述。
+
+如图所示，XYT组在大多数条目中占比最高，尤其是在与肿瘤、炎症和增殖相关的关键生物过程中。例如，在生物过程（BP）中，XYT在氧化应激反应（response to oxidative stress）、类固醇激素反应（response to steroid hormone）、钙离子稳态（calcium ion homeostasis）、血管生成相关过程（vascular process in circulatory system）等条目中占据主导地位。XKC组次之，表现出与XYT相似的趋势，而ZBM组在大多数条目中的占比最低。
+
+在**分子功能（MF）**方面，XYT组同样在多个条目中占比最高，尤其是在电压门控离子通道活性（voltage-gated ion channel activity）、转录因子结合（transcription factor binding）和氧化还原酶活性（oxidoreductase activity）等条目中。XKC次于XYT，而ZBM的基因富集数量最少。
+在**细胞成分（CC）**中，XYT在多个与细胞膜、突触和离子通道相关的条目中占据主导地位，如电压门控钙通道复合物（voltage-gated calcium channel complex）、突触膜（synaptic membrane）和膜微区（membrane raft）。XKC的表现与XYT相似，而ZBM的基因数量显著较低。
+
+从整体来看，XYT组在大多数条目中占比最高，其次是XKC组，而ZBM组占比最低。这表明XYT在功能注释中的基因富集程度最高，可能对与肿瘤、炎症和增殖相关的生物过程中有更大的影响。同时，XYT与XKC在多个条目中表现出相似的趋势，说明这两者在功能上具有一定的相似性。
+
+
+###  功能注释-KEGG
+
+为了全面了解ZBM、XKC和XYT三组在信号通路中的功能差异，基于KEGG富集分析结果对三组进行了比较分析。
+
+从图中可以观察到，XYT组在大多数信号通路中的富集程度最高，特别是在细胞凋亡（Apoptosis）、信号转导（Signal transduction）和代谢相关通路中表现突出。XKC组整体富集水平次之，而ZBM组在大多数通路中的富集程度相对较低。
+
+在癌症相关通路中，如PD-L1表达和PD-1检查点通路（PD-L1 expression and PD-1 checkpoint pathway in cancer）以及多种特异性癌症通路中，XYT组显示出最高的富集度，XKC组次之，表明这两组在肿瘤相关通路调控方面可能具有更重要的作用。
+
+在免疫系统相关通路（Immune system）和炎症反应相关通路中，XYT和XKC组表现出相似的富集模式，且明显高于ZBM组。这种趋势在自身免疫性疾病（Autoimmune disease）和类风湿性关节炎（Rheumatoid arthritis）等通路中尤为明显。
+
+在细胞生长与死亡（Cell growth and death）以及信号分子与相互作用（Signaling molecules and interaction）等增殖相关通路中，XYT组同样表现出最高的富集度，而XKC组紧随其后，显示出这两组在细胞增殖调控方面可能具有相似的功能特征。
+
+XYT与XKC在多个信号通路中表现出相似的富集趋势，特别是在代谢通路、信号转导和免疫相关通路中，这表明这两组在功能调控方面可能具有一定的相似性。相比之下，ZBM组在大多数通路中的富集程度较低，提示其在相关生物学功能调控中的作用可能相对较弱。
+
+
+![`r gen_title(4,"疾病与药物的KEGG ")`](../v20241015/output/03.2_kegg_enrichment_plot_ALL.png){width="100%" height="100%"}
+
+
+### 分子动力学模拟
+
+从图中可以看出，三组化合物类型分别为**ZBM**、**XKC**和**XYT**，它们在20个化合物条目中的结合能表现有显著差异。整体来看，**XYT**在大多数条目中占比最高，显示其与蛋白的结合自由能最低，结合能力最强；其次是**XKC**，其在多个条目中也有较高的占比；而**ZBM**的占比最低，表明其结合能相对较高，结合能力较弱。
+
+具体来看，在化合物与蛋白的结合中，例如在**X222284_6UNI**、**X222284_9AYG**和**X222284_4P5A**等条目中，XYT的表现最为突出，说明其在这些蛋白靶点上的结合能力最强。相比之下，ZBM在这些条目中的占比最低，表明其结合能较弱。
+
+同时，图中显示出**XYT**与**XKC**的表现趋势基本一致，这表明这两者在与蛋白的结合上可能具有相似的功能机制。它们可能在某些生物过程或疾病相关通路中发挥类似的作用。
+
+总之，通过对比三组化合物类型，可以推测出XYT在功能上的影响力最大，其次是XKC，而ZBM的影响力相对较小。这种差异可能与它们在不同蛋白靶点上的结合能力有关。
+
+
+![`r gen_title(5,"疾病与prescription ")`](../v20241015/output/07.venny_barplot.png){width="100%" height="100%"}
+
+
+
+
+
+
+
+## Discussion
+
+## References
+
+
+
+

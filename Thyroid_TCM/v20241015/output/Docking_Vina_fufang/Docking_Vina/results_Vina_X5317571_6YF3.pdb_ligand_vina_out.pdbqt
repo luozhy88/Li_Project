@@ -1,0 +1,47 @@
+MODEL 1
+REMARK VINA RESULT:     1.773      0.000      0.000
+REMARK INTER + INTRA:           4.219
+REMARK INTER:                   2.499
+REMARK INTRA:                   1.720
+REMARK UNBOUND:                 1.720
+REMARK SMILES CC1=CCC(=C(C)C)C(=O)CC(C)=CCC1
+REMARK SMILES IDX 12 1 14 2 13 3 15 4 16 5 2 6 1 7 3 8 11 10 9 11 10 12 5 13
+REMARK SMILES IDX 6 14 7 15 8 16 4 17
+REMARK H PARENT
+REMARK Flexibility Score: 60.00
+ROOT
+ATOM      1  C   UNL     1     -10.818 -21.968  22.877  1.00  0.00    -0.070 C 
+ATOM      2  C   UNL     1     -10.654 -21.371  21.668  1.00  0.00    -0.027 C 
+ATOM      3  C   UNL     1     -10.772 -21.081  24.097  1.00  0.00     0.039 C 
+ENDROOT
+BRANCH   2   4
+ATOM      4  C   UNL     1     -10.563 -22.071  20.334  1.00  0.00     0.032 C 
+BRANCH   4   5
+ATOM      5  C   UNL     1      -9.560 -23.233  20.325  1.00  0.00     0.034 C 
+BRANCH   5   6
+ATOM      6  C   UNL     1      -8.293 -22.837  21.059  1.00  0.00    -0.077 C 
+ATOM      7  C   UNL     1      -7.583 -21.579  20.631  1.00  0.00     0.039 C 
+ATOM      8  C   UNL     1      -7.808 -23.512  22.129  1.00  0.00    -0.023 CG0
+ATOM      9  G   UNL     1      -8.373 -24.796  22.690  1.00  0.00     0.000 G0
+ENDBRANCH   5   6
+ENDBRANCH   4   5
+ENDBRANCH   2   4
+BRANCH   1  10
+ATOM     10  C   UNL     1     -11.122 -23.451  23.073  1.00  0.00     0.111 C 
+BRANCH  10  11
+ATOM     11  C   UNL     1     -10.392 -24.077  24.235  1.00  0.00     0.163 C 
+ATOM     12  O   UNL     1     -11.034 -24.243  25.308  1.00  0.00    -0.294 OA
+BRANCH  11  13
+ATOM     13  C   UNL     1      -8.972 -24.556  24.138  1.00  0.00    -0.002 C 
+ATOM     14  C   UNL     1      -8.217 -24.737  25.267  1.00  0.00    -0.069 C 
+ATOM     15  C   UNL     1      -6.757 -25.124  25.191  1.00  0.00     0.039 C 
+ATOM     16  C   UNL     1      -8.812 -24.612  26.652  1.00  0.00     0.039 C 
+BRANCH  13  17
+ATOM     17  C   UNL     1      -8.367 -24.781  22.754  1.00  0.00     0.066 CG0
+ATOM     18  G   UNL     1      -7.808 -23.509  22.162  1.00  0.00     0.000 G0
+ENDBRANCH  13  17
+ENDBRANCH  11  13
+ENDBRANCH  10  11
+ENDBRANCH   1  10
+TORSDOF 0
+ENDMDL

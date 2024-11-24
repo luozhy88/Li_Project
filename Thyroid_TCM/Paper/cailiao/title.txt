@@ -1,0 +1,11 @@
+
+
+我要发表高级期刊，通过以下内容，给文章起个英文名字，给多个选择：Metabolite information for *Fritillaria thunbergii* (ZBM), *Prunella vulgaris* (XKC), and the Xiao Ying Tang formula (XYT) was collected from the Traditional Chinese Medicine Systems Pharmacology (TCMSP) database. The corresponding compound identifiers (CIDs) for these metabolites were retrieved from PubChem. Using these CIDs, gene information related to the metabolites was obtained from the Meta_Bat, BindingDB, and GuideToPharmacology databases. Additionally, thyroid nodule-related genes were sourced from GeneCards. The intersection of genes associated with traditional Chinese medicine (TCM) metabolites and thyroid nodule-related genes was then identified for downstream analysis.
+
+Gene Ontology (GO) and Kyoto Encyclopedia of Genes and Genomes (KEGG) enrichment analyses were conducted on the intersecting genes using the `enrichGO` and `enrichKEGG` functions from the "clusterProfiler" package in R. The results of these analyses were visualized to display the enriched biological processes, pathways, and functions associated with the metabolites and thyroid nodules (Figures 1 and 2). A significance threshold of p < 0.05 was applied to identify significantly enriched terms.
+
+For molecular docking studies, the CID-derived mySMILES data were converted into Structure Data Format (SDF) files using `scrub.py`. These SDF files served as input ligand files for docking simulations. Protein structures corresponding to the intersecting genes were obtained from the Protein Data Bank (PDB) via the RCSB website (https://search.rcsb.org). AutoDock Vina was then employed for local docking calculations to predict binding affinities between metabolites and target proteins.
+
+The results of GO and KEGG enrichment analyses were visualized using bar plots, as shown in Figures 3 and 4. These visualizations highlight key biological processes and pathways involved in metabolite-disease interactions, providing insights into potential mechanisms of action.
+
+例如类似的：The Potential Mechanisms of Catechins in Tea for Anti-Hypertension: An Integration of Network Pharmacology, Molecular Docking, and Molecular Dynamics Simulation 

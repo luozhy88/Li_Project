@@ -57,7 +57,9 @@ Meta=meta(pseq.core) %>% dplyr::select("GROUP")
 pseq.core_df= merge(Meta,pseq.core_Tax,by=0) %>% tibble::column_to_rownames(var="Row.names") %>% as.data.frame()
 
 ############################################read ML feature importance###########
-ML_feature_importance = read.csv("../output/H20/SRP151288_HC_vs_TC.Species/H20_feature_importance.csv") %>% head()
+ML_feature_importance = read.csv("../output/H20/SRP151288_HC_vs_TC.Species/H20_feature_importance.csv") #%>% head()
+ML_feature_importance$Sum=rowSums(ML_feature_importance[,-1])
+ML_feature_importance=ML_feature_importance %>% dplyr::arrange(desc(Sum)) %>% head(6)
 ML_feature_importance$variable
 
 df_boxplot_input = pseq.core_df[,c("GROUP",ML_feature_importance$variable)]
@@ -75,7 +77,7 @@ for (i in colnames(df_boxplot_input)[-1] ){
   p <- ggboxplot(df_boxplot_input, x = "GROUP", y = i,
                  color = "GROUP", palette =c("#00AFBB",  "#FC4E07"),
                  add = "jitter")+ 
-    labs(title = i)+
+    labs(title = i, x = "",y = "" )+
     theme(axis.title.y=element_blank(),
           plot.title = element_text(size = 8)
           )

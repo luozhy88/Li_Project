@@ -1,0 +1,36 @@
+MODEL 1
+REMARK VINA RESULT:    -1.506      0.000      0.000
+REMARK INTER + INTRA:          -2.127
+REMARK INTER:                  -2.035
+REMARK INTRA:                  -0.092
+REMARK UNBOUND:                -0.092
+REMARK SMILES CCCCCCCC(=O)[O-]
+REMARK SMILES IDX 5 1 6 2 7 3 8 4 9 5 10 6 4 7 3 8 2 9 1 10
+REMARK H PARENT
+REMARK Flexibility Score: inf
+ROOT
+ATOM      1  C   UNL     1      -3.605  52.660   9.234  1.00  0.00     0.000 C 
+ENDROOT
+BRANCH   1   2
+ATOM      2  C   UNL     1      -4.696  53.421  10.010  1.00  0.00     0.006 C 
+BRANCH   2   3
+ATOM      3  C   UNL     1      -5.804  54.007   9.115  1.00  0.00     0.053 C 
+BRANCH   3   4
+ATOM      4  C   UNL     1      -7.140  54.041   9.794  1.00  0.00     0.041 C 
+ATOM      5  O   UNL     1      -7.658  55.140  10.125  1.00  0.00    -0.550 OA
+ATOM      6  O   UNL     1      -7.799  52.855  10.091  1.00  0.00    -0.550 OA
+ENDBRANCH   3   4
+ENDBRANCH   2   3
+ENDBRANCH   1   2
+BRANCH   1   7
+ATOM      7  C   UNL     1      -2.770  51.730  10.125  1.00  0.00     0.000 C 
+BRANCH   7   8
+ATOM      8  C   UNL     1      -1.268  51.983   9.929  1.00  0.00    -0.000 C 
+BRANCH   8   9
+ATOM      9  C   UNL     1      -0.461  50.681   9.809  1.00  0.00    -0.003 C 
+ATOM     10  C   UNL     1       1.048  50.907   9.915  1.00  0.00     0.004 C 
+ENDBRANCH   8   9
+ENDBRANCH   7   8
+ENDBRANCH   1   7
+TORSDOF 6
+ENDMDL
