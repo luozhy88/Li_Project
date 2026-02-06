@@ -95,7 +95,14 @@ plot_box1
 ggsave(glue::glue(path,"/",tax,"_boxplot.pdf"),plot_box1,width = 10,height = 8)
 
 
-
+# 2. Export as SVG (New Addition)
+# Note: Requires 'svglite' package installed ；font-family: "Microsoft YaHei";' textLength='35.11px' 
+ggsave(
+  filename = glue::glue(path, "/", tax, "_boxplot.svg"), 
+  plot = plot_box1, 
+  width = 10, 
+  height = 8
+)
 
 
 
