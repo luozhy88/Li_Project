@@ -231,7 +231,7 @@ varimp_combined.plot=ggplot(varimp_combined, aes(y = variable, x = model, fill =
 height=length(varimp_combined$variable )%>% unique() /30
 # ggsave(glue::glue("output/varimp_combined.plot.pdf"),varimp_combined.plot,width = 6, height = height)
 ggsave(glue::glue(path,"/H20_feature_importance_heatmap_plot.pdf"),varimp_combined.plot,width = 6, height = height)
-
+ggsave(filename = glue::glue(path,"/H20_feature_importance_heatmap_plot.svg"), plot = varimp_combined.plot, width = 6,  height = height )
 varimp_wide <- varimp_combined %>% dplyr::select(-relative_importance ,-scaled_importance ,-percentage )%>%tidyr::pivot_wider(names_from = model,values_from = Importance) %>% dplyr::select(-DeepLearning) %>% dplyr::filter(DRF>0.00 & GBM>0.00 & GLM>0.00 )
 write.csv(varimp_wide, file = glue::glue(path,"/H20_feature_importance.csv"), row.names = FALSE)
 # 
