@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+{% set active_page = 'acupoint' %}
+{% block title %}穴位查基因 - 针灸穴位-基因关联数据库{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <h1 style="margin-bottom: 8px; font-size: 1.5em;">📍 穴位 → 基因 查询</h1>
+    <p style="color: var(--text-light); margin-bottom: 20px;">
+        选择一个穴位，查询与其在文献中共同出现的所有基因，查看共现频率、Jaccard相似度及支持文献。
+    </p>
+
+    <!-- 搜索区 -->
+    <div class="card" style="padding: 20px;">
+        <form method="get" action="/acupoint-query" style="display: flex; gap: 12px; align-items: flex-end;">
+            <div style="flex: 1; max-width: 400px;">
+                <label class="form-label">选择穴位</label>
+                <select name="acupoint" class="form-select" id="acupoint-select" onchange="this.form.submit()">
+                    <option value="">-- 请选择 --</option>
+                    {% for apt in acupoint_list %}
+                    <option value="{{ apt.name_en }}" {% if acupoint == apt.name_en %}selected{% endif %}>
+                        {{ apt.name_en }} {% if apt.code %}({{ apt.code }}){% endif %} {% if apt.name_cn %}- {{ apt.name_cn }}{% endif %}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">🔍 查询</button>
+            {% if acupoint %}
+            <a href="/acupoint-query" class="btn btn-secondary">重置</a>
+            {% endif %}
+        </form>
+    </div>
+
+    {% if acupoint %}
+    <!-- 结果统计 -->
+    <div class="stat-cards" style="margin-top: 20px;">
+        <div class="stat-card" style="border-top-color: #1a5fb4;">
+            <div class="number">{{ results|length }}</div>
+            <div class="label">关联基因数</div>
+        </div>
+        <div class="stat-card" style="border-top-color: #26a269;">
+            <div class="number">{{ results[0].apt_total if results else 0 }}</div>
+            <div class="label">该穴位总文献数</div>
+        </div>
+        <div class="stat-card" style="border-top-color: #c061cb;">
+            <div class="number">{{ results[0].cooccur if results else 0 }}</div>
+            <div class="label">Top基因共现次数</div>
+        </div>
+    </div>
+
+    <!-- 基因条形图 -->
+    <div class="card">
+        <div class="card-title">🧬 {{ acupoint }} 关联基因排行（Top 30）</div>
+        <div class="card-subtitle">X轴为共现文献数，数值越大表示该基因与 {{ acupoint }} 在文献中共同出现次数越多</div>
+        <div id="gene-bar-chart" class="chart-box"></div>
+    </div>
+
+    <!-- 详细表格 -->
+    <div class="card">
+        <div class="card-title">📋 关联基因详细列表</div>
+        <div class="card-subtitle">
+            共现频率 = 同时提及该穴位和该基因的文献数；
+            Jaccard = 共现文献 / (穴位文献 ∪ 基因文献)；
+            支持文献 = 具体提及该关联的原始文献
+        </div>
+        <div style="overflow-x: auto;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>排名</th>
+                        <th>基因</th>
+                        <th>生物功能</th>
+                        <th>共现频率</th>
+                        <th>Jaccard系数</th>
+                        <th>穴位文献</th>
+                        <th>基因文献</th>
+                        <th>支持文献数</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in results %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>
+                            <span class="tag tag-gene">{{ r.gene }}</span>
+                            {% if r.gene_function %}
+                            <div style="font-size: 0.78em; color: var(--text-light); margin-top: 4px; max-width: 200px; line-height: 1.4;">{{ r.gene_function }}</div>
+                            {% endif %}
+                        </td>
+                        <td>{{ r.gene_function or '-' }}</td>
+                        <td><strong>{{ r.cooccur }}</strong></td>
+                        <td>{{ r.jaccard }}</td>
+                        <td>{{ r.apt_total }}</td>
+                        <td>{{ r.gene_total }}</td>
+                        <td>{{ r.article_count }}</td>
+                        <td>
+                            <button class="btn btn-sm btn-secondary" onclick="toggleEvidence('ev-{{ loop.index }}')">
+                                📄 查看文献
+                            </button>
+                        </td>
+                    </tr>
+                    <tr id="ev-{{ loop.index }}" style="display: none; background: #f8fafc;">
+                        <td colspan="9" style="padding: 12px 16px;">
+                            <div style="font-size: 0.9em; font-weight: 600; margin-bottom: 8px;">
+                                {{ r.gene }} ↔ {{ acupoint }} 的支持文献（{{ r.article_count }} 篇）
+                            </div>
+                            <div style="max-height: 300px; overflow-y: auto;">
+                                <table class="data-table" style="font-size: 0.85em;">
+                                    <thead>
+                                        <tr>
+                                            <th>PMID</th>
+                                            <th>标题</th>
+                                            <th>期刊</th>
+                                            <th>年份</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for art in r.articles %}
+                                        <tr>
+                                            <td><a href="https://pubmed.ncbi.nlm.nih.gov/{{ art.pmid }}/" target="_blank">{{ art.pmid }}</a></td>
+                                            <td>{{ art.title }}</td>
+                                            <td>{{ art.journal }}</td>
+                                            <td>{{ art.year }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+function toggleEvidence(id) {
+    const el = document.getElementById(id);
+    el.style.display = el.style.display === 'none' ? 'table-row' : 'none';
+}
+
+{% if results %}
+const geneData = {{ results[:30] | tojson }};
+const chart = echarts.init(document.getElementById('gene-bar-chart'));
+chart.setOption({
+    tooltip: {
+        trigger: 'axis',
+        formatter: function(params) {
+            const d = geneData[params[0].dataIndex];
+            let fn = d.gene_function ? `<br/><span style="color:#666;font-size:12px;">${d.gene_function}</span>` : '';
+            return `<b>${d.gene}</b>${fn}<br/>共现频率: ${d.cooccur}<br/>Jaccard: ${d.jaccard}<br/>支持文献: ${d.article_count}`;
+        }
+    },
+    grid: { left: '3%', right: '8%', bottom: '3%', top: '3%', containLabel: true },
+    xAxis: { type: 'value', axisLabel: { fontSize: 11 }, name: '共现文献数' },
+    yAxis: {
+        type: 'category',
+        data: geneData.map(d => d.gene).reverse(),
+        axisLabel: { fontSize: 11 }
+    },
+    series: [{
+        data: geneData.map(d => d.cooccur).reverse(),
+        type: 'bar',
+        itemStyle: {
+            color: new echarts.graphic.LinearGradient(1,0,0,0,[{offset:0,color:'#3584e4'},{offset:1,color:'#1a5fb4'}]),
+            borderRadius: [0,4,4,0]
+        }
+    }]
+});
+window.addEventListener('resize', () => chart.resize());
+{% endif %}
+</script>
+{% endblock %}

@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}针灸穴位-基因关联数据库{% endblock %}</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        :root {
+            --primary: #1a5fb4;
+            --primary-light: #3584e4;
+            --primary-dark: #0d3b80;
+            --secondary: #26a269;
+            --accent: #c061cb;
+            --bg: #f6f8fb;
+            --card-bg: #ffffff;
+            --text: #2d3748;
+            --text-light: #718096;
+            --border: #e2e8f0;
+            --shadow: 0 2px 12px rgba(0,0,0,0.08);
+            --shadow-lg: 0 8px 30px rgba(0,0,0,0.12);
+            --radius: 10px;
+            --radius-sm: 6px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans SC", sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        /* 顶部导航 */
+        .topbar {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            color: white;
+            padding: 0 24px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        .topbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.25em;
+            font-weight: 600;
+        }
+        .topbar-brand .logo { font-size: 1.4em; }
+        .topbar-nav {
+            display: flex;
+            gap: 4px;
+        }
+        .topbar-nav a {
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 0.92em;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .topbar-nav a:hover {
+            background: rgba(255,255,255,0.15);
+            color: white;
+        }
+        .topbar-nav a.active {
+            background: rgba(255,255,255,0.25);
+            color: white;
+            font-weight: 500;
+        }
+        /* 主体布局 */
+        .main-layout {
+            display: flex;
+            margin-top: 60px;
+            min-height: calc(100vh - 60px);
+        }
+        /* 左侧菜单 */
+        .sidebar {
+            width: 220px;
+            background: var(--card-bg);
+            border-right: 1px solid var(--border);
+            padding: 20px 0;
+            position: fixed;
+            top: 60px; bottom: 0; left: 0;
+            overflow-y: auto;
+            z-index: 100;
+        }
+        .sidebar-section {
+            margin-bottom: 20px;
+        }
+        .sidebar-title {
+            padding: 0 20px 8px;
+            font-size: 0.75em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.92em;
+            transition: all 0.15s;
+            border-left: 3px solid transparent;
+        }
+        .sidebar a:hover {
+            background: var(--bg);
+            color: var(--primary);
+        }
+        .sidebar a.active {
+            background: rgba(26,95,180,0.08);
+            color: var(--primary);
+            border-left-color: var(--primary);
+            font-weight: 500;
+        }
+        .sidebar a .icon { font-size: 1.1em; width: 20px; text-align: center; }
+        /* 内容区 */
+        .content {
+            flex: 1;
+            margin-left: 220px;
+            padding: 24px;
+            max-width: calc(100% - 220px);
+        }
+        /* 卡片 */
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+        .card-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card-subtitle {
+            font-size: 0.85em;
+            color: var(--text-light);
+            margin-top: -12px;
+            margin-bottom: 16px;
+        }
+        /* 统计数字卡 */
+        .stat-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 20px;
+            text-align: center;
+            border-top: 3px solid var(--primary);
+            transition: transform 0.2s;
+        }
+        .stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+        .stat-card .number {
+            font-size: 2em;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1.2;
+        }
+        .stat-card .label {
+            font-size: 0.85em;
+            color: var(--text-light);
+            margin-top: 4px;
+        }
+        /* 表格 */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+        }
+        .data-table th {
+            background: var(--bg);
+            padding: 10px 12px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-light);
+            border-bottom: 2px solid var(--border);
+            white-space: nowrap;
+        }
+        .data-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+        .data-table tr:hover { background: rgba(26,95,180,0.03); }
+        .data-table a { color: var(--primary); text-decoration: none; }
+        .data-table a:hover { text-decoration: underline; }
+        /* 标签 */
+        .tag {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 0.82em;
+            margin: 2px;
+            font-weight: 500;
+        }
+        .tag-gene { background: #dbeafe; color: #1e40af; }
+        .tag-acupoint { background: #f3e8ff; color: #6b21a8; }
+        .tag-disease { background: #fef3c7; color: #92400e; }
+        .tag-method { background: #d1fae5; color: #065f46; }
+        /* 按钮 */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 18px;
+            border-radius: var(--radius-sm);
+            border: none;
+            font-size: 0.92em;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        .btn-primary:hover { background: var(--primary-dark); }
+        .btn-secondary {
+            background: var(--bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        .btn-secondary:hover { background: var(--border); }
+        .btn-sm { padding: 5px 12px; font-size: 0.85em; }
+        /* 表单 */
+        .form-group { margin-bottom: 16px; }
+        .form-label {
+            display: block;
+            font-size: 0.9em;
+            font-weight: 500;
+            margin-bottom: 6px;
+            color: var(--text);
+        }
+        .form-input, .form-select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 0.95em;
+            background: var(--card-bg);
+            color: var(--text);
+        }
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(26,95,180,0.1);
+        }
+        /* 搜索框 */
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .search-box input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 0.95em;
+        }
+        /* 分页 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 20px;
+        }
+        .pagination a, .pagination span {
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+            text-decoration: none;
+            color: var(--text);
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            font-size: 0.9em;
+        }
+        .pagination a:hover { background: var(--bg); }
+        .pagination span.current {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        /* 两列布局 */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        @media (max-width: 900px) {
+            .two-col { grid-template-columns: 1fr; }
+        }
+        /* 图表容器 */
+        .chart-box { width: 100%; height: 350px; }
+        .chart-box-lg { width: 100%; height: 500px; }
+        /* 信息框 */
+        .info-box {
+            background: #eff6ff;
+            border-left: 4px solid var(--primary);
+            padding: 14px 18px;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            margin-bottom: 16px;
+            font-size: 0.92em;
+        }
+        .info-box strong { color: var(--primary-dark); }
+        /* 算法公式 */
+        .formula {
+            background: var(--bg);
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            font-family: "Courier New", monospace;
+            font-size: 0.95em;
+            text-align: center;
+            margin: 10px 0;
+            border: 1px dashed var(--border);
+        }
+        /* 步骤条 */
+        .steps {
+            display: flex;
+            gap: 8px;
+            margin: 20px 0;
+        }
+        .step {
+            flex: 1;
+            text-align: center;
+            padding: 14px;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            border: 2px solid var(--border);
+            position: relative;
+        }
+        .step.active {
+            border-color: var(--primary);
+            background: rgba(26,95,180,0.05);
+        }
+        .step-num {
+            display: inline-block;
+            width: 28px; height: 28px;
+            line-height: 28px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        .step-title { font-weight: 600; font-size: 0.9em; }
+        .step-desc { font-size: 0.8em; color: var(--text-light); margin-top: 2px; }
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .sidebar { display: none; }
+            .content { margin-left: 0; max-width: 100%; }
+            .topbar-nav { display: none; }
+        }
+        /* 动画 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in { animation: fadeIn 0.4s ease; }
+        {% block extra_css %}{% endblock %}
+    </style>
+</head>
+<body>
+    <!-- 顶部导航 -->
+    <div class="topbar">
+        <div class="topbar-brand">
+            <span class="logo">🧬</span>
+            <span>Acupoint-Gene DB</span>
+        </div>
+        <nav class="topbar-nav">
+            <a href="/" class="{% if active_page == 'index' %}active{% endif %}">概览</a>
+            <a href="/acupoint-query" class="{% if active_page == 'acupoint' %}active{% endif %}">穴位查基因</a>
+            <a href="/gene-query" class="{% if active_page == 'gene' %}active{% endif %}">基因查穴位</a>
+            <a href="/network" class="{% if active_page == 'network' %}active{% endif %}">共现网络</a>
+            <a href="/articles" class="{% if active_page == 'articles' %}active{% endif %}">文献</a>
+            <a href="/about" class="{% if active_page == 'about' %}active{% endif %}">关于</a>
+        </nav>
+    </div>
+
+    <!-- 主体 -->
+    <div class="main-layout">
+        <!-- 左侧菜单 -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">查询分析</div>
+                <a href="/acupoint-query" class="{% if active_page == 'acupoint' %}active{% endif %}">
+                    <span class="icon">📍</span> 穴位 → 基因
+                </a>
+                <a href="/gene-query" class="{% if active_page == 'gene' %}active{% endif %}">
+                    <span class="icon">🧬</span> 基因 → 穴位
+                </a>
+                <a href="/network" class="{% if active_page == 'network' %}active{% endif %}">
+                    <span class="icon">🕸️</span> 共现网络
+                </a>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">数据浏览</div>
+                <a href="/" class="{% if active_page == 'index' %}active{% endif %}">
+                    <span class="icon">📊</span> 数据概览
+                </a>
+                <a href="/articles" class="{% if active_page == 'articles' %}active{% endif %}">
+                    <span class="icon">📄</span> 文献列表
+                </a>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">帮助</div>
+                <a href="/about" class="{% if active_page == 'about' %}active{% endif %}">
+                    <span class="icon">📖</span> 算法说明
+                </a>
+            </div>
+        </aside>
+
+        <!-- 内容区 -->
+        <main class="content">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>针灸穴位-基因关联数据库构建可行性分析报告</title>
+<style>
+  @page { size: A4; margin: 2cm; }
+  body {
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+    font-size: 11pt;
+    line-height: 1.7;
+    color: #333;
+    max-width: 100%;
+  }
+  h1 {
+    font-size: 20pt;
+    color: #1a5276;
+    border-bottom: 3px solid #1a5276;
+    padding-bottom: 8px;
+    margin-top: 30px;
+  }
+  h2 {
+    font-size: 15pt;
+    color: #2874a6;
+    border-bottom: 1px solid #aed6f1;
+    padding-bottom: 5px;
+    margin-top: 25px;
+  }
+  h3 {
+    font-size: 13pt;
+    color: #2e86c1;
+    margin-top: 20px;
+  }
+  h4 {
+    font-size: 12pt;
+    color: #5dade2;
+    margin-top: 15px;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 15px 0;
+    font-size: 10pt;
+  }
+  th, td {
+    border: 1px solid #bbb;
+    padding: 6px 8px;
+    text-align: left;
+    vertical-align: top;
+  }
+  th {
+    background-color: #eaf2f8;
+    font-weight: bold;
+    color: #1a5276;
+  }
+  tr:nth-child(even) {
+    background-color: #f8f9f9;
+  }
+  code {
+    background-color: #f4f4f4;
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-family: "Courier New", monospace;
+    font-size: 10pt;
+  }
+  pre {
+    background-color: #f4f4f4;
+    padding: 12px;
+    border-radius: 5px;
+    overflow-x: auto;
+    font-size: 9.5pt;
+    line-height: 1.4;
+  }
+  blockquote {
+    border-left: 4px solid #5dade2;
+    margin: 10px 0;
+    padding: 8px 15px;
+    background-color: #eaf2f8;
+    color: #1a5276;
+  }
+  ul, ol {
+    margin: 8px 0;
+    padding-left: 25px;
+  }
+  li {
+    margin: 4px 0;
+  }
+  hr {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 20px 0;
+  }
+  strong {
+    color: #1a5276;
+  }
+  p {
+    margin: 8px 0;
+  }
+</style>
+</head>
+<body>
+<h1 id="-">针灸穴位-基因关联数据库构建可行性分析报告</h1>
+<blockquote>
+<p>报告日期：2026年4月25日<br />
+研究主题：构建针灸穴位（以太冲穴为范例）与基因关联关系数据库的可行性分析</p>
+</blockquote>
+<hr />
+<h2 id="_1">一、研究背景与意义</h2>
+<h3 id="11">1.1 背景</h3>
+<p>针灸作为传统中医的核心疗法之一，其疗效已在世界范围内获得广泛认可。然而，针灸作用的生物学机制，尤其是穴位刺激如何调控基因表达，一直是现代医学研究的热点与难点。近年来，随着基因组学、转录组学、蛋白质组学等高通量技术的发展，越来越多的研究开始从分子层面揭示针灸的作用机制，大量关于"穴位-基因"关联的实验数据被发表，但尚未被系统整合。</p>
+<h3 id="12">1.2 意义</h3>
+<p>构建一个针灸穴位-基因关联数据库，具有以下重要意义：</p>
+<ul>
+<li><strong>知识整合</strong>：系统整合分散在全球文献中的针灸-基因研究数据，避免信息孤岛</li>
+<li><strong>机制揭示</strong>：通过数据挖掘发现穴位作用的共同分子机制和特异性调控网络</li>
+<li><strong>精准针灸</strong>：为个性化针灸治疗提供分子靶点参考，推动精准医学发展</li>
+<li><strong>新药研发</strong>：为基于针灸靶点的新型药物开发提供线索</li>
+<li><strong>国际化传播</strong>：用现代分子生物学语言诠释针灸理论，促进中医国际化</li>
+</ul>
+<hr />
+<h2 id="_2">二、文献调研结果</h2>
+<h3 id="21-lr3">2.1 太冲穴(LR3)相关基因研究文献汇总</h3>
+<p>太冲穴（足厥阴肝经原穴，LR3）是研究最为深入的穴位之一。通过检索PubMed、CNKI、万方等数据库，发现大量关于太冲穴调控基因表达的实验研究：</p>
+<table>
+<thead>
+<tr>
+<th>研究年份</th>
+<th>作者</th>
+<th>疾病模型</th>
+<th>技术方法</th>
+<th>关键发现基因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2024</td>
+<td>Zhang Yujiao等</td>
+<td>抑郁症(CUMS大鼠)</td>
+<td>RNA-seq</td>
+<td><strong>Casr, Bdkrb2, Gnb3, Ccl19</strong> — 电针百会+太冲可逆转CUMS诱导的46个基因下调和13个基因上调</td>
+</tr>
+<tr>
+<td>2019</td>
+<td>Ma Si-Ming等</td>
+<td>高血压(SHR大鼠)</td>
+<td>全转录组芯片(Rat Gene 1.0 ST)</td>
+<td><strong>Cd4, Il-33</strong> — 2371个差异表达基因，涉及氧化应激、炎症和血管内皮功能</td>
+</tr>
+<tr>
+<td>2012</td>
+<td>Wang等</td>
+<td>高血压(SHR大鼠)</td>
+<td>蛋白质组学(2D凝胶+质谱)</td>
+<td><strong>Synapsin-1, MBP, ALDH2, GSTM5, SOD, SIRT2</strong> — 延髓中抗氧化酶表达增加</td>
+</tr>
+<tr>
+<td>2011</td>
+<td>Choi等</td>
+<td>帕金森病(MPTP小鼠)</td>
+<td>cDNA芯片</td>
+<td><strong>Atp2a1, Dub2a, Klhl31, Tnnt3</strong> (上调); <strong>Hba-a1, Hba-a2, Hbb-b1, Ppbp, Ube2l6</strong> (下调)</td>
+</tr>
+<tr>
+<td>2015</td>
+<td>韩国研究组</td>
+<td>帕金森病脊髓损伤</td>
+<td>全转录组芯片</td>
+<td><strong>Ctla2a, Ppbp, Ube2l6</strong> (下调); <strong>Obox6, Tmem150</strong> (上调) — 穴位特异性调控</td>
+</tr>
+<tr>
+<td>2023</td>
+<td>网络药理学研究</td>
+<td>抑郁症</td>
+<td>数据库挖掘+网络分析</td>
+<td><strong>IL6, BDNF, TNF, IL1B, CASP3, MAPK3, CREB1, FOS, NGF, GFAP</strong> — 太冲为6大核心穴位之一</td>
+</tr>
+<tr>
+<td>2010</td>
+<td>韩国研究组</td>
+<td>帕金森病黑质</td>
+<td>基因芯片</td>
+<td><strong>Cdh1, Itih2, Mpel2, Rdh9, Serping1, Tph2, Vcam1</strong> — 穴位特异性下调</td>
+</tr>
+</tbody>
+</table>
+<h3 id="22">2.2 太冲穴调控的核心通路</h3>
+<p>根据文献整合，太冲穴针刺/电针主要调控以下信号通路：</p>
+<ol>
+<li><strong>氧化应激通路</strong>：SOD、GSTM5、ALDH2等抗氧化酶相关通路</li>
+<li><strong>炎症免疫通路</strong>：IL-6、TNF-α、IL-1β、IL-33、NF-κB信号通路</li>
+<li><strong>神经可塑性通路</strong>：BDNF、NGF、CREB1、MAPK信号通路</li>
+<li><strong>细胞凋亡通路</strong>：CASP3、Bcl-2家族相关通路</li>
+<li><strong>神经递质通路</strong>：GABA、多巴胺、5-HT相关基因表达</li>
+<li><strong>血管功能通路</strong>：ET-1、ANP、血管平滑肌收缩相关基因</li>
+</ol>
+<h3 id="23">2.3 其他穴位基因研究概况</h3>
+<p>除太冲穴外，以下穴位的基因研究也较为丰富：</p>
+<table>
+<thead>
+<tr>
+<th>穴位</th>
+<th>主要相关基因</th>
+<th>研究疾病</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>足三里(ST36)</strong></td>
+<td>IL-1β、IL-6、IL-10、Sod1、Cyp2a4、Foxf2、CGRP、NPY</td>
+<td>免疫调节、疼痛、脊髓损伤</td>
+</tr>
+<tr>
+<td><strong>百会(GV20)</strong></td>
+<td>Casr、Bdkrb2、Gnb3、Ccl19</td>
+<td>抑郁症、脑缺血</td>
+</tr>
+<tr>
+<td><strong>丰隆(ST40)</strong></td>
+<td>Gdf15、Ppap、OATP-1、Slpi、LXR</td>
+<td>高脂血症</td>
+</tr>
+<tr>
+<td><strong>阳陵泉(GB34)</strong></td>
+<td>Ntf3、Gja4、Tuba8、TH、DAT</td>
+<td>帕金森病</td>
+</tr>
+<tr>
+<td><strong>合谷(LI4)</strong></td>
+<td>多免疫基因</td>
+<td>过敏性鼻炎、疼痛</td>
+</tr>
+</tbody>
+</table>
+<h3 id="24">2.4 现有相关数据库资源</h3>
+<p>目前国际上尚无专门针对"针灸穴位-基因关联"的数据库，但存在以下相关资源：</p>
+<table>
+<thead>
+<tr>
+<th>数据库名称</th>
+<th>类型</th>
+<th>覆盖内容</th>
+<th>局限性</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>TCMGeneDIT</strong></td>
+<td>中药-基因-疾病关联</td>
+<td>2000+中药，13167基因，文本挖掘</td>
+<td>仅覆盖中草药，不含针灸穴位</td>
+</tr>
+<tr>
+<td><strong>TARA (NIH)</strong></td>
+<td>穴位解剖生理数据库</td>
+<td>穴位三维解剖、生理数据</td>
+<td>尚在建设中，不涵盖基因表达数据</td>
+</tr>
+<tr>
+<td><strong>GEO (NCBI)</strong></td>
+<td>基因表达数据仓库</td>
+<td>存储大量针灸相关芯片数据</td>
+<td>非结构化，需自行挖掘</td>
+</tr>
+<tr>
+<td><strong>TCMID/TCMSP/HERB</strong></td>
+<td>中药综合数据库</td>
+<td>中药成分、靶点、疾病</td>
+<td>无针灸穴位特异性数据</td>
+</tr>
+<tr>
+<td><strong>SymMap</strong></td>
+<td>中医症状-靶点映射</td>
+<td>症状、中药、靶点、疾病</td>
+<td>缺乏穴位层面数据</td>
+</tr>
+</tbody>
+</table>
+<p><strong>关键发现</strong>：目前市场上存在一个明显的空白——<strong>尚无专门的"针灸穴位-基因"关联数据库</strong>。已有的TCMGeneDIT等数据库聚焦中药而非针灸，TARA项目聚焦解剖生理而非分子基因。这为本项目的开展提供了明确的切入点。</p>
+<hr />
+<h2 id="_3">三、技术可行性分析</h2>
+<h3 id="31">3.1 数据来源与可获得性</h3>
+<h4 id="311">3.1.1 文献数据来源（充足）</h4>
+<ul>
+<li><strong>PubMed/MEDLINE</strong>：已有数百篇针灸-基因组学文献</li>
+<li><strong>CNKI/万方/维普</strong>：大量中文针灸实验研究</li>
+<li><strong>GEO数据库</strong>：可直接获取原始芯片数据（如GSE73939, GSE122063等）</li>
+<li><strong>蛋白质组学数据</strong>：部分研究提供差异蛋白列表</li>
+</ul>
+<h4 id="312">3.1.2 结构化数据提取（可行）</h4>
+<p>每篇文献可提取以下结构化字段：</p>
+<pre><code>- 文献元数据：标题、作者、年份、DOI、期刊
+- 实验信息：物种、疾病模型、样本组织、刺激方式、针刺参数
+- 穴位信息：穴位名称（中英文）、经络归属、定位方法
+- 基因信息：差异表达基因、调控方向（上调/下调）、倍数变化、P值
+- 通路信息：GO功能注释、KEGG通路、蛋白互作网络
+- 验证信息：qRT-PCR、Western blot等验证结果
+</code></pre>
+<h3 id="32">3.2 技术路线</h3>
+<pre><code>第一阶段：数据采集与标准化
+    ├── 文献检索（PubMed/Embase/CNKI/万方等）
+    ├── 全文获取与PDF解析
+    ├── 人工/半自动数据提取
+    └── 数据标准化（基因符号统一、穴位名称规范化）
+
+第二阶段：数据库构建
+    ├── 数据库选型（MySQL/PostgreSQL + Elasticsearch）
+    ├── 实体关系设计（穴位-基因-疾病-通路-文献五维关联）
+    ├── API接口开发（RESTful API）
+    └── Web前端构建（检索、浏览、可视化）
+
+第三阶段：数据分析与挖掘
+    ├── 穴位特异性基因分析
+    ├── 核心靶点网络构建（Cytoscape/NetworkX）
+    ├── 通路富集分析（GO/KEGG）
+    └── 机器学习预测模型（穴位-基因关联预测）
+
+第四阶段：功能扩展
+    ├── 穴位配伍基因网络分析
+    ├── 疾病-穴位推荐系统
+    └── 多组学数据整合（转录组+蛋白组+代谢组）
+</code></pre>
+<h3 id="33">3.3 关键技术难点与解决方案</h3>
+<table>
+<thead>
+<tr>
+<th>难点</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>基因名称不统一（别名多）</td>
+<td>使用NCBI Gene ID作为唯一标识符，映射到HGNC官方符号</td>
+</tr>
+<tr>
+<td>穴位名称古今差异</td>
+<td>参照《腧穴名称与定位》(GB/T 12346-2021)国家标准</td>
+</tr>
+<tr>
+<td>物种差异（人/大鼠/小鼠）</td>
+<td>使用OrthoDB/Ensembl进行同源基因转换</td>
+</tr>
+<tr>
+<td>实验异质性大</td>
+<td>建立标准化评分体系，标注证据等级</td>
+</tr>
+<tr>
+<td>数据量增长快</td>
+<td>设计可扩展的数据库架构，支持增量更新</td>
+</tr>
+<tr>
+<td>针刺参数差异（手法/电针/留针时间）</td>
+<td>建立详细的刺激参数字段，支持分层分析</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="_4">四、科学可行性分析</h2>
+<h3 id="41">4.1 穴位特异性基因表达的科学依据</h3>
+<p>大量实验证据表明，穴位刺激具有基因调控的特异性：</p>
+<ol>
+<li>
+<p><strong>穴位 vs 非穴位</strong>：多项研究（如Ma et al., 2019; Choi et al., 2011）发现，针刺穴位组与针刺非穴位组的差异表达基因谱显著不同，证明穴位并非单纯的"安慰剂效应"</p>
+</li>
+<li>
+<p><strong>经脉特异性</strong>：不同经脉的穴位调控不同脏腑相关基因。如针刺肺经穴位主要影响呼吸相关基因，而针刺肝经穴位（如太冲）主要影响肝功能和神经相关基因</p>
+</li>
+<li>
+<p><strong>疾病特异性</strong>：同一穴位在不同疾病模型中调控不同基因集。如太冲在高血压模型中主要调控血管功能基因，在抑郁症模型中主要调控神经可塑性基因</p>
+</li>
+</ol>
+<h3 id="42-">4.2 从"穴位-基因"到"系统生物学网络"</h3>
+<p>针灸的作用机制符合系统生物学的"多靶点、多通路"特征：</p>
+<ul>
+<li>单个穴位可调控数百至数千个基因</li>
+<li>多个基因构成信号通路网络</li>
+<li>不同穴位之间存在协同或拮抗作用</li>
+<li>穴位效应与个体的基因多态性相关</li>
+</ul>
+<p>这种复杂性恰好适合用数据库+网络分析的方法来研究。</p>
+<hr />
+<h2 id="_5">五、市场需求与应用前景</h2>
+<h3 id="51">5.1 目标用户</h3>
+<ol>
+<li><strong>科研人员</strong>：针灸机制研究者、系统生物学研究者、中医药现代化研究者</li>
+<li><strong>临床医生</strong>：针灸医师、中西医结合医师</li>
+<li><strong>生物信息学家</strong>：需要高质量针灸-基因关联数据进行算法开发</li>
+<li><strong>制药企业</strong>：寻找基于针灸靶点的新药研发线索</li>
+<li><strong>国际学生/学者</strong>：学习针灸分子机制的教育资源</li>
+</ol>
+<h3 id="52">5.2 应用场景</h3>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>机制查询</td>
+<td>查询特定穴位调控了哪些基因和通路</td>
+</tr>
+<tr>
+<td>靶点发现</td>
+<td>发现某疾病的核心针灸靶点基因</td>
+</tr>
+<tr>
+<td>处方优化</td>
+<td>分析穴位配伍的基因协同效应</td>
+</tr>
+<tr>
+<td>数据下载</td>
+<td>下载特定穴位-基因关联数据集用于研究</td>
+</tr>
+<tr>
+<td>可视化分析</td>
+<td>生成交互式网络图、热图、火山图</td>
+</tr>
+<tr>
+<td>预测推荐</td>
+<td>基于症状/疾病推荐可能的有效穴位</td>
+</tr>
+</tbody>
+</table>
+<h3 id="53">5.3 竞争优势</h3>
+<ul>
+<li><strong>首创性</strong>：全球首个专注于"针灸穴位-基因"关联的数据库</li>
+<li><strong>专业性</strong>：聚焦穴位特异性，区别于泛泛的中医数据库</li>
+<li><strong>数据深度</strong>：不仅存储基因列表，还包含针刺参数、实验条件等元数据</li>
+<li><strong>动态更新</strong>：持续跟踪最新文献，保持数据时效性</li>
+<li><strong>开放共享</strong>：支持学术用户免费下载数据，促进合作研究</li>
+</ul>
+<hr />
+<h2 id="_6">六、实施计划与里程碑</h2>
+<h3 id="61">6.1 项目阶段规划</h3>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>时间</th>
+<th>主要任务</th>
+<th>产出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Phase 1</strong></td>
+<td>第1-3个月</td>
+<td>文献系统检索、数据提取、标准化</td>
+<td>建立核心数据集（目标：收录100+文献，覆盖30+穴位）</td>
+</tr>
+<tr>
+<td><strong>Phase 2</strong></td>
+<td>第4-6个月</td>
+<td>数据库设计与开发、Web平台搭建</td>
+<td>可运行的Beta版本数据库</td>
+</tr>
+<tr>
+<td><strong>Phase 3</strong></td>
+<td>第7-9个月</td>
+<td>数据分析模块开发、网络可视化</td>
+<td>支持在线分析功能的V1.0版本</td>
+</tr>
+<tr>
+<td><strong>Phase 4</strong></td>
+<td>第10-12个月</td>
+<td>用户测试、论文撰写、正式发布</td>
+<td>学术论文 + 公开发布的数据库平台</td>
+</tr>
+</tbody>
+</table>
+<h3 id="62">6.2 预期成果</h3>
+<ol>
+<li><strong>数据库平台</strong>：一个支持多维度检索的Web数据库</li>
+<li><strong>数据集</strong>：至少收录200篇以上的针灸-基因研究文献</li>
+<li><strong>学术论文</strong>：1-2篇SCI论文（数据库论文+应用案例论文）</li>
+<li><strong>软件著作权/专利</strong>：数据库系统的知识产权保护</li>
+</ol>
+<hr />
+<h2 id="_7">七、风险评估与对策</h2>
+<table>
+<thead>
+<tr>
+<th>风险类型</th>
+<th>风险描述</th>
+<th>可能性</th>
+<th>对策</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>数据质量</td>
+<td>文献中基因数据不完整或错误</td>
+<td>高</td>
+<td>建立双重审核机制；与作者直接联系获取原始数据</td>
+</tr>
+<tr>
+<td>数据版权</td>
+<td>批量下载商业数据库文献存在版权风险</td>
+<td>中</td>
+<td>优先使用开放获取文献；与出版社协商合作协议</td>
+</tr>
+<tr>
+<td>技术实现</td>
+<td>自然语言处理自动提取准确率不足</td>
+<td>中</td>
+<td>采用"自动提取+人工校验"的混合模式</td>
+</tr>
+<tr>
+<td>学术认可</td>
+<td>新数据库难以在短期内获得高引用</td>
+<td>中</td>
+<td>通过高质量论文发表、会议推广、合作研究提升影响力</td>
+</tr>
+<tr>
+<td>资金维持</td>
+<td>服务器和人力成本持续投入</td>
+<td>中</td>
+<td>申请科研项目资助；寻求大学/医院的技术支持</td>
+</tr>
+<tr>
+<td>同行竞争</td>
+<td>其他团队可能同步启动类似项目</td>
+<td>低</td>
+<td>加快进度，抢占先发优势；突出穴位特异性特色</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="_8">八、经费预算（估算）</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>金额（人民币）</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>服务器与域名</td>
+<td>5,000-10,000/年</td>
+<td>云服务器租赁</td>
+</tr>
+<tr>
+<td>数据库软件许可</td>
+<td>0</td>
+<td>使用开源软件（PostgreSQL, Django, Vue.js等）</td>
+</tr>
+<tr>
+<td>文献获取费用</td>
+<td>3,000-5,000</td>
+<td>部分付费论文下载</td>
+</tr>
+<tr>
+<td>人力成本（学生助研）</td>
+<td>15,000-30,000/年</td>
+<td>数据提取与校验</td>
+</tr>
+<tr>
+<td>会议差旅与推广</td>
+<td>10,000-20,000</td>
+<td>学术会议宣传</td>
+</tr>
+<tr>
+<td>总计</td>
+<td><strong>33,000-65,000/年</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="_9">九、结论与建议</h2>
+<h3 id="91">9.1 可行性结论</h3>
+<p>综合以上分析，<strong>构建针灸穴位-基因关联数据库是高度可行的</strong>，具体结论如下：</p>
+<ol>
+<li><strong>科学可行性：★★★★★</strong></li>
+<li>已有充分的实验证据表明穴位刺激可特异性调控基因表达</li>
+<li>以"太冲穴"为代表的多个穴位已有丰富的基因表达数据积累</li>
+<li>
+<p>网络药理学和系统生物学方法为该数据库的分析提供了成熟工具</p>
+</li>
+<li>
+<p><strong>技术可行性：★★★★★</strong></p>
+</li>
+<li>数据来源充足，GEO等公共数据库可直接获取原始数据</li>
+<li>数据库技术成熟，开源工具链完善</li>
+<li>
+<p>基因标准化、穴位规范化等关键技术问题均有现成解决方案</p>
+</li>
+<li>
+<p><strong>市场空白度：★★★★★</strong></p>
+</li>
+<li>目前全球尚无专门的"针灸穴位-基因"数据库</li>
+<li>TCMGeneDIT聚焦中药，TARA聚焦解剖，均不覆盖本领域</li>
+<li>
+<p>填补该空白具有显著的学术价值和应用价值</p>
+</li>
+<li>
+<p><strong>实施难度：★★★☆☆</strong></p>
+</li>
+<li>主要工作量在文献检索和数据提取</li>
+<li>无重大技术瓶颈，适合中小型团队实施</li>
+<li>建议先从太冲、足三里、百会等数据丰富的穴位做起，逐步扩展</li>
+</ol>
+<h3 id="92">9.2 行动建议</h3>
+<ol>
+<li>
+<p><strong>立即启动文献系统检索</strong>：以"acupuncture + gene expression/microarray/RNA-seq + [穴位名]"为核心检索式，在PubMed、Embase、Cochrane、CNKI、万方等平台全面检索</p>
+</li>
+<li>
+<p><strong>组建跨学科团队</strong>：建议由针灸学专业（提供领域知识）、生物信息学专业（负责数据库构建与数据分析）、计算机专业（负责Web开发）组成</p>
+</li>
+<li>
+<p><strong>申请科研基金</strong>：可申报国家自然科学基金（中医药现代化专项）、省级中医药科研专项等</p>
+</li>
+<li>
+<p><strong>寻求国际合作</strong>：与TARA项目团队、韩国针灸研究组等建立数据共享合作</p>
+</li>
+<li>
+<p><strong>优先数据发布</strong>：不必等待"完美"的数据集，可先发布Beta版本，逐步迭代完善</p>
+</li>
+</ol>
+<hr />
+<h2 id="_10">十、附录：太冲穴核心关联基因速查表</h2>
+<table>
+<thead>
+<tr>
+<th>基因符号</th>
+<th>基因全称</th>
+<th>调控方向</th>
+<th>相关疾病/功能</th>
+<th>文献来源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>BDNF</strong></td>
+<td>脑源性神经营养因子</td>
+<td>上调</td>
+<td>抑郁、神经保护</td>
+<td>网络药理学研究</td>
+</tr>
+<tr>
+<td><strong>IL6</strong></td>
+<td>白细胞介素-6</td>
+<td>下调</td>
+<td>抗炎、免疫调节</td>
+<td>网络药理学研究</td>
+</tr>
+<tr>
+<td><strong>TNF</strong></td>
+<td>肿瘤坏死因子</td>
+<td>下调</td>
+<td>抗炎、神经保护</td>
+<td>网络药理学研究</td>
+</tr>
+<tr>
+<td><strong>IL1B</strong></td>
+<td>白细胞介素-1β</td>
+<td>下调</td>
+<td>抗炎</td>
+<td>网络药理学研究</td>
+</tr>
+<tr>
+<td><strong>CASP3</strong></td>
+<td>半胱氨酸天冬氨酸蛋白酶3</td>
+<td>下调</td>
+<td>抗凋亡</td>
+<td>网络药理学研究</td>
+</tr>
+<tr>
+<td><strong>MAPK3</strong></td>
+<td>丝裂原活化蛋白激酶3</td>
+<td>调节</td>
+<td>信号转导</td>
+<td>网络药理学研究</td>
+</tr>
+<tr>
+<td><strong>CREB1</strong></td>
+<td>cAMP反应元件结合蛋白1</td>
+<td>上调</td>
+<td>神经可塑性、记忆</td>
+<td>网络药理学研究</td>
+</tr>
+<tr>
+<td><strong>NGF</strong></td>
+<td>神经生长因子</td>
+<td>上调</td>
+<td>神经再生</td>
+<td>网络药理学研究</td>
+</tr>
+<tr>
+<td><strong>GFAP</strong></td>
+<td>胶质纤维酸性蛋白</td>
+<td>下调</td>
+<td>神经炎症</td>
+<td>网络药理学研究</td>
+</tr>
+<tr>
+<td><strong>SOD</strong></td>
+<td>超氧化物歧化酶</td>
+<td>上调</td>
+<td>抗氧化应激</td>
+<td>Wang et al., 2012</td>
+</tr>
+<tr>
+<td><strong>GSTM5</strong></td>
+<td>谷胱甘肽S-转移酶M5</td>
+<td>上调</td>
+<td>解毒、抗氧化</td>
+<td>Wang et al., 2012</td>
+</tr>
+<tr>
+<td><strong>ALDH2</strong></td>
+<td>乙醛脱氢酶2</td>
+<td>上调</td>
+<td>氧化应激保护</td>
+<td>Wang et al., 2012</td>
+</tr>
+<tr>
+<td><strong>IL33</strong></td>
+<td>白细胞介素-33</td>
+<td>调节</td>
+<td>免疫调节、降压</td>
+<td>Ma et al., 2019</td>
+</tr>
+<tr>
+<td><strong>CD4</strong></td>
+<td>CD4分子</td>
+<td>调节</td>
+<td>T细胞免疫</td>
+<td>Ma et al., 2019</td>
+</tr>
+<tr>
+<td><strong>Casr</strong></td>
+<td>钙敏感受体</td>
+<td>上调</td>
+<td>神经保护、抑郁</td>
+<td>Zhang et al., 2024</td>
+</tr>
+<tr>
+<td><strong>Bdkrb2</strong></td>
+<td>缓激肽受体B2</td>
+<td>上调</td>
+<td>血管调节</td>
+<td>Zhang et al., 2024</td>
+</tr>
+<tr>
+<td><strong>Ppbp</strong></td>
+<td>促血小板碱性蛋白</td>
+<td>下调</td>
+<td>炎症、帕金森</td>
+<td>Choi et al., 2011</td>
+</tr>
+<tr>
+<td><strong>Ube2l6</strong></td>
+<td>泛素结合酶E2L6</td>
+<td>下调</td>
+<td>蛋白降解调控</td>
+<td>Choi et al., 2011</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<blockquote>
+<p><strong>报告说明</strong>：本报告基于截至2026年4月的公开文献资源撰写。由于针灸-基因组学研究领域发展迅速，建议在项目实施过程中持续跟踪最新文献动态，及时更新数据库内容。</p>
+</blockquote>
+</body>
+</html>

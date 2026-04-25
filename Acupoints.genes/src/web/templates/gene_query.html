@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+{% set active_page = 'gene' %}
+{% block title %}基因查穴位 - 针灸穴位-基因关联数据库{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <h1 style="margin-bottom: 8px; font-size: 1.5em;">🧬 基因 → 穴位 查询</h1>
+    <p style="color: var(--text-light); margin-bottom: 20px;">
+        输入一个基因符号（如 TNF, IL6, AKT），查询与其在文献中共同出现的所有穴位，查看共现频率、Jaccard相似度及支持文献。
+    </p>
+
+    <!-- 搜索区 -->
+    <div class="card" style="padding: 20px;">
+        <form method="get" action="/gene-query" style="display: flex; gap: 12px; align-items: flex-end;">
+            <div style="flex: 1; max-width: 400px;">
+                <label class="form-label">基因符号</label>
+                <input type="text" name="gene" class="form-input" id="gene-input"
+                       placeholder="如: TNF, IL6, AKT, PI3K..."
+                       value="{{ gene }}" list="gene-list">
+                <datalist id="gene-list">
+                    {% for g in gene_list %}
+                    <option value="{{ g.gene }}">{{ g.gene }}</option>
+                    {% endfor %}
+                </datalist>
+            </div>
+            <button type="submit" class="btn btn-primary">🔍 查询</button>
+            {% if gene %}
+            <a href="/gene-query" class="btn btn-secondary">重置</a>
+            {% endif %}
+        </form>
+    </div>
+
+    {% if gene %}
+    <!-- 结果统计 -->
+    <div class="stat-cards" style="margin-top: 20px;">
+        <div class="stat-card" style="border-top-color: #1a5fb4;">
+            <div class="number">{{ results|length }}</div>
+            <div class="label">关联穴位数</div>
+        </div>
+        <div class="stat-card" style="border-top-color: #26a269;">
+            <div class="number">{{ results[0].gene_total if results else 0 }}</div>
+            <div class="label">该基因总文献数</div>
+        </div>
+        <div class="stat-card" style="border-top-color: #c061cb;">
+            <div class="number">{{ results[0].cooccur if results else 0 }}</div>
+            <div class="label">Top穴位共现次数</div>
+        </div>
+    </div>
+
+    <!-- 穴位条形图 -->
+    <div class="card">
+        <div class="card-title">📍 {{ gene }} 关联穴位排行</div>
+        <div class="card-subtitle">X轴为共现文献数，数值越大表示该穴位与 {{ gene }} 在文献中共同出现次数越多</div>
+        <div id="apt-bar-chart" class="chart-box"></div>
+    </div>
+
+    <!-- 详细表格 -->
+    <div class="card">
+        <div class="card-title">📋 关联穴位详细列表</div>
+        <div class="card-subtitle">
+            共现频率 = 同时提及该基因和该穴位的文献数；
+            Jaccard = 共现文献 / (基因文献 ∪ 穴位文献)
+        </div>
+        <div style="overflow-x: auto;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>排名</th>
+                        <th>穴位</th>
+                        <th>归经与主治</th>
+                        <th>代码</th>
+                        <th>共现频率</th>
+                        <th>Jaccard系数</th>
+                        <th>基因文献</th>
+                        <th>穴位文献</th>
+                        <th>支持文献数</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in results %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>
+                            <span class="tag tag-acupoint">{{ r.acupoint }}</span>
+                            {% if r.name_cn %}
+                            <span style="font-size: 0.82em; color: var(--text-light);">{{ r.name_cn }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if r.meridian %}
+                            <div style="font-size: 0.78em; color: var(--secondary); margin-bottom: 2px;">{{ r.meridian }}</div>
+                            {% endif %}
+                            {% if r.apt_function %}
+                            <div style="font-size: 0.78em; color: var(--text-light); max-width: 220px; line-height: 1.4;">{{ r.apt_function }}</div>
+                            {% else %}
+                            -
+                            {% endif %}
+                        </td>
+                        <td>{{ r.code or '-' }}</td>
+                        <td><strong>{{ r.cooccur }}</strong></td>
+                        <td>{{ r.jaccard }}</td>
+                        <td>{{ r.gene_total }}</td>
+                        <td>{{ r.apt_total }}</td>
+                        <td>{{ r.article_count }}</td>
+                        <td>
+                            <button class="btn btn-sm btn-secondary" onclick="toggleEvidence('ev-{{ loop.index }}')">
+                                📄 查看文献
+                            </button>
+                        </td>
+                    </tr>
+                    <tr id="ev-{{ loop.index }}" style="display: none; background: #f8fafc;">
+                        <td colspan="10" style="padding: 12px 16px;">
+                            <div style="font-size: 0.9em; font-weight: 600; margin-bottom: 8px;">
+                                {{ gene }} ↔ {{ r.acupoint }} 的支持文献（{{ r.article_count }} 篇）
+                            </div>
+                            <div style="max-height: 300px; overflow-y: auto;">
+                                <table class="data-table" style="font-size: 0.85em;">
+                                    <thead>
+                                        <tr>
+                                            <th>PMID</th>
+                                            <th>标题</th>
+                                            <th>期刊</th>
+                                            <th>年份</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for art in r.articles %}
+                                        <tr>
+                                            <td><a href="https://pubmed.ncbi.nlm.nih.gov/{{ art.pmid }}/" target="_blank">{{ art.pmid }}</a></td>
+                                            <td>{{ art.title }}</td>
+                                            <td>{{ art.journal }}</td>
+                                            <td>{{ art.year }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+function toggleEvidence(id) {
+    const el = document.getElementById(id);
+    el.style.display = el.style.display === 'none' ? 'table-row' : 'none';
+}
+
+{% if results %}
+const aptData = {{ results | tojson }};
+const chart = echarts.init(document.getElementById('apt-bar-chart'));
+chart.setOption({
+    tooltip: {
+        trigger: 'axis',
+        formatter: function(params) {
+            const d = aptData[params[0].dataIndex];
+            let mer = d.meridian ? `<br/><span style="color:#26a269;font-size:12px;">${d.meridian}</span>` : '';
+            let fn = d.apt_function ? `<br/><span style="color:#666;font-size:12px;">${d.apt_function}</span>` : '';
+            return `<b>${d.acupoint}</b> ${d.code ? '('+d.code+')' : ''}${mer}${fn}<br/>共现频率: ${d.cooccur}<br/>Jaccard: ${d.jaccard}<br/>支持文献: ${d.article_count}`;
+        }
+    },
+    grid: { left: '3%', right: '8%', bottom: '3%', top: '3%', containLabel: true },
+    xAxis: { type: 'value', axisLabel: { fontSize: 11 }, name: '共现文献数' },
+    yAxis: {
+        type: 'category',
+        data: aptData.map(d => d.acupoint + (d.code ? ' ('+d.code+')' : '')).reverse(),
+        axisLabel: { fontSize: 11 }
+    },
+    series: [{
+        data: aptData.map(d => d.cooccur).reverse(),
+        type: 'bar',
+        itemStyle: {
+            color: new echarts.graphic.LinearGradient(1,0,0,0,[{offset:0,color:'#c061cb'},{offset:1,color:'#9333ea'}]),
+            borderRadius: [0,4,4,0]
+        }
+    }]
+});
+window.addEventListener('resize', () => chart.resize());
+{% endif %}
+</script>
+{% endblock %}

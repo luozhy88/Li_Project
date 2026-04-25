@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% set active_page = 'articles' %}
+{% block title %}{{ article.title[:40] }}... - 文献详情{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <div style="margin-bottom: 16px;">
+        <a href="/articles" style="color: var(--primary); text-decoration: none; font-size: 0.9em;">← 返回文献列表</a>
+    </div>
+
+    <div class="card">
+        <h1 style="font-size: 1.25em; margin-bottom: 12px; line-height: 1.5;">{{ article.title }}</h1>
+
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px;">
+            <span class="tag" style="background: #eff6ff; color: var(--primary);">📅 {{ article.year or 'N/A' }}</span>
+            <span class="tag" style="background: #eff6ff; color: var(--primary);">📚 {{ article.journal }}</span>
+            <span class="tag" style="background: #eff6ff; color: var(--primary);">🌐 {{ article.language or 'N/A' }}</span>
+            {% if article.has_fulltext %}
+            <span class="tag" style="background: #d1fae5; color: #065f46;">📄 开放全文</span>
+            {% endif %}
+        </div>
+
+        <div style="font-size: 0.9em; color: var(--text-light); margin-bottom: 16px;">
+            <strong>PMID:</strong> {{ article.pmid }} &nbsp;|&nbsp;
+            <strong>DOI:</strong> {{ article.doi or 'N/A' }} &nbsp;|&nbsp;
+            <strong>检索策略:</strong> {{ article.search_strategy or 'N/A' }}
+        </div>
+
+        <div style="font-size: 0.9em; color: var(--text); margin-bottom: 20px; line-height: 1.6;">
+            <strong>作者：</strong>{{ article.authors }}
+        </div>
+
+        {% if article.abstract %}
+        <div style="background: var(--bg); padding: 16px; border-radius: var(--radius-sm); margin-bottom: 20px;">
+            <div style="font-weight: 600; margin-bottom: 8px; font-size: 0.95em;">摘要</div>
+            <div style="font-size: 0.9em; line-height: 1.7; color: var(--text); white-space: pre-wrap;">{{ article.abstract }}</div>
+        </div>
+        {% endif %}
+
+        <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+            {% if article.acupoints %}
+            <div style="flex: 1; min-width: 200px;">
+                <div style="font-weight: 600; margin-bottom: 8px; color: #9333ea;">📍 关联穴位</div>
+                <div>
+                    {% for apt in article.acupoints %}
+                    <span class="tag tag-acupoint">{{ apt.name }} {{ '(' + apt.code + ')' if apt.code else '' }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            {% if article.genes %}
+            <div style="flex: 1; min-width: 200px;">
+                <div style="font-weight: 600; margin-bottom: 8px; color: #1e40af;">🧬 关联基因</div>
+                <div>
+                    {% for gene in article.genes %}
+                    <span class="tag tag-gene">{{ gene }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            {% if article.diseases %}
+            <div style="flex: 1; min-width: 200px;">
+                <div style="font-weight: 600; margin-bottom: 8px; color: #92400e;">🏥 关联疾病</div>
+                <div>
+                    {% for disease in article.diseases %}
+                    <span class="tag tag-disease">{{ disease }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border);">
+            <strong style="font-size: 0.9em;">外部链接：</strong>
+            {% if article.pmid %}
+            <a href="https://pubmed.ncbi.nlm.nih.gov/{{ article.pmid }}/" target="_blank" class="btn btn-sm btn-secondary">PubMed</a>
+            {% endif %}
+            {% if article.doi %}
+            <a href="https://doi.org/{{ article.doi }}" target="_blank" class="btn btn-sm btn-secondary">DOI</a>
+            {% endif %}
+            {% if article.pmcid %}
+            <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/{{ article.pmcid }}/" target="_blank" class="btn btn-sm btn-secondary">PMC全文</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

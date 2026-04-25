@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+{% set active_page = 'index' %}
+{% block title %}数据概览 - 针灸穴位-基因关联数据库{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <h1 style="margin-bottom: 8px; font-size: 1.6em;">📊 数据概览</h1>
+    <p style="color: var(--text-light); margin-bottom: 20px;">
+        针灸穴位-基因关联数据库 (Acupoint-Gene DB) 是一个系统性的文献整合数据库，
+        通过自动化采集 PubMed 文献，提取穴位-基因-疾病关联信息。
+    </p>
+
+    <!-- 统计卡 -->
+    <div class="stat-cards">
+        <div class="stat-card" style="border-top-color: #1a5fb4;">
+            <div class="number" id="stat-articles">-</div>
+            <div class="label">收录文献</div>
+        </div>
+        <div class="stat-card" style="border-top-color: #26a269;">
+            <div class="number" id="stat-genes">-</div>
+            <div class="label">关联基因</div>
+        </div>
+        <div class="stat-card" style="border-top-color: #c061cb;">
+            <div class="number" id="stat-acupoints">-</div>
+            <div class="label">关联穴位</div>
+        </div>
+        <div class="stat-card" style="border-top-color: #e5a50a;">
+            <div class="number" id="stat-diseases">-</div>
+            <div class="label">关联疾病</div>
+        </div>
+        <div class="stat-card" style="border-top-color: #3584e4;">
+            <div class="number" id="stat-fulltext">-</div>
+            <div class="label">开放全文</div>
+        </div>
+    </div>
+
+    <!-- 图表区 -->
+    <div class="two-col">
+        <div class="card">
+            <div class="card-title">📅 发表年份趋势</div>
+            <div id="year-chart" class="chart-box"></div>
+        </div>
+        <div class="card">
+            <div class="card-title">🏥 Top 疾病/表型</div>
+            <div id="disease-chart" class="chart-box"></div>
+        </div>
+    </div>
+
+    <div class="two-col">
+        <div class="card">
+            <div class="card-title">🧬 Top 高频基因</div>
+            <div id="gene-chart" class="chart-box"></div>
+        </div>
+        <div class="card">
+            <div class="card-title">📍 Top 高频穴位</div>
+            <div id="acupoint-chart" class="chart-box"></div>
+        </div>
+    </div>
+
+    <!-- 数据库构建流程 -->
+    <div class="card">
+        <div class="card-title">🔄 数据库构建流程</div>
+        <div class="steps">
+            <div class="step active">
+                <div class="step-num">1</div>
+                <div class="step-title">文献检索</div>
+                <div class="step-desc">PubMed 20+检索策略</div>
+            </div>
+            <div class="step active">
+                <div class="step-num">2</div>
+                <div class="step-title">数据采集</div>
+                <div class="step-desc">元数据与全文下载</div>
+            </div>
+            <div class="step active">
+                <div class="step-num">3</div>
+                <div class="step-title">实体提取</div>
+                <div class="step-desc">穴位/基因/疾病识别</div>
+            </div>
+            <div class="step active">
+                <div class="step-num">4</div>
+                <div class="step-title">关联分析</div>
+                <div class="step-desc">共现网络与统计</div>
+            </div>
+            <div class="step active">
+                <div class="step-num">5</div>
+                <div class="step-title">平台构建</div>
+                <div class="step-desc">可视化与查询</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+async function loadStats() {
+    const r = await fetch('/api/stats');
+    const s = await r.json();
+    document.getElementById('stat-articles').textContent = s.articles;
+    document.getElementById('stat-genes').textContent = s.genes;
+    document.getElementById('stat-acupoints').textContent = s.acupoints;
+    document.getElementById('stat-diseases').textContent = s.diseases;
+    document.getElementById('stat-fulltext').textContent = s.fulltext;
+}
+
+async function loadYearChart() {
+    const r = await fetch('/api/year_data');
+    const data = await r.json();
+    const chart = echarts.init(document.getElementById('year-chart'));
+    chart.setOption({
+        tooltip: { trigger: 'axis' },
+        grid: { left: '3%', right: '4%', bottom: '3%', top: '10%', containLabel: true },
+        xAxis: { type: 'category', data: data.map(d => d.year), axisLabel: { fontSize: 11 } },
+        yAxis: { type: 'value', axisLabel: { fontSize: 11 } },
+        series: [{
+            data: data.map(d => d.count),
+            type: 'bar',
+            itemStyle: { color: new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'#3584e4'},{offset:1,color:'#1a5fb4'}]), borderRadius: [4,4,0,0] }
+        }]
+    });
+}
+
+async function loadGeneChart() {
+    const r = await fetch('/api/top_genes?limit=15');
+    const data = await r.json();
+    const chart = echarts.init(document.getElementById('gene-chart'));
+    chart.setOption({
+        tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+        grid: { left: '3%', right: '8%', bottom: '3%', top: '3%', containLabel: true },
+        xAxis: { type: 'value', axisLabel: { fontSize: 11 } },
+        yAxis: { type: 'category', data: data.map(d => d.gene).reverse(), axisLabel: { fontSize: 11 } },
+        series: [{
+            data: data.map(d => d.count).reverse(),
+            type: 'bar',
+            itemStyle: { color: '#26a269', borderRadius: [0,4,4,0] }
+        }]
+    });
+}
+
+async function loadAcupointChart() {
+    const r = await fetch('/api/top_acupoints?limit=15');
+    const data = await r.json();
+    const chart = echarts.init(document.getElementById('acupoint-chart'));
+    chart.setOption({
+        tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+        grid: { left: '3%', right: '8%', bottom: '3%', top: '3%', containLabel: true },
+        xAxis: { type: 'value', axisLabel: { fontSize: 11 } },
+        yAxis: { type: 'category', data: data.map(d => d.name_en + (d.code ? ' ('+d.code+')' : '')).reverse(), axisLabel: { fontSize: 11 } },
+        series: [{
+            data: data.map(d => d.count).reverse(),
+            type: 'bar',
+            itemStyle: { color: '#c061cb', borderRadius: [0,4,4,0] }
+        }]
+    });
+}
+
+async function loadDiseaseChart() {
+    const r = await fetch('/api/top_diseases?limit=12');
+    const data = await r.json();
+    const chart = echarts.init(document.getElementById('disease-chart'));
+    chart.setOption({
+        tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+        grid: { left: '3%', right: '8%', bottom: '3%', top: '3%', containLabel: true },
+        xAxis: { type: 'value', axisLabel: { fontSize: 11 } },
+        yAxis: { type: 'category', data: data.map(d => d.disease).reverse(), axisLabel: { fontSize: 11 } },
+        series: [{
+            data: data.map(d => d.count).reverse(),
+            type: 'bar',
+            itemStyle: { color: '#e5a50a', borderRadius: [0,4,4,0] }
+        }]
+    });
+}
+
+loadStats();
+loadYearChart();
+loadGeneChart();
+loadAcupointChart();
+loadDiseaseChart();
+
+window.addEventListener('resize', () => {
+    ['year-chart','gene-chart','acupoint-chart','disease-chart'].forEach(id => {
+        const c = echarts.getInstanceByDom(document.getElementById(id));
+        if (c) c.resize();
+    });
+});
+</script>
+{% endblock %}

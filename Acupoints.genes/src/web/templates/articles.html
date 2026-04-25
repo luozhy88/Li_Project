@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% set active_page = 'articles' %}
+{% block title %}文献列表 - 针灸穴位-基因关联数据库{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <h1 style="margin-bottom: 8px; font-size: 1.5em;">📄 文献列表</h1>
+    <p style="color: var(--text-light); margin-bottom: 20px;">
+        共收录 {{ total }} 篇文献，支持按标题、作者、关键词搜索。
+    </p>
+
+    <div class="card" style="padding: 16px;">
+        <form method="get" action="/articles" class="search-box">
+            <input type="text" name="q" placeholder="搜索标题、作者、关键词..." value="{{ search }}">
+            <button type="submit" class="btn btn-primary">🔍 搜索</button>
+            {% if search %}
+            <a href="/articles" class="btn btn-secondary">重置</a>
+            {% endif %}
+        </form>
+    </div>
+
+    <div class="card">
+        <div style="overflow-x: auto;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>PMID</th>
+                        <th>标题</th>
+                        <th>年份</th>
+                        <th>期刊</th>
+                        <th>全文</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for a in articles %}
+                    <tr>
+                        <td>
+                            <a href="https://pubmed.ncbi.nlm.nih.gov/{{ a.pmid }}/" target="_blank">{{ a.pmid }}</a>
+                        </td>
+                        <td>
+                            <a href="/article/{{ a.id }}" style="font-weight: 500;">{{ a.title }}</a>
+                            <div style="font-size: 0.82em; color: var(--text-light); margin-top: 2px;">
+                                👤 {{ a.authors }}
+                            </div>
+                        </td>
+                        <td>{{ a.year or '-' }}</td>
+                        <td style="font-size: 0.88em;">{{ a.journal }}</td>
+                        <td>
+                            {% if a.has_fulltext %}
+                            <span class="tag" style="background: #d1fae5; color: #065f46;">✓</span>
+                            {% else %}
+                            <span class="tag" style="background: #f3f4f6; color: #9ca3af;">-</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="pagination">
+            {% if page > 1 %}
+            <a href="/articles?page={{ page-1 }}&q={{ search }}">← 上一页</a>
+            {% endif %}
+            <span class="current">第 {{ page }} 页</span>
+            {% if page * per_page < total %}
+            <a href="/articles?page={{ page+1 }}&q={{ search }}">下一页 →</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
