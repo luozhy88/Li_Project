@@ -1,0 +1,170 @@
+---
+output:
+  word_document: 
+    number_sections: true
+  pdf_document: default
+  html_document: default
+header-includes:
+  - \usepackage{fontspec}
+  - \setmainfont{Noto Sans CJK SC}  # 或者其他支持中文的字体
+title: "Integrative Analysis of TCM Metabolites in Thyroid Nodule Pathogenesis: Insights from Network Pharmacology and Molecular Docking"
+bibliography: references.bib
+csl: journal-of-ethnopharmacology.csl
+---
+
+```{r include=FALSE}
+library(kableExtra)
+gen_title <- function(i,c="图片标题") {
+  paste0("Figure", i, ": ", c) 
+}
+gen_title_table <- function(i,c="表标题") {
+  paste0("Table", i, ": ", c) 
+}
+```
+
+# Abstract
+
+Thyroid cancer, a malignant tumor originating from the follicular or parafollicular cells of the thyroid gland, has seen a rising incidence and is now the eighth most common cancer worldwide. This study employs network pharmacology to compare the active components, key targets, mechanisms of action, and related pathways of three classic traditional Chinese medicine (TCM) formulations—Xiao Ying Tang (XYT), Zhe Bei Mu (ZBM), and Xia Ku Cao (XKC)—for treating thyroid tumors. Through molecular docking and 3CLpro activity assays, we identified the most therapeutically effective active components and analyzed their mechanisms of action.
+
+Our findings revealed that the number of action targets ranked from few to many as follows: ZBM (78 targets, 1%), XKC (842 targets, 6%), and XYT (1595 targets, 12%). Gene ontology analysis indicated that XYT and XKC share similarities in biological processes, molecular functions, and cellular components. These genes are integral to voltage-gated calcium channel complexes, playing significant roles in oxidative stress responses, steroid hormone reactions, calcium homeostasis, and angiogenesis. Elevated levels of reactive oxygen species (ROS) are implicated in thyroid cancer progression through oxidative stress-induced DNA damage and genomic instability.
+
+Furthermore, transient receptor potential canonical (TRPC) channels were identified as key players in cancer cell proliferation. The enriched pathways associated with XYT and XKC include apoptosis, signal transduction, and immune response pathways. Notably, the anti-apoptotic gene BAG-1 was found to be highly expressed in thyroid cancer tissues compared to normal tissues. Molecular dynamics simulations demonstrated that XYT exhibited the highest binding affinity among the three formulations.
+
+In conclusion, this study highlights the potential of Xiao Ying Tang (XYT) in treating thyroid tumors through its strong binding affinities and interactions with key target proteins. XYT demonstrated the highest gene enrichment and binding affinity among the formulations analyzed, suggesting its significant therapeutic impact. The integration of network pharmacology and molecular docking offers valuable insights into the mechanisms of traditional Chinese medicine in thyroid cancer treatment, paving the way for future research.
+
+Keywords:Thyroid cancer, Traditional Chinese Medicine, Molecular docking, Gene ontology, KEGG pathways
+
+# Introduction
+
+Thyroid cancer is a malignant tumor that arises from the follicular epithelium or parafollicular cells of the thyroid gland and is recognized as the most prevalent malignancy in the head and neck region. In recent years, the incidence of thyroid cancer has been steadily increasing, surpassing that of other malignant tumors, and it has now become the eighth most common cancer worldwide[@Cabanillas2016ThyroidCancer].
+
+According to statistics from the National Cancer Center of China, thyroid cancer ranked seventh among all malignant tumors in terms of incidence in 2015, and it was fourth among female malignant tumors. Overall, the prognosis for thyroid cancer in China is relatively favorable, with a five-year survival rate of 84.3%. However, there remains a significant disparity compared to developed countries such as the United States, where the five-year survival rate is reported to be 98%[@Du2020EpidemiologyThyroid].
+
+Currently, there is no ideal curative treatment available in Western medicine. The primary treatment approach involves surgical resection of the thyroid gland combined with radioactive iodine therapy or lifelong administration of thyroid hormone replacement medications to manage symptoms[@WangCurrentSurgical2023]. Nevertheless, long-term medication can lead to side effects that cause considerable discomfort for patients, who also face risks of persistent or recurrent cancer along with local and distant metastases[@LiBloodProfiles2024][@ZhangThyroidCancer2023]. Even molecular targeted therapies such as Dabrafenib, Trametinib, Selpercatinib, and Pralsetinib are limited in clinical application due to their high costs and uncertain long-term efficacy[@AmericanCancerSociety2016CancerFacts][@Xing2013MolecularPathogenesis][@Ma2024ResearchTCM][@ChenResilience2024]. Therefore, it is crucial to actively seek effective methods for treating thyroid tumors and to conduct research on related regulatory mechanisms.
+
+Traditional Chinese medicine (TCM) offers unique experiences and remedies for treating thyroid tumors. Researchers have utilized a TCM heritage assistance platform to perform statistical analyses on clinical efficacy observations regarding TCM in the prevention and treatment of thyroid diseases over the past fifteen years. By categorizing 131 recorded TCM prescriptions by frequency, a total of 163 herbal medicines were identified. The two most frequently used herbs were *Xia Ku Cao* (Prunella vulgaris) with 116 occurrences and *Zhe Bei Mu* (Fritillaria thunbergii) with 108 occurrences[@Chen2024ModernResearch].
+
+*Xia Ku Cao* has been shown to exert a bidirectional regulatory effect on the immune system; its aqueous extract modulates NF-kB and MAP kinase activity to stimulate macrophage activity[@Sun2024ResearchProgress].
+
+Modern pharmacological studies have confirmed that *Zhe Bei Mu* contains various alkaloids, saponins, flavonoids, and polysaccharides that exhibit effects such as phlegm elimination, cough relief, anti-inflammatory properties, pain relief, and anti-tumor effects while also reversing tumor resistance[@Hou2024StudyMechanism]. Studies have demonstrated that network pharmacology analysis of *Zhe Bei Mu* reveals its intervention mechanisms in thyroid cancer by identifying 2,357 disease-related targets and 96 core targets associated with thyroid cancer, including critical genes like NPM1, HSPA5, and HDAC5[@Wang2024ExploringMechanism].
+
+Researchers have conducted network pharmacology and molecular docking studies on *Zhe Bei Mu* and *Xia Ku Cao*, identifying 108 targets related to treating thyroid nodules with overlapping targets such as AKT1, tumor protein P53 (TP53), and mitogen-activated protein kinase 1 (MAPK1) identified as core targets. Both herbs can treat thyroid nodules through multiple components, multiple targets, and multiple pathways[@Xu2024TCMTreatment].
+
+The *Xiao Ying Fang*, formulated by renowned TCM expert Professor Xu Zhiyin, consists of *Chai Hu*, *Yu Jin*, *Hou Po*, *Ban Xia*, *Dang Gui*, *Huang Qi*, *Bai Zhu*, *Cang Zhu*, *Ban Zhi Lian*, *Mao Zhua Cao*, and *Xia Ku Cao*. Clinical applications by Pu Chunli have demonstrated that this formula significantly alleviates neck discomfort in patients while reducing the volume and maximum diameter of thyroid nodules[@Lv2024TreatmentThyroid]. Furthermore, Meng Dali's clinical trials found that this formula can lower levels of thyroid autoantibodies while regulating CD4+ and CD8+ ratios to improve immune dysregulation[@Meng2024StudyTreatment]. Experimental studies have confirmed that this formula significantly inhibits follicular thyroid carcinoma by downregulating the HIF-1α/VEGF signaling pathway to suppress angiogenesis[@Deng2024EffectsSanjie].
+
+
+# Methods
+
+Metabolite information for *Fritillaria thunbergii* (ZBM), *Prunella vulgaris* (XKC), and the Xiao Ying Tang formula (XYT) was collected from the Traditional Chinese Medicine Systems Pharmacology (TCMSP) database[@TraditionalChineseMedicineSystemsPharmacologyDatabase]. The corresponding compound identifiers (CIDs) for these metabolites were retrieved from PubChem[@PubChemCompoundDatabase]. Using these CIDs, gene information related to the metabolites was obtained from the Meta_Bat, BindingDB, and GuideToPharmacology databases[@Meta_BatDatabase]. Additionally, thyroid nodule-related genes were sourced from GeneCards[@GeneCardsDatabase]. The intersection of genes associated with traditional Chinese medicine (TCM) metabolites and thyroid nodule-related genes was then identified for downstream analysis.
+
+Gene Ontology (GO) and Kyoto Encyclopedia of Genes and Genomes (KEGG) enrichment analyses were conducted on the intersecting genes using the `enrichGO` and `enrichKEGG` functions from the "clusterProfiler" package in R[@Yu2012clusterProfiler]. The results of these analyses were visualized to display the enriched biological processes, pathways, and functions associated with the metabolites and thyroid nodules (Figures 1 and 2). A significance threshold of p < 0.05 was applied to identify significantly enriched terms[@RCoreTeam2024R].
+
+For molecular docking studies, the CID-derived mySMILES data were converted into Structure Data Format (SDF) files using `scrub.py`[@PythonSoftwareFoundation2024PythonLanguage]. These SDF files served as input ligand files for docking simulations. Protein structures corresponding to the intersecting genes were obtained from the Protein Data Bank (PDB) via the RCSB website[@RCSBProteinDataBank]. AutoDock Vina was then employed for local docking calculations to predict binding affinities between metabolites and target proteins[@Trott2010AutoDockVina].
+
+The results of GO and KEGG enrichment analyses were visualized using bar plots, as shown in Figures 3 and 4. These visualizations highlight key biological processes and pathways involved in metabolite-disease interactions, providing insights into potential mechanisms of action[@Zhang2020VisualizationEnrichment][@Chen2021DataVisualization].
+
+   
+# Workflow
+
+![`r gen_title(1,"Network pharmacology workflow for investigating the mechanism of traditional Chinese medicine in treating thyroid nodules")`](output/flowchart.png){width="100%" height="100%"}
+
+
+# Results
+
+To identify potential biomarkers within the gut microbiome associated with thyroid cancer, we conducted an in-depth analysis of microbial community data at two taxonomic levels: genus and species.  This comprehensive approach allows for a more nuanced understanding of the microbial landscape and its potential implications in thyroid cancer pathogenesis.  In the following sections, we present the results of our machine learning feature selection process at both the genus and species levels, offering valuable insights into the most relevant microbial taxa associated with thyroid cancer.
+
+## Screening of Disease-Related Targets
+
+
+For the three traditional Chinese medicine (TCM) formulas ZBM, XKC, and XYT, Venn diagrams were generated to compare disease-related genes with TCM-related genes. In the case of ZBM (Figure2 A), 12,909 disease-related genes and 29 TCM-related genes were identified, with 78 overlapping genes, accounting for 1% of the total. For XKC (Figure2 B), 12,145 disease-related genes and 252 TCM-related genes were identified, with 842 overlapping genes, representing 6% of the total. Lastly, for XYT (Figure2 C), 11,392 disease-related genes and 536 TCM-related genes were identified, with 1,595 overlapping genes, making up 12% of the total. These overlapping genes may represent potential therapeutic targets associated with the respective TCM formulas.
+
+![`r gen_title(2,"Venn diagram analysis of disease-related genes and TCM-related genes for the traditional Chinese medicine formulas. (A) ZBM formula showing 12,909 disease-related genes and 29 TCM-related genes with 78 overlapping genes (1% of total). (B) XKC formula revealing 12,145 disease-related genes and 252 TCM-related genes with 842 overlapping genes (6% of total). (C) XYT formula displaying 11,392 disease-related genes and 536 TCM-related genes with 1,595 overlapping genes (12% of total). The overlapping genes indicate potential therapeutic targets associated with each TCM formula.")`](../v20241015/output/02_combined_venn_plot.png){width="100%" height="100%"}
+
+
+
+###  Functional Annotation - GO
+
+![`r gen_title(3,"Gene Ontology (GO) enrichment analysis of functional annotations for three traditional Chinese medicine (TCM) formulas: ZBM, XKC, and XYT. The bar chart displays the enriched GO terms in three categories: biological processes (BP), molecular functions (MF), and cellular components (CC). Each formula is represented by a different color: ZBM (light blue), XKC (orange), and XYT (green). The x-axis shows the gene ratio for each GO term, while the y-axis lists the enriched GO terms. The length of each bar indicates the level of enrichment for that particular GO term in the respective formula. This analysis reveals distinct functional profiles for each TCM formula, with XYT showing the highest representation across most entries, followed by XKC and then ZBM, suggesting varying degrees of impact on biological processes related to tumors, inflammation, and proliferation.")`](../v20241015/output/03.2_combined_GO_plot.png){width="100%" height="100%"}
+
+To comprehensively understand the functional differences among the ZBM, XKC, and XYT groups based on GO enrichment analysis results, we compared the three groups across biological processes (BP), molecular functions (MF), and cellular components (CC). 
+
+As illustrated in the figures, the XYT group exhibited the highest representation across most entries, particularly in key biological processes related to tumors, inflammation, and proliferation. For example, within biological processes (BP), XYT dominated in categories such as response to oxidative stress, response to steroid hormones, calcium ion homeostasis, and vascular processes in the circulatory system. The XKC group followed a similar trend but with lower representation than XYT, while the ZBM group had the lowest representation across most entries. 
+
+In terms of molecular functions (MF), the XYT group again led in several entries, especially in voltage-gated ion channel activity, transcription factor binding, and oxidoreductase activity. The XKC group ranked second to XYT, whereas ZBM had the fewest gene enrichments.
+
+Regarding cellular components (CC), XYT dominated multiple entries related to cell membranes, synapses, and ion channels, such as voltage-gated calcium channel complexes and synaptic membranes. The performance of XKC was similar to that of XYT; however, ZBM showed a significantly lower number of associated genes. 
+
+Overall, the XYT group had the highest representation across most entries, followed by XKC and then ZBM. This indicates that XYT has the highest degree of gene enrichment in functional annotations and may have a more substantial impact on biological processes related to tumors, inflammation, and proliferation. Additionally, XYT and XKC exhibited similar trends across multiple entries, suggesting a degree of functional similarity between these two formulations.
+
+
+
+###  Functional Annotation -KEGG
+
+To gain a comprehensive understanding of functional differences among ZBM, XKC, and XYT within signaling pathways based on KEGG enrichment analysis results, we conducted comparative analyses. 
+
+The data reveal that the XYT group showed the highest enrichment across most signaling pathways, particularly in apoptosis pathways and signal transduction processes. The overall enrichment level for XKC was next highest while ZBM exhibited relatively lower enrichment across most pathways. 
+
+In cancer-related pathways—such as PD-L1 expression and PD-1 checkpoint pathways as well as various specific cancer pathways—the XYT group displayed the highest enrichment levels followed by XKC. This suggests that both groups may play significant roles in regulating tumor-associated pathways. 
+
+In immune system-related pathways and inflammation response pathways, both XYT and XKC exhibited similar enrichment patterns that were notably higher than those observed in ZBM. This trend was particularly evident in pathways associated with autoimmune diseases and rheumatoid arthritis. 
+
+In proliferation-related pathways such as cell growth and death as well as signaling molecules and interactions, XYT again demonstrated the highest enrichment levels while XKC closely followed. This indicates that both groups may share similar functional characteristics in regulating cell proliferation. 
+
+XYT and XKC exhibited similar enrichment trends across multiple signaling pathways—especially those related to metabolism, signal transduction, and immune responses—indicating a potential functional similarity between these two formulations. In contrast, ZBM showed lower enrichment levels across most pathways suggesting its role in related biological functions may be comparatively weaker.
+
+
+![`r gen_title(4,"KEGG pathway enrichment analysis of three traditional Chinese medicine (TCM) formulas: ZBM, XKC, and XYT. The dot plot illustrates enriched KEGG pathways categorized into major functional groups including immune system, metabolism, signal transduction, and disease-specific pathways. The size of dots represents the gene count, while colors indicate the adjusted p-value significance level (purple: most significant; red: least significant). The x-axis shows the gene ratio, and the y-axis displays the enriched KEGG pathways grouped by functional categories. Different shapes denote the three TCM formulas (XYT, XKC, and ZBM).  ")`](../v20241015/output/03.2_kegg_enrichment_plot_ALL.png){width="100%" height="100%"}
+
+
+
+
+
+### Molecular Dynamics Simulation
+
+The analysis reveals significant differences in binding energies among three types of compounds: ZBM, XKC, and XYT, across 20 compound entries. Molecular docking and interaction studies between core gene target proteins and traditional Chinese medicine components were conducted using AutoDock Vina software. It is generally accepted that the lower the binding energy between a ligand and a receptor, the stronger the binding affinity. When the binding energy is less than 0 kcal/mol, spontaneous binding can occur. A binding energy less than −5 kcal/mol indicates good binding affinity, while a value below −7 kcal/mol suggests a highly active binding conformation.
+
+Overall, XYT was most frequently represented across the entries, indicating its lowest free energy of binding to proteins and superior binding capabilities compared to the other compounds. XKC followed, also showing high representation in several entries. In contrast, ZBM had the lowest representation, indicating its relatively higher binding energy and weaker binding capacity.
+
+Specifically examining compound-protein interactions, such as those involving β-Sitosterol (CID 222284) with proteins 6UNI, 9AYG, and 4P5A, XYT demonstrated outstanding performance, indicating its strongest binding affinity at these protein targets. Conversely, ZBM showed minimal representation at these entries, reflecting its weaker binding energy.
+
+Moreover, trends indicated that XYT and XKC performed consistently alike, suggesting they may share similar functional mechanisms when binding to proteins. They could potentially play analogous roles in certain biological processes or disease-associated pathways.
+
+In summary, the comparative analysis of these three compound types suggests that XYT exerts the greatest functional influence, followed by XKC, while ZBM's influence appears relatively minor. This disparity may correlate with their respective binding capacities at different protein targets.
+
+
+![`r gen_title(5," Molecular docking analysis comparing binding energies of top 20 compounds from three traditional Chinese medicine (TCM) formulas: ZBM, XKC, and XYT. The horizontal bar chart displays binding energy scores (kcal/mol) for protein-ligand interactions, with each compound labeled by its identifier and target protein. The compounds are ranked by binding affinity and color-coded by formula type (XKC: green, XYT: orange, ZBM: purple). Lower binding energy values indicate stronger protein-ligand interactions. ")`](../v20241015/output/07.venny_barplot.png){width="100%" height="100%"}
+
+
+
+
+## Discussion
+
+This study employed network pharmacology to compare the active components, key targets, mechanisms of action, and related pathways of three classic traditional Chinese medicine formulations for the treatment of thyroid tumors: XYT, XKC, and ZBM. We also identified the most therapeutically effective active components through molecular docking and 3CLpro activity assays to analyze the mechanisms by which these traditional formulations treat thyroid cancer.
+
+The results indicated that the number of action targets ranked from few to many is as follows: ZBM (78, 1%), XKC (842, 6%), and XYT (1595, 12%). Gene ontology analysis revealed that XYT and XKC share similarities in various aspects within biological processes (BP), molecular functions (MF), and cellular components (CC). These genes are crucial components of voltage-gated calcium channel complexes, involved in regulating voltage-gated ion channel activity, transcription factor binding, and redox enzyme activity. They play significant roles in oxidative stress responses, steroid hormone reactions, calcium homeostasis, and angiogenesis. Reactive oxygen species (ROS) are implicated in various inflammatory and chronic diseases, including cancer. Under normal circumstances, cellular redox status is maintained by balancing ROS production with antioxidant retention. Oxidative reactions are interdependent with the occurrence of thyroid cancer; elevated ROS levels can trigger the progression of malignant thyroid tumors[@Heydarzadeh2022CrossTalkPolyphenols]. Oxidative stress induces DNA damage and genomic instability, sustaining proliferation pathways and cell survival while promoting angiogenesis and metastasis, thereby supporting multiple stages of tumor development. Compared to normal thyroid tissue, thyroid cancer tissues exhibit higher levels of thyroid hormones[@Cazarin2022RedoxHomeostasis].
+
+Transient receptor potential canonical (TRPC) channels are non-selective calcium channels activated by various stimuli that allow calcium ions to enter cells. Several TRPC channels contribute to promoting cancer cell proliferation. Studies have shown that TRPC1 and TRPC2 influence the migration and adhesion of follicular thyroid cancer cells as well as RAC, calcium, and MMP2[@Asghar2015TRPC1Channels]. These ion channels are also widely present in vascular endothelial cells; calcium-regulating proteins can modulate calcium ion influx from these channels into endothelial cells, subsequently regulating tumor angiogenesis[@Scarpellino2020CalciumPermeableChannels]. Thus, Xiao Ying Tang and Xia Ku Cao may play significant roles in regulating redox reactions and inhibiting calcium channels to suppress angiogenesis in thyroid tumors.
+
+The enriched pathways associated with the target genes related to XYT and XKC include apoptosis, signal transduction, immune system-related risks, and pathological responses. Abnormalities in apoptosis mechanisms within tumor cells can prevent the normal clearance of aberrant cells. The Bcl-2-associated gene BAG-1 is a novel anti-apoptotic gene that can bind to Bcl-2 protein; this interaction inhibits the release of apoptotic factors such as cytochrome c, thereby exerting anti-apoptotic effects. Research indicates that the positive expression rate of BAG-1 in thyroid cancer is 74%, significantly higher than in thyroid adenomas or normal thyroid tissues[@Lu2020AdvancesResearch]. Recent studies have utilized nanomaterials to promote apoptosis for anti-tumor effects[@Davis2014NanotetracTargets].
+
+Molecular dynamics simulation results revealed a hierarchical binding affinity pattern, with ZBM showing the lowest affinity, followed by XKC, and XYT demonstrating the highest binding strength. Among these classical compounds, β-Sitosterol (CID 222284) exhibited the most robust binding interactions with protein structures 6UNI, 9AYG, and 4P5A, displaying remarkable binding affinities. Additionally, XYT demonstrated notable binding capabilities, particularly forming strong molecular interactions with protein structures 2AR9 and 7KYO, suggesting its potential therapeutic significance in targeting these specific protein conformations.
+
+The top-ranked binding compounds are involved in pathways such as CYP3A4, CACNA1H, and POLB. CYP3A4 is a critical enzyme for the metabolism of chemotherapeutic agents in thyroid tumors; for instance, Vandetanib is a tyrosine kinase inhibitor used for medullary thyroid carcinoma primarily metabolized by CYP3A4[@Indra2019IdentificationHuman]. The regulation of CYP3A4 expression involves multiple signaling pathways. In the context of cancer cachexia, parathyroid hormone-related peptide (PTHrP) has been identified as a key regulatory factor that inhibits CYP3A4 expression via the cAMP/PKA/PKC/NF-κB pathway; inhibitors of these pathways can reverse this suppression[@Fujita2024InvolvementParathyroid].
+
+Currently confirmed major signaling pathways involved in thyroid cancer include MAPK, PI3K, Wnt/β-catenin, Shh, Keap1/Nrf2, JAK-STAT, and NF-κB pathways. The activation mechanisms of Wnt/β-catenin signaling promote thyroid cancer progression through β-catenin stabilization[@SastrePerona2024RoleWnt]. Keap1/Nrf2 signaling participates in both benign and malignant thyroid diseases and can serve as a prognostic marker or therapeutic target[@Renaud2024Keap1Nrf2Signaling]. The activation of MAPK signaling is closely associated with various types of thyroid cancers, particularly papillary thyroid carcinoma (PTC) and follicular thyroid carcinoma (FTC), making MAPK and PI3K pathways key activation routes in thyroid tumorigenesis[@Zaballos2024KeySignaling].
+
+## Conclusion
+
+This study elucidated the potential mechanisms of XYT in the treatment of thyroid tumors through network pharmacology. Our findings suggest that active components, such as β-Sitosterol, may provide crucial therapeutic effects by influencing target proteins including 6UNI, 9AYG, and 4P5A. Molecular docking studies further demonstrated that the primary active ingredients exhibited strong binding affinities with the target proteins, providing a solid foundation for future investigations. By integrating network pharmacology analysis and molecular docking validation, we discovered that the pharmacodynamics of β-Sitosterol is likely mediated through the interaction of its active molecules with target proteins, although its pharmacokinetic properties warrant further exploration. While this research offers valuable insights, it is important to acknowledge its limitations, and additional pharmacological and clinical studies are necessary to validate our conclusions.
+
+```{r include=FALSE}
+dir.create("output/fig_output",recursive = T)
+system("cp output/flowchart.png output/fig_output/fig1.png")
+system("cp ../v20241015/output/02_combined_venn_plot.png  output/fig_output/fig2_combined_venn_plot.png")
+system("cp ../v20241015/output/03.2_combined_GO_plot.png  output/fig_output/fig3_combined_GO_plot.png")
+system("cp ../v20241015/output/03.2_kegg_enrichment_plot_ALL.png  output/fig_output/fig4_kegg_enrichment_plot_ALL.png")
+system("cp ../v20241015/output/07.venny_barplot.png  output/fig_output/fig5.venny_barplot.png ")
+
+```
+
+## References

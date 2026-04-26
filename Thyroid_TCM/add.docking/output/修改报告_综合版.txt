@@ -1,19 +1,20 @@
 ================================================================================
 《2024.12.21v2.docx》稿件修改综合报告
 ================================================================================
-生成时间：2026-04-23
+生成时间：2026-04-24
 
 ================================================================================
-第一部分：V3版本主要修改内容（全文润色与结构调整）
+第一部分：V3-V5版本主要修改内容（全文润色、引用清理与结构调整）
 ================================================================================
 
 一、修改概述
 -----------
 本报告记录从原始稿件（2024.12.21v2.docx）到最终投稿版本
 （2024.12.21v2_docking_updated.docx）的全部修改内容，
-包括：全文语言润色、分子对接图片整合、参考文献纠正、新增局限性声明等。
+包括：全文语言润色、分子对接图片整合、参考文献纠正与大规模清理、
+新增局限性声明、中文文献替换为英文综述等。
 
-二、主要修改模块（共7大模块）
+二、主要修改模块（共9大模块）
 ------------------------------
 
 【模块1】分子对接结果可视化（图片整合）
@@ -113,7 +114,42 @@
 
 ================================================================================
 
-【模块7】标记颜色管理
+【模块7】大规模参考文献清理（V4-V5核心工作）
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+原始状态：
+  参考文献列表中存在大量幽灵引用、伪造引用、内容不匹配引用和重复引用。
+
+修改内容：
+  ① 删除4个幽灵引用：[8]、[9]、[27]、[28]（正文未引用）
+  ② 删除3个内容不匹配引用：[15]、[16]、[17]（引用文献与正文描述完全不符）
+  ③ 删除2个伪造引用：[4]、[5]（经网络检索确认不存在）
+     - [4] Li J et al. Thyroid 2024 → 真实作者为Liu H等，刊于J Multidiscip Healthc 2023
+     - [5] Zhang S et al. J Clin Med 2023 → 真实作者为Díez JJ等，刊于J Multidiscip Healthc 2021
+  ④ 合并重复引用：[12]与[13]为同一篇Nile SH浙贝母综述，合并为[12]
+  ⑤ 删除Introduction中3句无可靠文献支撑的临床疗效声明
+  ⑥ 全面重新编号所有正文引用（1-29连续）和参考文献列表（34条）
+
+================================================================================
+
+【模块8】中文期刊引用替换为英文综述
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+原始状态：
+  [3] Wang L, Zhang H. 中华外科杂志 2023（中文期刊）
+  [11] Sun Y 等. 夏枯草化学成分中文期刊
+
+修改内容：
+  [3] → Haugen BR, Alexander EK, Bible KC, et al. 2015 American Thyroid Association 
+        Management Guidelines for Adult Patients with Thyroid Nodules and 
+        Differentiated Thyroid Cancer. Thyroid. 2016;26(1):1–133.
+  
+  [11] → Wang SJ, Wang XH, Dai YY, Ma MH, Rahman K, Nian H, Zhang H. 
+        Prunella vulgaris: a comprehensive review of chemical constituents, 
+        pharmacological effects and clinical applications. 
+        Curr Pharm Des. 2019;25(3):359–369.
+
+================================================================================
+
+【模块9】标记颜色管理
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   所有新增内容和修改内容均用粉红色（Hot Pink, #FF69B4）标注，
   便于作者与合作者区分原文和修改部分。
@@ -131,7 +167,9 @@
 ├─────────────────┼────────────────────┼────────────────────────────┤
 │ 对接图          │ 0张                │ 1张整合大图（Figure 6）    │
 │ 段落数          │ ~127段             │ ~145段                     │
-│ 参考文献        │ 39条               │ 44条（新增5条）            │
+│ 参考文献        │ 39条               │ 34条（清理后）             │
+│ 幽灵/伪造引用   │ 6条                │ 0条                        │
+│ 中文期刊引用    │ 2条                │ 0条（全部替换为英文）      │
 │ 局限性声明      │ 无                 │ 有（5点）                  │
 │ 文献实验支撑    │ 无                 │ 有（5篇文献）              │
 │ 前后不一致      │ 5处严重错误        │ 全部修正                   │
@@ -170,7 +208,7 @@
      理由：正文描述为"Zhe Bei Mu网络药理学分析...2,357疾病靶点、96核心靶点"，
            原文引用是材料科学摩擦学研究，完全不匹配。
      ⚠️ 注意：[12]和[13]现在引用同一篇文献。由于找不到单独的浙贝母网络药理
-           学英文文献，这是务实的替代方案。
+           学英文文献，这是务实的替代方案。已在V5中合并为[12]。
 
 [14] 原文：Xu Z et al. 中西医保守治疗良性甲状腺结节Meta分析 (eCAM 2024)
      → 纠正为：Wang GQ et al. 浙贝母-夏枯草药对治疗甲状腺结节的网络药理学
@@ -225,85 +263,102 @@
 
 ---
 
-二、仍需进一步处理的参考文献
+二、已删除的参考文献（10条）
 ==============================
 
-以下引用经大量检索后，未能找到与正文描述完全匹配的英文文献。
-建议作者在投稿前进一步核实或修改正文。
+以下引用已在V4-V5中从正文和参考文献列表中物理删除。
 
-[15] 正文描述：Pu Chunli应用消瘿方缓解颈部不适、缩小结节体积和直径
-     当前引用：Lv J et al. 自主功能性甲状腺结节根治性治疗的成本效益
-                (Clin Endocrinol 2024)
-     问题：引用与正文完全不匹配。
-     检索结果：未找到作者"Pu Chunli"与"Xiao Ying Tang"相关的索引文献。
-     最接近的替代：Wang TX et al. 消瘿散结汤治疗甲状腺结节临床研究
-                    (新中医 2021;53(21):39-42)
-     建议：删除此引用及对应正文描述，或找到正确的文献来源。
-
-[16] 正文描述：Meng Dali临床试验发现消瘿方可降低甲状腺自身抗体水平、
-                调节CD4+/CD8+比例
-     当前引用：Meng D et al. 植物源生物碱治疗结直肠癌综述
-                (Front Pharmacol 2024)
-     问题：引用与正文完全不匹配。作者名"Meng Dali"与引用中的"Meng D"
-           可能不是同一人。
-     检索结果：未找到作者"Meng Dali"与"Xiao Ying Tang"及CD4+/CD8+
-           相关的索引文献。
-     最接近的替代：Chen JL et al. 消瘿方对桥本甲状腺炎患者自身抗体的影响
-                    (现代中西医结合杂志 2016)
-     建议：删除此引用及对应正文描述，或找到正确的文献来源。
-
-[17] 正文描述：消瘿方通过下调HIF-1α/VEGF信号通路抑制滤泡状甲状腺癌血管生成
-     当前引用：Deng J et al. 散结消瘿方联合左甲状腺素治疗良性甲状腺结节
-                (eCAM 2024)
-     问题：方名不匹配（正文为"Xiao Ying Tang"，引用为"Sanjie Xiaoying Fang"）；
-           研究类型不匹配（正文为实验研究/FTC，引用为临床研究/良性结节）。
-     检索结果：找到Deng JL et al. 散结消瘦方通过HIF-1α/VEGF对FTC裸鼠
-           血管生成的影响 (中草药 2024;45(11):3795-3799)，但方名为
-           "散结消瘦方"而非"消瘿汤"。
-     建议：核实方名是否应为"Sanjie Xiaoshou Fang"，或找到正确的
-           Xiao Ying Tang实验研究文献。
-
-[8] Ma W et al. TCM syndrome differentiation in colorectal cancer (eCAM 2024)
-     问题：该引用未被正文引用（幽灵引用）。
-     建议：从参考文献列表中删除。
-
-[9] Chen R et al. Resilience in Chinese spouses of advanced cancer patients
-     (Cancer Nursing 2024)
-     问题：该引用未被正文引用（幽灵引用）。
-     建议：从参考文献列表中删除。
-
-[27] Zhang Y et al. GO/KEGG富集结果可视化 (Bioinformatics 2020)
-     问题：该引用未被正文引用（幽灵引用）。信息也不完整（无DOI，
-           作者名只有Zhang Y）。
-     建议：从参考文献列表中删除，或补充完整信息。
-
-[28] Chen H et al. 生物信息学数据可视化综述 (Brief Bioinform 2021)
-     问题：该引用未被正文引用（幽灵引用）。信息也不完整（无DOI，
-           作者名只有Chen H）。
-     建议：从参考文献列表中删除，或补充完整信息。
-
----
-
-三、其他可疑但无法完全确认的引用
-==================================
-
-[3] Wang L, Zhang H. Current surgical status of thyroid diseases.
-    Chinese Journal of Surgery. 2023
-    该期刊为中文期刊，但论文为英文撰写。建议确认是否有对应的英文版本
-    或英文综述可替代。
-
-[4] Li J et al. Blood profiles in radioiodine refractory PTC.
-    Thyroid. 2024;34(1):23-31
-    2024年发表的文献，在2024年12月的论文中引用。时间上是可能的，
-    但建议核实该文献是否真实存在。
+[4] Li J et al. Blood profiles in radioiodine refractory PTC. Thyroid. 2024
+    问题：经PubMed/Google Scholar检索核实，该文献不存在。
+    真实文献：Liu H, Chen Q, Liu B, et al. Blood profiles in the prediction of
+             radioiodine refractory papillary thyroid cancer: a case-control study.
+             J Multidiscip Healthc. 2023;16:535-546.
+    处理：删除引用标注和参考文献条目。
 
 [5] Zhang S et al. Thyroid cancer patients' view of clinician professionalism.
     J Clin Med. 2023
-    建议核实该文献的真实性。
+    问题：经检索核实，该文献不存在。
+    真实文献：Díez JJ, Galofré JC. Thyroid cancer patients' view of clinician
+             professionalism and multidisciplinary approach to their management.
+             J Multidiscip Healthc. 2021;14:1053-1061.
+    处理：删除引用标注和参考文献条目。
 
-[11] Sun Y et al. Research progress on chemical composition of Prunella vulgaris.
-     Chin J Org Chem 2024
-     该期刊为中文期刊，论文为英文撰写。建议确认是否有对应的英文版本。
+[8] Ma W et al. TCM syndrome differentiation in colorectal cancer (eCAM 2024)
+    问题：幽灵引用，正文未引用。
+    处理：删除。
+
+[9] Chen R et al. Resilience in Chinese spouses of advanced cancer patients
+    (Cancer Nursing 2024)
+    问题：幽灵引用，正文未引用。
+    处理：删除。
+
+[13] Nile SH et al. 浙贝母综述（重复）
+    问题：与[12]为同一篇文献，重复引用。
+    处理：合并为[12]。
+
+[15] Lv J et al. Cost effectiveness of autonomously functioning thyroid nodules
+    (Clin Endocrinol 2024)
+    问题：正文描述为"Pu Chunli应用消瘿方缓解颈部不适"，引用为成本效益研究，
+          完全不匹配。未找到作者"Pu Chunli"与"Xiao Ying Tang"相关索引文献。
+    处理：删除引用标注、参考文献条目，以及对应正文描述。
+
+[16] Meng D et al. Plant-derived alkaloids for colorectal cancer (Front Pharmacol 2024)
+    问题：正文描述为"Meng Dali临床试验发现消瘿方可降低甲状腺自身抗体水平"，
+          引用为结直肠癌生物碱综述，完全不匹配。
+          未找到作者"Meng Dali"与"Xiao Ying Tang"及CD4+/CD8+相关索引文献。
+    处理：删除引用标注、参考文献条目，以及对应正文描述。
+
+[17] Deng J et al. Sanjie Xiaoying Fang combined with levothyroxine (eCAM 2024)
+    问题：正文描述为"消瘿方通过下调HIF-1α/VEGF抑制滤泡状甲状腺癌血管生成"，
+          引用为"散结消瘿方联合左甲状腺素治疗良性甲状腺结节"临床研究，
+          方名和研究类型均不匹配。
+    处理：删除引用标注、参考文献条目，以及对应正文描述。
+
+[27] Zhang Y et al. Visualization of enrichment results in GO and KEGG pathways
+    (Bioinformatics 2020)
+    问题：幽灵引用，正文未引用。信息也不完整（无DOI，作者名只有Zhang Y）。
+    处理：删除。
+
+[28] Chen H et al. Data visualization in bioinformatics (Brief Bioinform 2021)
+    问题：幽灵引用，正文未引用。信息也不完整（无DOI，作者名只有Chen H）。
+    处理：删除。
+
+---
+
+三、已替换的参考文献（2条）
+============================
+
+[3] 原文：Wang L, Zhang H. Current surgical status of thyroid diseases.
+    Chinese Journal of Surgery. 2023;61(2):145–150.
+    问题：中文期刊，论文为英文撰写。
+    → 替换为：Haugen BR, Alexander EK, Bible KC, Doherty GM, Mandel SJ, 
+              Nikiforov YE, et al. 2015 American Thyroid Association Management 
+              Guidelines for Adult Patients with Thyroid Nodules and Differentiated 
+              Thyroid Cancer: The American Thyroid Association Guidelines Task Force 
+              on Thyroid Nodules and Differentiated Thyroid Cancer. 
+              Thyroid. 2016;26(1):1–133. doi:10.1089/thy.2015.0020
+    理由：ATA指南是甲状腺癌诊疗的权威英文综述，与正文"手术切除+放射性碘治疗
+          +终身甲状腺激素替代"的描述完全匹配。
+
+[11] 原文：Sun Y, Liang W, Gan X. Research progress on chemical composition and 
+     pharmacological effects of Prunella vulgaris. Chinese Journal.
+     问题：中文期刊，论文为英文撰写。
+    → 替换为：Wang SJ, Wang XH, Dai YY, Ma MH, Rahman K, Nian H, Zhang H. 
+              Prunella vulgaris: a comprehensive review of chemical constituents, 
+              pharmacological effects and clinical applications. 
+              Curr Pharm Des. 2019;25(3):359–369. doi:10.2174/1381612825666190313121608
+    理由：Current Pharmaceutical Design是权威英文综述期刊，该文献全面覆盖
+          夏枯草的化学成分和药理作用，与正文描述高度匹配。
+
+---
+
+四、当前参考文献统计
+====================
+
+总条目数：34条
+- 正文编号引用范围：1-29（连续无缺失）
+- Discussion作者-年份引用：5条（β-sitosterol支撑文献，[30]-[34]）
+- 全部为英文文献，无中文期刊
 
 
 ================================================================================
@@ -368,14 +423,19 @@
 
 ---
 
-投稿前必须完成：
+投稿前建议完成：
 ----------------
   ① 全文母语润色（当前语言质量仍是最大短板）
-  ② 核实所有原始参考文献的准确性（尤其是2024年文献）
-  ③ 删除[8]、[9]、[27]、[28]四个幽灵引用
-  ④ 核实[15]、[16]、[17]的文献来源，如无法确认则删除对应正文描述
-  ⑤ 考虑将[3]、[11]等中文期刊引用替换为英文综述
-  ⑥ 准备好回复审稿人的预设话术（尤其是关于"缺乏实验验证"的质疑）
+  ② 准备好回复审稿人的预设话术（尤其是关于"缺乏实验验证"的质疑）
+  ③ 确认所有作者对润色后内容的认可
+
+【已完成项】以下任务已在本次会话中完成：
+  ✓ 删除[8]、[9]、[27]、[28]四个幽灵引用
+  ✓ 删除[15]、[16]、[17]三个不匹配引用及对应正文
+  ✓ 删除[4]、[5]两个伪造引用
+  ✓ 合并[12]、[13]重复引用
+  ✓ 将[3]、[11]中文期刊替换为英文综述
+  ✓ 重新编号所有引用
 
 
 ================================================================================
@@ -383,14 +443,20 @@
 ================================================================================
 
 原始文件：
-  2024.12.21v2.docx
+  input/2024.12.21v2.docx
 
 最终文件：
-  output/2024.12.21v2_docking_updated.docx
+  output/2024.12.21v2_docking_updated.docx      （当前工作主文件）
+  output/2024.12.21v2_docking_updated_final.docx （最终备份）
+  output/figure_composite_docking.png             （分子对接整合大图）
 
-辅助文件：
-  output/figure_composite_docking.png  （分子对接整合大图）
-  output/修改报告_综合版.txt            （本报告）
+报告文件：
+  output/修改报告_综合版.txt                      （本报告）
+  output/会话状态_恢复用.txt                      （会话恢复状态）
+
+辅助脚本（保留备查）：
+  fix_references_v5.py
+  replace_chinese_refs.py
 
 ================================================================================
 报告结束
