@@ -7,6 +7,7 @@
 import os
 import json
 import subprocess
+import math
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -19,25 +20,66 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 OUTPUT_DIR = 'output/paper_figures'
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-BASE_URL = 'http://ag.db.qyjc.top'
+# 加载本地数据
+LOCAL_DB_PATH = 'cloudflare-test-worker/db_data.json'
+_local_db = None
 
-# 加载中文字体
-CJK_FONT = fm.FontProperties(fname='/usr/share/fonts/google-noto-cjk/NotoSansCJK-Medium.ttc')
-CJK_FONT_LIGHT = fm.FontProperties(fname='/usr/share/fonts/google-noto-cjk/NotoSansCJK-Light.ttc')
-CJK_FONT_BOLD = fm.FontProperties(fname='/usr/share/fonts/google-noto-cjk/NotoSansCJK-Bold.ttc')
+def get_local_db():
+    global _local_db
+    if _local_db is None:
+        with open(LOCAL_DB_PATH, 'r', encoding='utf-8') as f:
+            _local_db = json.load(f)
+    return _local_db
+
+# 加载中文字体（支持 macOS / Linux）
+import platform
+if platform.system() == 'Darwin':
+    # macOS
+    CJK_FONT_PATH = '/System/Library/Fonts/PingFang.ttc'
+    CJK_FONT = fm.FontProperties(fname=CJK_FONT_PATH)
+    CJK_FONT_LIGHT = fm.FontProperties(fname=CJK_FONT_PATH)
+    CJK_FONT_BOLD = fm.FontProperties(fname=CJK_FONT_PATH)
+else:
+    # Linux
+    CJK_FONT_PATH = '/usr/share/fonts/google-noto-cjk/NotoSansCJK-Medium.ttc'
+    CJK_FONT = fm.FontProperties(fname='/usr/share/fonts/google-noto-cjk/NotoSansCJK-Medium.ttc')
+    CJK_FONT_LIGHT = fm.FontProperties(fname='/usr/share/fonts/google-noto-cjk/NotoSansCJK-Light.ttc')
+    CJK_FONT_BOLD = fm.FontProperties(fname='/usr/share/fonts/google-noto-cjk/NotoSansCJK-Bold.ttc')
+
+# 设置 matplotlib 全局字体以支持 networkx 等库
+CJK_FONT_NAME = fm.FontProperties(fname=CJK_FONT_PATH).get_name()
+plt.rcParams['font.family'] = [CJK_FONT_NAME, 'sans-serif']
+plt.rcParams['axes.unicode_minus'] = False
 
 
 def fetch_api(endpoint):
-    url = f'{BASE_URL}{endpoint}'
-    try:
-        result = subprocess.run(
-            ['curl', '-s', '-A', 'Mozilla/5.0', '--max-time', '15', url],
-            capture_output=True, text=True, timeout=20
-        )
-        return json.loads(result.stdout)
-    except Exception as e:
-        print(f'API fetch failed: {endpoint} - {e}')
+    """从本地 db_data.json 获取数据"""
+    db = get_local_db()
+    # 映射 endpoint 到 db_data 的键
+    mapping = {
+        '/api/stats': 'stats',
+        '/api/year_data': 'year_data',
+        '/api/top_genes': 'top_genes',
+        '/api/top_acupoints': 'top_acupoints',
+        '/api/top_diseases': 'top_diseases',
+        '/api/network': 'network_data',
+        '/api/journal_stats': 'journal_stats',
+        '/api/acupoint_list': 'acupoint_list',
+        '/api/gene_list': 'gene_list',
+        '/api/disease_list': 'disease_list',
+    }
+    # 处理带参数的 endpoint
+    base = endpoint.split('?')[0]
+    if base in mapping:
+        return db.get(mapping[base])
+    # 处理 query endpoints
+    if endpoint.startswith('/api/acupoint_genes'):
+        # 本地模拟 queryAcupointGenes
         return None
+    if endpoint.startswith('/api/gene_acupoints'):
+        return None
+    print(f'Unknown endpoint: {endpoint}')
+    return None
 
 
 def fig1_dashboard():
@@ -87,6 +129,7 @@ def fig2_top_genes():
     if not data:
         return None
 
+    data = data[:10]
     genes = [d['gene'] for d in data][::-1]
     counts = [d['count'] for d in data][::-1]
 
@@ -111,7 +154,8 @@ def fig3_top_acupoints():
     if not data:
         return None
 
-    names = [f"{d['name_en']}\n{d['code']}" if d.get('code') else d['name_en'] for d in data][::-1]
+    data = data[:10]
+    names = [f"{d['name_cn']}\n{d['code']}" if d.get('code') else d['name_cn'] for d in data][::-1]
     counts = [d['count'] for d in data][::-1]
 
     fig, ax = plt.subplots(figsize=(10, 6))
@@ -165,7 +209,7 @@ def fig4_network():
                            node_color='#3584e4', node_size=[G.degree(n) * 60 + 150 for n in gene_nodes if n in pos], 
                            alpha=0.85, ax=ax)
     
-    nx.draw_networkx_labels(G, pos, font_size=9, font_family='sans-serif', ax=ax)
+    nx.draw_networkx_labels(G, pos, font_size=9, font_family=CJK_FONT_NAME, ax=ax)
     
     ax.set_title('穴位-基因共现网络图（共现频次≥5）', fontsize=14, fontweight='bold', fontproperties=CJK_FONT)
     ax.axis('off')
@@ -238,6 +282,108 @@ def fig6_gene_query():
     ax.spines['right'].set_visible(False)
     plt.tight_layout()
     path = f'{OUTPUT_DIR}/fig6_gene_query.png'
+    plt.savefig(path, dpi=300, bbox_inches='tight', facecolor='white')
+    plt.close()
+    return path
+
+
+def fig7_topology():
+    with open('output/analysis_results/network_topology.json', 'r', encoding='utf-8') as f:
+        topo = json.load(f)
+    deg_genes = topo['degree_centrality']['top_genes'][:10]
+    bet_genes = topo['betweenness_centrality']['top_genes'][:10]
+
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
+
+    # 度中心性
+    genes1 = [g[0] for g in deg_genes][::-1]
+    vals1 = [g[1] for g in deg_genes][::-1]
+    bars1 = ax1.barh(genes1, vals1, color='#1a5fb4', edgecolor='white', height=0.6)
+    for bar, v in zip(bars1, vals1):
+        ax1.text(bar.get_width() + 0.002, bar.get_y() + bar.get_height()/2, f'{v:.3f}', va='center', fontsize=9, color='#333')
+    ax1.set_xlabel('度中心性', fontsize=12, fontproperties=CJK_FONT_LIGHT)
+    ax1.set_title('基因度中心性 Top 10', fontsize=14, fontweight='bold', fontproperties=CJK_FONT)
+    ax1.spines['top'].set_visible(False)
+    ax1.spines['right'].set_visible(False)
+
+    # 中介中心性
+    genes2 = [g[0] for g in bet_genes][::-1]
+    vals2 = [g[1] for g in bet_genes][::-1]
+    bars2 = ax2.barh(genes2, vals2, color='#26a269', edgecolor='white', height=0.6)
+    for bar, v in zip(bars2, vals2):
+        ax2.text(bar.get_width() + 0.002, bar.get_y() + bar.get_height()/2, f'{v:.3f}', va='center', fontsize=9, color='#333')
+    ax2.set_xlabel('中介中心性', fontsize=12, fontproperties=CJK_FONT_LIGHT)
+    ax2.set_title('基因中介中心性 Top 10', fontsize=14, fontweight='bold', fontproperties=CJK_FONT)
+    ax2.spines['top'].set_visible(False)
+    ax2.spines['right'].set_visible(False)
+
+    plt.tight_layout()
+    path = f'{OUTPUT_DIR}/fig7_topology.png'
+    plt.savefig(path, dpi=300, bbox_inches='tight', facecolor='white')
+    plt.close()
+    return path
+
+
+def fig8_clusters():
+    with open('output/analysis_results/cluster_communities.json', 'r', encoding='utf-8') as f:
+        cluster = json.load(f)
+    comms = cluster['communities'][:8]
+
+    ids = [f"社区{c['community_id']}" for c in comms]
+    apt_counts = [len(c['acupoints']) for c in comms]
+    gene_counts = [len(c['genes']) for c in comms]
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+    x = range(len(ids))
+    width = 0.35
+    bars1 = ax.bar([i - width/2 for i in x], apt_counts, width, label='穴位', color='#c061cb', edgecolor='white')
+    bars2 = ax.bar([i + width/2 for i in x], gene_counts, width, label='基因', color='#3584e4', edgecolor='white')
+
+    for bar in bars1:
+        ax.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 0.3, str(int(bar.get_height())), ha='center', fontsize=9)
+    for bar in bars2:
+        ax.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 0.3, str(int(bar.get_height())), ha='center', fontsize=9)
+
+    ax.set_xticks(x)
+    ax.set_xticklabels(ids, fontproperties=CJK_FONT)
+    ax.set_ylabel('节点数量', fontsize=12, fontproperties=CJK_FONT_LIGHT)
+    ax.set_title('Louvain 聚类分析：各社区节点构成', fontsize=14, fontweight='bold', fontproperties=CJK_FONT)
+    ax.legend(prop=CJK_FONT)
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    plt.tight_layout()
+    path = f'{OUTPUT_DIR}/fig8_clusters.png'
+    plt.savefig(path, dpi=300, bbox_inches='tight', facecolor='white')
+    plt.close()
+    return path
+
+
+def fig9_hypergeo():
+    import csv
+    results = []
+    with open('output/analysis_results/hypergeometric_test.csv', 'r', encoding='utf-8-sig') as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            row['p_value'] = float(row['p_value'])
+            row['cooccur'] = int(row['cooccur'])
+            results.append(row)
+    # 取最显著的10个
+    results = sorted(results, key=lambda x: x['p_value'])[:10][::-1]
+
+    labels = [f"{r['acupoint']}-{r['gene']}" for r in results]
+    pvals = [-math.log10(r['p_value']) for r in results]
+    colors = ['#ef4444' if r['significance'] == '***' else '#f59e0b' if r['significance'] == '**' else '#26a269' if r['significance'] == '*' else '#94a3b8' for r in results]
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+    bars = ax.barh(labels, pvals, color=colors, edgecolor='white', height=0.6)
+    for bar, r in zip(bars, results):
+        ax.text(bar.get_width() + 0.1, bar.get_y() + bar.get_height()/2, r['significance'], va='center', fontsize=10, color='#333')
+    ax.set_xlabel('-log10(p-value)', fontsize=12, fontproperties=CJK_FONT_LIGHT)
+    ax.set_title('超几何检验：Top 10 显著穴位-基因对', fontsize=14, fontweight='bold', fontproperties=CJK_FONT)
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    plt.tight_layout()
+    path = f'{OUTPUT_DIR}/fig9_hypergeo.png'
     plt.savefig(path, dpi=300, bbox_inches='tight', facecolor='white')
     plt.close()
     return path
@@ -369,6 +515,12 @@ def main():
     fig5_acupoint_query()
     print('正在生成图6：TNF关联穴位分析...')
     fig6_gene_query()
+    print('正在生成图7：网络拓扑分析...')
+    fig7_topology()
+    print('正在生成图8：Louvain聚类分析...')
+    fig8_clusters()
+    print('正在生成图9：超几何显著性检验...')
+    fig9_hypergeo()
     
     print('正在插入图片到Word文档...')
     insert_figures_to_docx(
