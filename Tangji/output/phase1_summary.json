@@ -1,0 +1,45 @@
+{
+  "phase": "Phase 1",
+  "title": "甲状腺癌糖基化基础数据库",
+  "generated": "2026-05-01T14:50:38.457481",
+  "deliverables": {
+    "database": "output/thyroid_glyco_db.sqlite",
+    "report": "output/phase1_report.md",
+    "query_tool": "07_query_database.py"
+  },
+  "statistics": {
+    "studies": 11,
+    "glycan_structures": 24,
+    "clinical_groups": 17,
+    "samples": 17,
+    "glycan_abundance_records": 21,
+    "biomarkers": 7,
+    "glycosyltransferases": 8,
+    "enzyme_glycan_links": 12
+  },
+  "coverage": {
+    "cancer_types": [
+      "Differentiated thyroid cancer (DTC)",
+      "Papillary thyroid carcinoma (PTC)",
+      "Papillary thyroid microcarcinoma (PTMC)",
+      "All types",
+      "Medullary thyroid carcinoma (MTC)"
+    ],
+    "methods": [
+      "MALDI-TOF MS",
+      "HCD-MS/MS, MALDI-imaging",
+      "综述",
+      "LC-MS/MS glycoproteomics",
+      "LC-ESI/MS"
+    ],
+    "year_range": [
+      2015,
+      2025
+    ]
+  },
+  "next_phase_priorities": [
+    "IgG N-glycan diagnostic model validation tool",
+    "Data volume expansion (contact authors, GlycoPOST)",
+    "Web interface prototype (Flask + frontend)"
+  ]
+}

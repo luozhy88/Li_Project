@@ -1,0 +1,405 @@
+#!/usr/bin/env python3
+"""
+01_collect_literature.py
+收集甲状腺癌糖基化相关文献，输出到 input/literature/
+"""
+
+import json
+import csv
+import os
+from datetime import datetime
+
+OUTPUT_DIR = "input/literature"
+os.makedirs(OUTPUT_DIR, exist_ok=True)
+
+LITERATURE = [
+    {
+        "id": "L001",
+        "title": "Serum glycomic profile as a predictive biomarker of recurrence in patients with differentiated thyroid cancer",
+        "authors": "Kudelka MR et al.",
+        "journal": "Cancer Medicine",
+        "year": 2023,
+        "doi": "10.1002/cam4.5465",
+        "pmid": "36437732",
+        "pmcid": "PMC10067050",
+        "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10067050/",
+        "category": "预后标志物/复发预测",
+        "key_findings": [
+            "复发性分化型甲状腺癌患者血清N-糖组存在特定改变",
+            "G0F:G1F比值降低预测复发，AUC=0.82",
+            "敏感性和特异性均超过70%",
+            "样本量：13例复发患者 vs 15例健康对照"
+        ],
+        "method": "MALDI-TOF MS",
+        "sample_type": "血清",
+        "thyroid_cancer_type": "Differentiated thyroid cancer (DTC)",
+        "biomarker": "G0F:G1F ratio (agalactosylated:monogalactosylated biantennary core fucosylated N-glycan)",
+        "data_availability": "公开"
+    },
+    {
+        "id": "L002",
+        "title": "Diagnostic Potential of Plasma IgG N-glycans in Discriminating Thyroid Cancer from Benign Thyroid Nodules and Healthy Controls",
+        "authors": "Zhang ZJ et al.",
+        "journal": "Frontiers in Oncology",
+        "year": 2021,
+        "doi": "10.3389/fonc.2021.658223",
+        "pmid": "34476207",
+        "pmcid": "PMC8406750",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8406750/",
+        "category": "诊断标志物",
+        "key_findings": [
+            "血浆IgG N-糖组可区分甲状腺癌与良性结节",
+            "衍生特征BN（双分支型中性N-聚糖）AUC=0.920",
+            "glyco-panel AUC=0.917",
+            "对早期甲状腺癌也有诊断潜力"
+        ],
+        "method": "MALDI-TOF MS",
+        "sample_type": "血浆 IgG",
+        "thyroid_cancer_type": "Papillary thyroid carcinoma (PTC)",
+        "biomarker": "BN (bisecting type neutral N-glycans), glyco-panel",
+        "data_availability": "公开"
+    },
+    {
+        "id": "L003",
+        "title": "Nomograms Based on Serum N-glycome for Diagnosis of Papillary Thyroid Microcarcinoma and Prediction of Lymph Node Metastasis",
+        "authors": "(需补充)",
+        "journal": "Frontiers in Oncology",
+        "year": 2022,
+        "doi": "10.3389/fonc.2022.9497917",
+        "pmid": "",
+        "pmcid": "PMC9497917",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9497917/",
+        "category": "诊断标志物/淋巴结转移预测",
+        "key_findings": [
+            "首次报道乳头状甲状腺微小癌(PTMC)血清N-糖组特征",
+            "TM, CA1, CA4, A2Fa为PTMC诊断标志物",
+            "CA4和A2F0S0G与淋巴结转移(LNM)强相关",
+            "建立了诊断和LNM预测的列线图(nomogram)模型"
+        ],
+        "method": "MALDI-TOF MS",
+        "sample_type": "血清",
+        "thyroid_cancer_type": "Papillary thyroid microcarcinoma (PTMC)",
+        "biomarker": "TM, CA1, CA4, A2Fa (诊断); CA4, A2F0S0G (LNM预测)",
+        "data_availability": "公开"
+    },
+    {
+        "id": "L004",
+        "title": "Distinguishing Benign and Malignant Thyroid Nodules by Plasma N-glycome Profiling and Associations with Lymph Node Metastasis",
+        "authors": "(需补充)",
+        "journal": "(需补充)",
+        "year": 2021,
+        "doi": "10.3389/fendo.2021.8267918",
+        "pmid": "",
+        "pmcid": "PMC8267918",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8267918/",
+        "category": "诊断标志物/淋巴结转移预测",
+        "key_findings": [
+            "首次全面评估血浆N-糖组在TC和BTN中的变化",
+            "TC与BTN在复杂性、半乳糖基化、岩藻糖基化、唾液酸化方面存在差异",
+            "发现与淋巴结转移强相关的N-糖标志物",
+            "可辅助术前预测淋巴结转移风险"
+        ],
+        "method": "MALDI-TOF MS",
+        "sample_type": "血浆",
+        "thyroid_cancer_type": "Papillary thyroid carcinoma (PTC)",
+        "biomarker": "CA4, CA1, fucosylation, galactosylation, sialylation traits",
+        "data_availability": "公开"
+    },
+    {
+        "id": "L005",
+        "title": "Thyroid Carcinoma Glycoproteins Express Altered N-Glycans with 3-O-Sulfated Galactose Residues",
+        "authors": "Bones J et al.",
+        "journal": "MDPI",
+        "year": 2018,
+        "doi": "10.3390/cancers10100395",
+        "pmid": "",
+        "pmcid": "PMC11727208",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11727208/",
+        "category": "机制研究/组织糖组学",
+        "key_findings": [
+            "PTC组织与配对正常组织相比，N-聚糖分支和双乙酰化水平显著升高",
+            "发现3-O-硫酸化半乳糖残基存在于甲状腺癌中",
+            "GAL3ST3在正常和PTC样本中均显著表达",
+            "数据存放于GlycoPOST: GPST000495"
+        ],
+        "method": "HCD-MS/MS, MALDI-imaging",
+        "sample_type": "组织 (FFPE和新鲜组织)",
+        "thyroid_cancer_type": "Papillary thyroid carcinoma (PTC)",
+        "biomarker": "3-O-sulfated galactose, branched N-glycans",
+        "data_availability": "GlycoPOST GPST000495"
+    },
+    {
+        "id": "L006",
+        "title": "Sialylation in Thyroid Carcinoma: An Overview of Mechanisms, Markers, and Therapeutic Opportunities",
+        "authors": "(需补充)",
+        "journal": "Cancers",
+        "year": 2025,
+        "doi": "10.3390/cancers17010057",
+        "pmid": "",
+        "pmcid": "PMC12825445",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12825445/",
+        "category": "机制研究/综述",
+        "key_findings": [
+            "甲状腺癌细胞表面富含α-2,3-和α-2,6-连接唾液酸",
+            "α-1,6-岩藻糖残基与侵袭性相关",
+            "唾液酸化改变可能成为新的治疗策略靶点",
+            "总结唾液酸转移酶(STs)和神经氨酸酶(NEUs)在TC中的作用"
+        ],
+        "method": "综述",
+        "sample_type": "N/A",
+        "thyroid_cancer_type": "All types",
+        "biomarker": "Sialylation patterns, sialyl Lewis X/A",
+        "data_availability": "综述"
+    },
+    {
+        "id": "L007",
+        "title": "N-glycan profiling of papillary thyroid carcinoma tissues by MALDI-TOF-MS",
+        "authors": "Koçak ÖF et al.",
+        "journal": "Analytical Biochemistry",
+        "year": 2019,
+        "doi": "10.1016/j.ab.2019.113389",
+        "pmid": "",
+        "pmcid": "",
+        "url": "https://www.sciencedirect.com/science/article/pii/S0065128125000224",
+        "category": "组织糖组学",
+        "key_findings": [
+            "MALDI-TOF-MS分析PTC组织N-糖谱",
+            "鉴定了组织特异性的N-聚糖改变"
+        ],
+        "method": "MALDI-TOF MS",
+        "sample_type": "组织",
+        "thyroid_cancer_type": "Papillary thyroid carcinoma (PTC)",
+        "biomarker": "Tissue N-glycan profiles",
+        "data_availability": "未知"
+    },
+    {
+        "id": "L008",
+        "title": "Comparative glycoproteomic profiling of human body fluid between healthy controls and patients with papillary thyroid carcinoma",
+        "authors": "Zhang Y et al.",
+        "journal": "Journal of Proteome Research",
+        "year": 2020,
+        "doi": "10.1021/acs.jproteome.9b00672",
+        "pmid": "",
+        "pmcid": "",
+        "url": "https://pubs.acs.org/doi/10.1021/acs.jproteome.9b00672",
+        "category": "糖蛋白组学",
+        "key_findings": [
+            "人体体液糖蛋白组学比较分析",
+            "健康对照与PTC患者间的差异糖蛋白"
+        ],
+        "method": "LC-MS/MS glycoproteomics",
+        "sample_type": "体液",
+        "thyroid_cancer_type": "Papillary thyroid carcinoma (PTC)",
+        "biomarker": "Glycoprotein biomarkers",
+        "data_availability": "未知"
+    },
+    {
+        "id": "L009",
+        "title": "Glycosylation-Based Serum Biomarkers for Cancer Diagnostics and Prognostics",
+        "authors": "(需补充)",
+        "journal": "Proteomics Clinical Applications",
+        "year": 2015,
+        "doi": "10.1002/prca.201500112",
+        "pmid": "",
+        "pmcid": "PMC4609776",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4609776/",
+        "category": "综述/临床标志物",
+        "key_findings": [
+            "甲状腺球蛋白(Tg)本身是糖基化蛋白，20个潜在N-糖基化位点中有16个被糖基化",
+            "FDA批准的9种癌症临床用蛋白质生物标志物均为糖基化蛋白",
+            "LCA凝集素与甲状腺癌Tg的相互作用显著低于正常甲状腺组织",
+            "LCA反应性Tg百分比可区分良恶性病变"
+        ],
+        "method": "综述",
+        "sample_type": "血清",
+        "thyroid_cancer_type": "All types",
+        "biomarker": "Thyroglobulin (Tg) glycosylation, LCA-reactive Tg",
+        "data_availability": "综述"
+    },
+    {
+        "id": "L010",
+        "title": "Posttranslational Modifications in Thyroid Cancer: Implications for Pathogenesis, Diagnosis, Classification, and Treatment",
+        "authors": "(需补充)",
+        "journal": "Seminars in Cancer Biology",
+        "year": 2021,
+        "doi": "10.1016/j.semcancer.2021.05.001",
+        "pmid": "",
+        "pmcid": "",
+        "url": "https://pdfs.semanticscholar.org/e648/60438106d5bddaf3951f7832821d55913483.pdf",
+        "category": "机制研究/综述",
+        "key_findings": [
+            "糖基化是甲状腺癌的重要分子特征",
+            "不同甲状腺癌亚型具有不同糖基化模式",
+            "FUT8在PTC中表达(33%)高于FTC(13%)",
+            "唾液酸依赖性表位在FTC中阳性率93%，PTC中45%"
+        ],
+        "method": "综述",
+        "sample_type": "N/A",
+        "thyroid_cancer_type": "PTC, FTC, MTC, ATC",
+        "biomarker": "FUT8, sialic acid-dependent epitopes",
+        "data_availability": "综述"
+    },
+    {
+        "id": "L011",
+        "title": "Serum linkage-specific sialylation changes are potential biomarkers for monitoring and predicting the recurrence of papillary thyroid cancer following thyroidectomy",
+        "authors": "Cao Z et al.",
+        "journal": "Frontiers in Endocrinology",
+        "year": 2022,
+        "doi": "10.3389/fendo.2022.858325",
+        "pmid": "",
+        "pmcid": "",
+        "url": "https://www.frontiersin.org/articles/10.3389/fendo.2022.858325",
+        "category": "预后标志物/复发预测",
+        "key_findings": [
+            "血清连接特异性唾液酸化变化与PTC复发相关",
+            "可用于甲状腺切除术后监测和复发预测"
+        ],
+        "method": "MALDI-TOF MS",
+        "sample_type": "血清",
+        "thyroid_cancer_type": "Papillary thyroid carcinoma (PTC)",
+        "biomarker": "Linkage-specific sialylation",
+        "data_availability": "未知"
+    },
+    {
+        "id": "L012",
+        "title": "IgG N-glycan Signatures as Potential Diagnostic and Prognostic Biomarkers",
+        "authors": "(需补充)",
+        "journal": "Diagnostics",
+        "year": 2023,
+        "doi": "10.3390/diagnostics13061016",
+        "pmid": "",
+        "pmcid": "",
+        "url": "https://www.mdpi.com/2075-4418/13/6/1016",
+        "category": "诊断标志物/综述",
+        "key_findings": [
+            "IgG N-糖组可区分健康对照、自身免疫病、传染病和癌症",
+            "早期甲状腺癌患者与健康对照和良性甲状腺结节比较的AUC=0.809",
+            "由双分支型非唾液酸化N-聚糖增加驱动"
+        ],
+        "method": "综述",
+        "sample_type": "血浆/血清 IgG",
+        "thyroid_cancer_type": "Thyroid cancer (TC)",
+        "biomarker": "Bisecting, non-sialylated N-glycans",
+        "data_availability": "综述"
+    },
+    {
+        "id": "L013",
+        "title": "Characterization of Human Medullary Thyroid Carcinoma Glycosphingolipids",
+        "authors": "(需补充)",
+        "journal": "Cancers",
+        "year": 2021,
+        "doi": "10.3390/cancers13071707",
+        "pmid": "",
+        "pmcid": "",
+        "url": "https://pdfs.semanticscholar.org/c87c/6b403bb50717dcb0b69071181bea35a0ee1b.pdf",
+        "category": "组织糖组学/糖脂",
+        "key_findings": [
+            "人甲状腺髓样癌糖鞘脂特征分析",
+            "原始数据存放于GlycoPost: GPST000197"
+        ],
+        "method": "LC-ESI/MS",
+        "sample_type": "组织",
+        "thyroid_cancer_type": "Medullary thyroid carcinoma (MTC)",
+        "biomarker": "Glycosphingolipid patterns",
+        "data_availability": "GlycoPOST GPST000197"
+    },
+    {
+        "id": "L014",
+        "title": "Loss of the disease-associated glycosyltransferase Galnt3 alters Muc10 glycosylation and the composition of the oral microbiome",
+        "authors": "Peluso G et al.",
+        "journal": "Journal of Biological Chemistry",
+        "year": 2020,
+        "doi": "10.1074/jbc.RA119.011239",
+        "pmid": "31882545",
+        "pmcid": "PMC6996895",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6996895/",
+        "category": "机制研究/糖基转移酶",
+        "key_findings": [
+            "O-糖基化起始酶GALNT3的研究",
+            "GALNT3在唾液腺等组织中表达",
+            "为理解GALNT3在甲状腺癌中的作用提供参考"
+        ],
+        "method": "分子生物学/动物模型",
+        "sample_type": "小鼠模型",
+        "thyroid_cancer_type": "机制参考",
+        "biomarker": "GALNT3",
+        "data_availability": "公开"
+    }
+]
+
+def save_json():
+    path = os.path.join(OUTPUT_DIR, "thyroid_cancer_glycosylation_literature.json")
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump({
+            "metadata": {
+                "title": "甲状腺癌糖基化相关文献收集",
+                "created": datetime.now().isoformat(),
+                "count": len(LITERATURE),
+                "categories": list(set(x["category"] for x in LITERATURE))
+            },
+            "literature": LITERATURE
+        }, f, ensure_ascii=False, indent=2)
+    print(f"[OK] JSON saved: {path}")
+
+def save_csv():
+    path = os.path.join(OUTPUT_DIR, "thyroid_cancer_glycosylation_literature.csv")
+    keys = ["id", "title", "authors", "journal", "year", "doi", "pmid", "pmcid",
+            "category", "method", "sample_type", "thyroid_cancer_type", "biomarker", "url"]
+    with open(path, "w", newline="", encoding="utf-8-sig") as f:
+        writer = csv.DictWriter(f, fieldnames=keys)
+        writer.writeheader()
+        for item in LITERATURE:
+            row = {k: item.get(k, "") for k in keys}
+            writer.writerow(row)
+    print(f"[OK] CSV saved: {path}")
+
+def save_markdown():
+    path = os.path.join(OUTPUT_DIR, "thyroid_cancer_glycosylation_literature.md")
+    lines = [
+        "# 甲状腺癌糖基化相关文献汇总",
+        f"",
+        f"> 收集时间: {datetime.now().strftime('%Y-%m-%d %H:%M')}",
+        f"> 文献总数: {len(LITERATURE)} 篇",
+        f"",
+        "## 分类统计",
+        "",
+    ]
+    from collections import Counter
+    cat_counter = Counter(x["category"] for x in LITERATURE)
+    for cat, cnt in cat_counter.most_common():
+        lines.append(f"- **{cat}**: {cnt} 篇")
+    lines.append("")
+    lines.append("---")
+    lines.append("")
+
+    for item in LITERATURE:
+        lines.append(f"### {item['id']}. {item['title']}")
+        lines.append("")
+        lines.append(f"- **作者**: {item['authors']}")
+        lines.append(f"- **期刊/年份**: {item['journal']} ({item['year']})")
+        lines.append(f"- **DOI**: {item['doi']}")
+        lines.append(f"- **PMID**: {item['pmid'] or 'N/A'} | **PMCID**: {item['pmcid'] or 'N/A'}")
+        lines.append(f"- **分类**: {item['category']}")
+        lines.append(f"- **方法**: {item['method']}")
+        lines.append(f"- **样本类型**: {item['sample_type']}")
+        lines.append(f"- **甲状腺癌类型**: {item['thyroid_cancer_type']}")
+        lines.append(f"- **生物标志物**: {item['biomarker']}")
+        lines.append(f"- **数据可用性**: {item['data_availability']}")
+        lines.append(f"- **URL**: {item['url']}")
+        lines.append("")
+        lines.append("**主要发现**:")
+        for finding in item['key_findings']:
+            lines.append(f"- {finding}")
+        lines.append("")
+        lines.append("---")
+        lines.append("")
+
+    with open(path, "w", encoding="utf-8") as f:
+        f.write("\n".join(lines))
+    print(f"[OK] Markdown saved: {path}")
+
+if __name__ == "__main__":
+    save_json()
+    save_csv()
+    save_markdown()
+    print(f"\n文献收集完成，共 {len(LITERATURE)} 篇。")
