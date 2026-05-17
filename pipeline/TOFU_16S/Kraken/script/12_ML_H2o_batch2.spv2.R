@@ -237,7 +237,7 @@ ggsave(filename = glue::glue(path,"/H20_feature_importance_heatmap_plot.svg"), p
 varimp_wide <- varimp_combined %>% dplyr::select(-relative_importance ,-scaled_importance ,-percentage )%>%tidyr::pivot_wider(names_from = model,values_from = Importance) %>% dplyr::select(-DeepLearning) %>% dplyr::filter(DRF>0.00 & GBM>0.00 & GLM>0.00 )
 write.csv(varimp_wide, file = glue::glue(path,"/H20_feature_importance.csv"), row.names = FALSE)
 
-
+write.csv(varimp_combined, file = glue::glue(path,"/H20_feature_importance_heatmap_all.csv"), row.names = FALSE)
 
 # 
 # 
