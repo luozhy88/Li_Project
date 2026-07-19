@@ -1,0 +1,150 @@
+# 项目配置文件：假定位体征文献计量学分析
+# 修改此文件即可复用本流程，脚本中不硬编码路径与参数
+
+project:
+  name: "False_Localizing_Sign_Bibliometrics"
+  root: "."
+
+input:
+  # PubMed 已导出的三种格式
+  pubmed_csv: "input/false/csv csv-falselocal-set.csv"
+  pubmed_medline: "input/false/pub pubmed-falselocal-set.txt"
+  pubmed_abstracts: "input/false/125 abstract-falselocal-set.txt"
+  # Web of Science 以 CiteSpace/ plain-text 格式导出后放置于此（可选）
+  wos_file: "input/89_186_plain.txt"
+
+output:
+  root: "output"
+  figures: "output/figures"
+  tables: "output/tables"
+  report: "output/report"
+
+search:
+  # 检索词（用于报告与方法描述）
+  terms:
+    - "false localizing sign"
+    - "false localising sign"
+    - "pseudo-localization sign"
+  # PubMed 检索式
+  pubmed_query: "(false localizing sign*[Title/Abstract]) OR (False localising sign*[Title/Abstract]) OR (Pseudo-localization sign[Title/Abstract])"
+  # WoS Topic 检索式（TS=Title/Abstract/Keywords）
+  wos_query: "TS=(false localizing sign*) OR TS=(false localising sign*) OR TS=(pseudo-localization sign)"
+
+deduplication:
+  # 去重优先级：PMID > DOI > 归一化标题
+  keys:
+    - "pmid"
+    - "doi"
+    - "normalized_title"
+  # 标题去重时忽略这些词
+  title_stopwords:
+    - "the"
+    - "a"
+    - "an"
+    - "in"
+    - "of"
+    - "and"
+    - "or"
+    - "on"
+    - "with"
+    - "as"
+    - "case"
+    - "report"
+
+analysis:
+  top_n_journals: 15
+  top_n_countries: 10
+  top_n_authors: 10
+  top_n_keywords: 20
+  figure_dpi: 300
+  figure_format: "png"
+  figsize: [10, 6]
+  seaborn_style: "whitegrid"
+  # 关键词共现网络：只保留出现频次 >= min_keyword_count 的词
+  min_keyword_count: 3
+  # 共现边权重 >= min_cooccurrence 才写入边表
+  min_cooccurrence: 2
+
+# Nature / Science 风格配色（色盲友好、印刷友好）
+colors:
+  primary: "#2874A6"      # 主色：深蓝
+  secondary: "#C0392B"    # 辅色：暗红
+  accent: "#27AE60"       # 强调：深绿
+  background: "#FFFFFF"
+  grid: "#E5E5E5"
+  text: "#333333"
+  # 用于多分类的色盲友好调色板（基于 Wong, Nature Methods 2011）
+  palette:
+    - "#0072B2"
+    - "#D55E00"
+    - "#009E73"
+    - "#CC79A7"
+    - "#F0E442"
+    - "#56B4E9"
+    - "#E69F00"
+    - "#999999"
+  # 词云用色序列
+  wordcloud:
+    - "#0072B2"
+    - "#D55E00"
+    - "#009E73"
+    - "#CC79A7"
+    - "#56B4E9"
+    - "#E69F00"
+    - "#333333"
+
+country_extraction:
+  # 常见国家/地区别名映射（地址中可能使用缩写）
+  aliases:
+    USA: "United States"
+    US: "United States"
+    "U.S.A": "United States"
+    "U.S.": "United States"
+    UK: "United Kingdom"
+    "U.K.": "United Kingdom"
+    England: "United Kingdom"
+    Scotland: "United Kingdom"
+    Wales: "United Kingdom"
+    Korea: "South Korea"
+    "Republic of Korea": "South Korea"
+    Russia: "Russian Federation"
+    Czechia: "Czech Republic"
+    UAE: "United Arab Emirates"
+
+keyword:
+  #  MeSH/OT 中需要剔除的泛词
+  stopwords:
+    - "humans"
+    - "human"
+    - "male"
+    - "female"
+    - "adult"
+    - "middle aged"
+    - "aged"
+    - "child"
+    - "adolescent"
+    - "young adult"
+    - "case reports"
+    - "review"
+    - "journal article"
+    - "diagnosis"
+    - "physiopathology"
+    - "etiology"
+    - "complications"
+    - "diagnostic imaging"
+    - "pathology"
+
+report:
+  title: "假定位体征（False Localizing Sign）相关研究的文献计量学分析"
+  subtitle: "基于 PubMed 与 Web of Science 的初步计量报告"
+  language: "zh"
+  author: "[待填写作者]"
+  # Word 文档输出文件名
+  docx_filename: "False_Localizing_Sign_文献计量分析报告.docx"
+  # 图表在报告中的字号说明
+  figure_caption_prefix: "Fig."
+  table_caption_prefix: "Table"
+
+citespace:
+  # 合并去重后导出的 CiteSpace 可读文件
+  output_file: "output/01_citespace_input.txt"
