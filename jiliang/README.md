@@ -91,7 +91,7 @@ TS=(false localizing sign*) OR TS=(false localising sign*) OR TS=(pseudo-localiz
 | `output/01_deduplication_report.txt` | 去重报告 |
 | `output/figures/fig*.png` | 英文图表（年度趋势、期刊、国家、作者、关键词网络、词云） |
 | `output/tables/*.csv` | 各类统计表格 |
-| `output/report/False_Localizing_Sign_文献计量分析报告.docx` | 中文 Word 报告草稿 |
+| `output/report/01_False_Localizing_Sign_文献计量分析报告.docx` | 中文 Word 报告草稿（文件名前缀 01、02… 按生成先后编号，数字越大越新） |
 
 ## 注意事项
 
