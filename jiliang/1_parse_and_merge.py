@@ -11,6 +11,7 @@ import argparse
 import os
 import re
 import sys
+from collections import Counter
 from pathlib import Path
 
 import pandas as pd
@@ -204,8 +205,14 @@ def parse_wos(wos_path: str) -> pd.DataFrame:
             if last:
                 prev = current.get(last)
                 if isinstance(prev, list):
-                    if prev:
+                    # AU/AF 字段的续行是新作者，而不是上一个作者的延续
+                    if last in ("authors", "full_authors"):
+                        prev.append(value)
+                    elif prev:
                         prev[-1] = (prev[-1] + " " + value).strip()
+                elif last in ("keywords",):
+                    # DE/ID 字段的续行是新关键词，用分号分隔
+                    current[last] = (str(prev or "") + "; " + value).strip("; ")
                 else:
                     current[last] = (str(prev or "") + " " + value).strip()
         elif tag == "AU":
@@ -293,6 +300,37 @@ def parse_wos(wos_path: str) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
+def canonicalize_author_names(df: pd.DataFrame) -> pd.DataFrame:
+    """合并作者姓名拼写变体（连字符/空格/逗号/大小写差异，如 'Carrasco Moro R'
+    与 'Carrasco-Moro R'、WoS 风格 'Larner, AJ' 与 PubMed 风格 'Larner AJ'）。"""
+    def key(name: str) -> str:
+        k = re.sub(r"[-‐‑‒–—,.'’]", " ", name.lower())
+        return re.sub(r"\s+", " ", k).strip()
+
+    variants: dict = {}
+    for col in ("authors", "first_author"):
+        for val in df[col].fillna(""):
+            for nm in str(val).split(";"):
+                nm = nm.strip()
+                if nm:
+                    variants.setdefault(key(nm), Counter())[nm] += 1
+
+    display = {}
+    for k, counter in variants.items():
+        # 优先：出现次数多 > 含连字符 > 不带逗号 > 较短
+        best = sorted(counter.items(),
+                      key=lambda kv: (kv[1], "-" in kv[0], "," not in kv[0], -len(kv[0])),
+                      reverse=True)[0][0]
+        display[k] = best.replace(",", "")
+
+    df = df.copy()
+    for col in ("authors", "first_author"):
+        df[col] = df[col].fillna("").apply(
+            lambda v: "; ".join(display.get(key(nm.strip()), nm.strip())
+                                for nm in str(v).split(";") if nm.strip()))
+    return df
+
+
 def normalize_title(title: str, stopwords: list) -> str:
     if not title:
         return ""
@@ -351,6 +389,7 @@ def deduplicate(pubmed_df: pd.DataFrame, wos_df: pd.DataFrame, config: dict) -> 
 
     deduped = merged.loc[keep].copy()
     deduped.drop(columns=["source_priority", "normalized_title"], inplace=True, errors="ignore")
+    deduped = canonicalize_author_names(deduped)
 
     # 生成去重报告
     report_lines = [

@@ -73,14 +73,17 @@ def load_table(path):
 
 
 def format_reference(row):
-    authors = str(row.get("authors", "")).replace(";", ",")
-    title = str(row.get("title", "")).rstrip(".")
-    journal = str(row.get("journal", ""))
+    def clean(v):
+        s = str(v if v is not None else "").strip()
+        return "" if s.lower() in ("nan", "none") else s
+    authors = clean(row.get("authors")).replace(";", ",")
+    title = clean(row.get("title")).rstrip(".")
+    journal = clean(row.get("journal"))
     year = str(int(row["year"])) if pd.notna(row.get("year")) else ""
-    vol = str(row.get("volume", ""))
-    issue = str(row.get("issue", ""))
-    pages = str(row.get("pages", ""))
-    doi = str(row.get("doi", ""))
+    vol = clean(row.get("volume"))
+    issue = clean(row.get("issue"))
+    pages = clean(row.get("pages"))
+    doi = clean(row.get("doi"))
     parts = []
     if authors:
         parts.append(authors + ".")
@@ -99,7 +102,8 @@ def format_reference(row):
         parts.append(loc + ".")
     if doi:
         parts.append(f"doi:{doi}.")
-    return " ".join(parts)
+    ref = " ".join(parts)
+    return ref if ref.endswith(".") else ref + "."
 
 
 def generate_report(config: dict):

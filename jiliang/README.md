@@ -13,6 +13,9 @@
 ├── 2_descriptive_analysis.py    # 描述性统计与图表（年度/期刊/国家/作者）
 ├── 3_keyword_analysis.py        # 关键词词频、共现网络、词云
 ├── 4_generate_report.py         # 生成中文 Word 报告
+├── build_info2_style_report.py  # 附加：仿 info 风格的附录图表与报告（05）
+├── build_geo_style_report.py    # 附加：世界分布图/合作网络/文献体裁等图表与报告（06）
+├── revise_for_medicine.py       # 附加：面向 Medicine 投稿的一致性修订（07）
 ├── input/                       # 输入数据（用户提供）
 │   └── false/                   # PubMed 检索结果示例
 └── output/                      # 所有输出文件

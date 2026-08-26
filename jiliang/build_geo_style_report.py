@@ -309,7 +309,7 @@ def wrap(draw, text, font, width):
     return out + ([line] if line else [])
 
 
-def draw_first_author_table(path, records):
+def draw_first_author_table(path, records, label='Table D1'):
     counts = Counter(r.get('first_author', '').strip() for r in records
                      if r.get('first_author', '').strip())
     top = counts.most_common(10)
@@ -317,7 +317,7 @@ def draw_first_author_table(path, records):
     im = Image.new('RGB', (W, H), '#fff9bd')
     draw = ImageDraw.Draw(im)
     title, head, body, tiny = get_font(34, True), get_font(25, True), get_font(23), get_font(17)
-    draw.text((60, 42), 'Table D1. Top 10 productive first authors in false localizing sign research',
+    draw.text((60, 42), f'{label}. Top 10 productive first authors in false localizing sign research',
               font=title, fill='#111')
     draw.line((60, 108, W - 60, 108), fill='#111', width=3)
     for x, lab in zip([60, 420, 690],
