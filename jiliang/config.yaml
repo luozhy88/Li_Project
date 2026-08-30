@@ -133,6 +133,28 @@ keyword:
     - "complications"
     - "diagnostic imaging"
     - "pathology"
+  # 同义词表：绘图/统计前将变体归并为规范词（键为规范词，值为变体的小写形式）
+  thesaurus:
+    "False localizing sign":
+      ["false localizing sign", "false localizing signs", "false localising sign",
+       "false localising signs", "false localisation", "false localizing",
+       "false localizing phenomenon", "pseudo-localization sign", "pseudo-localisation sign"]
+    "Kernohan-Woltman notch phenomenon":
+      ["kernohan-woltman notch phenomenon", "kernohan-woltman notch", "kernohan notch",
+       "kernohan's notch", "kernohan’s notch", "kernohan", "kernohans<acute accent> notch",
+       "hendidura de kernohan", "fenómeno de le hendidura de kernohan-woltman"]
+    "Paresis": ["paresis", "brain paresis"]
+    "Hemiparesis": ["hemiparesis"]
+    "Ipsilateral hemiparesis":
+      ["ipsilateral hemiparesis", "ih = ipsilateral hemiparesis", "hemiparesia ipsilateral"]
+    "Paradoxical hemiparesis": ["paradoxical hemiparesis", "hemiparesia paradójica"]
+    "Intracranial Hypotension":
+      ["intracranial hypotension", "spontaneous intracranial hypotension"]
+    "Cerebrospinal Fluid Leak":
+      ["cerebrospinal fluid leak", "csf leak", "cerebrospinal fluid leakage", "spinal csf leak"]
+    "CSF Hypovolemia": ["csf hypovolaemia", "csf hypovolemia"]
+    "CSF Venous Fistula":
+      ["csf venous fistula", "cerebrospinal fluid-venous fistula", "cerebrospinal fluid–venous fistula"]
 
 report:
   title: "假定位体征（False Localizing Sign）相关研究的文献计量学分析"

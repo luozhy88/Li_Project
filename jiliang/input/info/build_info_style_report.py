@@ -10,7 +10,10 @@ from __future__ import annotations
 from collections import Counter, defaultdict
 from itertools import combinations
 from pathlib import Path
+import importlib.util
 import re
+
+import yaml
 
 import matplotlib.pyplot as plt
 from matplotlib import gridspec
@@ -46,11 +49,36 @@ def style():
     })
 
 
-def save(fig, name):
+def save(fig, name, facecolor=YELLOW):
     path = WORK / name
-    fig.savefig(path, dpi=240, bbox_inches='tight', facecolor=YELLOW)
+    fig.savefig(path, dpi=240, bbox_inches='tight', facecolor=facecolor)
     plt.close(fig)
     return path
+
+
+# ---- 同义词归一化（复用 3_keyword_analysis.py 的实现与 config.yaml 同义词表）----
+def _kw_module():
+    spec = importlib.util.spec_from_file_location('kw_analysis', ROOT / '3_keyword_analysis.py')
+    m = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(m)
+    return m
+
+
+_KW = _kw_module()
+_CONFIG = yaml.safe_load(open(ROOT / 'config.yaml', encoding='utf-8'))
+_STOPWORDS = {w.lower() for w in _CONFIG.get('keyword', {}).get('stopwords', [])}
+_MAPPER_CACHE = None
+
+
+def kw_mapper(df):
+    global _MAPPER_CACHE
+    if _MAPPER_CACHE is None:
+        _MAPPER_CACHE = _KW.build_keyword_mapper(df, _STOPWORDS, _CONFIG)
+    return _MAPPER_CACHE
+
+
+def map_terms(items, mapper):
+    return list(dict.fromkeys(mapper.get(x, x) for x in items))
 
 
 def keywords(value):
@@ -136,8 +164,9 @@ def make_author_table(df):
 def network_data(df):
     counts = Counter()
     edges = Counter()
+    mapper = kw_mapper(df)
     for val in df['keywords']:
-        items = list(dict.fromkeys(keywords(val)))
+        items = map_terms(keywords(val), mapper)
         counts.update(items)
     # Remove demographic/indexing terms and retain a legible set of substantive
     # research concepts.  This avoids a decorative but unreadable dense graph.
@@ -151,7 +180,7 @@ def network_data(df):
                   and not x.lower().startswith('false localiz')]
     selected = {x for x, _ in sorted(candidates, key=lambda item: (-item[1], item[0]))[:26]}
     for val in df['keywords']:
-        items = sorted(set(x for x in keywords(val) if x in selected))
+        items = sorted(set(x for x in map_terms(keywords(val), mapper) if x in selected))
         edges.update(combinations(items, 2))
     G = nx.Graph()
     for item in selected: G.add_node(item, frequency=counts[item])
@@ -162,7 +191,7 @@ def network_data(df):
 
 def make_network_and_clusters(df):
     G, _ = network_data(df)
-    pos = nx.spring_layout(G, seed=19, k=1.35, iterations=250)
+    pos = nx.spring_layout(G, seed=19, k=1.5, iterations=250)
     communities = list(nx.algorithms.community.greedy_modularity_communities(G)) if G.number_of_edges() else [set(G.nodes())]
     community_index = {n: i for i, c in enumerate(communities) for n in c}
     fig = plt.figure(figsize=(13, 6.8)); gs = gridspec.GridSpec(1, 2, width_ratios=[1.08, 1])
@@ -173,18 +202,32 @@ def make_network_and_clusters(df):
         colors = '#8ecae6' if idx == 0 else [PALETTE[community_index[n] % len(PALETTE)] for n in G.nodes]
         nx.draw_networkx_edges(G, pos, width=widths, alpha=.35, edge_color='#7a7a7a', ax=ax)
         nx.draw_networkx_nodes(G, pos, node_size=sizes, node_color=colors, alpha=.9, edgecolors='white', linewidths=.8, ax=ax)
-        nx.draw_networkx_labels(G, pos, font_size=7, ax=ax)
-        ax.margins(0.22)
+        ax.margins(0.22)  # 必须先固定坐标范围，再进行像素级标签防重叠
+        texts = nx.draw_networkx_labels(G, pos, font_size=7, ax=ax)
+        _KW.adjust_labels(ax, list(texts.values()))  # 防标签重叠
         ax.axis('off')
     fig.suptitle('Keyword analysis of false localizing sign research', fontsize=16, weight='bold', y=1.02)
-    return save(fig, 'fig10_keyword_network_and_clusters.png')
+    return save(fig, 'fig10_keyword_network_and_clusters.png', facecolor='white')
 
 
 def make_timeline(df):
-    tracked = ['Magnetic Resonance Imaging', 'Diagnosis, Differential', 'Brain Neoplasms', 'Tomography, X-Ray Computed', 'Cervical Vertebrae', 'Meningioma', 'Spinal Cord Compression', 'Trigeminal Neuralgia', 'Paresis', 'Intracranial Pressure']
+    # 数据驱动选题：同义词合并后 n >= 5 的高频主题，剔除泛词与主题词本身
+    mapper = kw_mapper(df)
+    generic = {
+        'humans', 'male', 'female', 'middle aged', 'adult', 'aged', 'child',
+        'young adult', 'adolescent', 'aged, 80 and over', 'retrospective studies',
+        'history, 19th century', 'history, 20th century', 'case reports',
+    }
+    counts = Counter()
+    for val in df['keywords']:
+        counts.update(map_terms(keywords(val), mapper))
+    tracked = [t for t, n in counts.most_common()
+               if n >= 5 and t.lower() not in generic
+               and not t.lower().startswith('false localiz')][:10]
     ranges = []
     for term in tracked:
-        years = [int(y) for y, val in zip(df['year'], df['keywords']) if pd.notna(y) and term in keywords(val)]
+        years = [int(y) for y, val in zip(df['year'], df['keywords'])
+                 if pd.notna(y) and term in map_terms(keywords(val), mapper)]
         if years: ranges.append((term, min(years), max(years), len(years)))
     ranges.sort(key=lambda x: (x[1], -x[3]))
     years = list(range(int(df.year.min()), int(df.year.max()) + 1))
@@ -198,9 +241,9 @@ def make_timeline(df):
         ax.text(years[-1] + 1.5, y, f'n={freq}', va='center', fontsize=8)
     ax.set_yticks([]); ax.set_xlim(years[0] - 48, years[-1] + 12); ax.set_ylim(-1, len(ranges))
     ax.set_xlabel('Year'); ax.set_title('Research-topic time distribution in false localizing sign literature', loc='left', weight='bold', fontsize=14)
-    ax.text(0, -0.14, 'Red segments mark the observed first-to-last publication span for each keyword; they are not citation-burst estimates.', transform=ax.transAxes, fontsize=8)
+    ax.text(0, -0.14, 'Red segments mark the observed first-to-last publication span for each keyword; they are not citation-burst estimates. Topics arranged chronologically by initial appearance year; only topics with n >= 5 records are shown.', transform=ax.transAxes, fontsize=8)
     for side in ['top', 'right', 'left']: ax.spines[side].set_visible(False)
-    return save(fig, 'fig11_topic_time_distribution.png')
+    return save(fig, 'fig11_topic_time_distribution.png', facecolor='white')
 
 
 def make_analysis_overview(df):
