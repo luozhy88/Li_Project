@@ -20,6 +20,7 @@ from pathlib import Path
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+import matplotlib.patheffects as pe
 import networkx as nx
 import numpy as np
 import yaml
@@ -68,6 +69,28 @@ def load_country_stats():
         counts.update(cs)
         edges.update(combinations(cs, 2))
     return counts, edges
+
+
+def load_country_year_stats():
+    """Per-country publication years (each record counted once per country)."""
+    spec = importlib.util.spec_from_file_location('desc', ROOT / '2_descriptive_analysis.py')
+    desc = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(desc)
+    config = yaml.safe_load(open(ROOT / 'config.yaml', encoding='utf-8'))
+    patterns = desc.build_country_patterns(config)
+    years = {}
+    for row in read_records():
+        cs = sorted(set(desc.extract_countries(row.get('affiliations') or '', patterns)))
+        cs = sorted({'Korea, Republic of' if c == 'South Korea' else c for c in cs})
+        try:
+            year = int(float(row.get('year') or 0))
+        except (TypeError, ValueError):
+            year = 0
+        if year <= 0:
+            continue
+        for c in cs:
+            years.setdefault(c, []).append(year)
+    return years
 
 
 def read_records():
@@ -184,57 +207,142 @@ def draw_world_map(path, counts):
     plt.close(fig)
 
 
-# ---------------------------------------------------------------- fig E2: glowing network
-def draw_glow_network(path, counts, edges):
+# ---------------------------------------------------------------- fig E2: collaboration network
+def draw_glow_network(path, counts, edges, country_years=None):
+    """Country collaboration network with CiteSpace-style annual-ring nodes.
+
+    - Node AREA strictly proportional to total publication output.
+    - Each node is drawn as concentric rings: one ring per decade with at
+      least one publication, ring color encodes the decade (shared color
+      scale), ring area is proportional to the publication count in that
+      decade.  Earliest decade = innermost ring, latest = outermost.
+    - Connected components are hand-placed to avoid label overlap and edge
+      crossings; isolated nodes are aligned in a bottom strip.
+    - A legend (bottom right) explains node size, ring colors and links.
+    """
     g = nx.Graph()
     for (a, b), w in edges.items():
         g.add_edge(a, b, weight=w)
     connected = set(g.nodes)
-    isolated = sorted(set(counts) - connected)
-    pos = nx.spring_layout(g, k=1.9, seed=42, weight='weight')
-    # Spread isolated countries on an outer ellipse.
-    n_iso = len(isolated)
-    for i, name in enumerate(isolated):
-        ang = -math.pi / 2 + 2 * math.pi * i / max(n_iso, 1)
-        pos[name] = np.array([1.7 * math.cos(ang), 1.15 * math.sin(ang)])
-    nudge = {  # resolve remaining label/node overlaps
-        'Nepal': (-.4, .18), 'Mexico': (-.3, .22), 'Malaysia': (.32, .12),
-        'Canada': (-.28, -.18), 'Slovakia': (.3, .08), 'China': (.12, -.28),
+    isolated = sorted((set(counts) - connected), key=lambda c: (-counts[c], c))
+
+    # --- hand-placed core layout: one quadrant per connected component,
+    #     edges fan out from each hub so no two links cross
+    pos = {
+        # USA component (upper centre-left)
+        'United States': (-0.30, 1.08),
+        'Mexico': (-1.10, 1.42),
+        'Italy': (0.88, 1.32),
+        'Slovakia': (-0.22, 0.52),
+        # UK component (upper right)
+        'United Kingdom': (1.28, 0.98),
+        'Australia': (1.74, 1.40),
+        'Denmark': (1.76, 0.56),
+        # Germany--Switzerland (lower left)
+        'Germany': (-1.12, 0.28),
+        'Switzerland': (-1.58, 0.02),
+        # S. Korea--Malaysia (lower centre-right)
+        'Korea, Republic of': (0.52, 0.34),
+        'Malaysia': (1.04, 0.06),
     }
-    for name, (dx, dy) in nudge.items():
-        if name in pos:
-            pos[name] = pos[name] + np.array([dx, dy])
+    # --- isolated nodes: bottom strip, two rows sorted by output
+    row1, row2 = isolated[:8], isolated[8:]
+    for i, name in enumerate(row1):
+        pos[name] = (-1.62 + 2.50 * i / max(len(row1) - 1, 1), -0.82)
+    for i, name in enumerate(row2):
+        pos[name] = (-1.50 + 2.38 * i / max(len(row2) - 1, 1), -1.34)
 
     fig, ax = plt.subplots(figsize=(13.5, 9), dpi=200)
     fig.patch.set_facecolor('white')
     vmax = max(counts.values())
 
-    def size(c):  # scatter area in points^2
-        return 260 + 3600 * math.sqrt(c) / math.sqrt(vmax)
+    def size(c):  # scatter area in points^2, strictly linear in c
+        return 100 + 210 * c
 
+    cmap = plt.get_cmap('turbo')
+
+    def ring_periods(name):
+        """{5-year slice: count} for a country, from its publication years."""
+        ys = (country_years or {}).get(name)
+        if not ys:  # fallback: single ring of neutral colour
+            return {2025: counts[name]}
+        pc = Counter(y // 5 * 5 for y in ys)
+        return dict(sorted(pc.items()))
+
+    # color scale normalised to the slices actually present in the data
+    node_periods = {name: ring_periods(name) for name in counts}
+    all_slices = [s for periods in node_periods.values() for s in periods]
+    smin, smax = min(all_slices), max(all_slices)
+    norm = Normalize(smin, smax)
+
+    # links
     for (a, b), w in edges.items():
         x1, y1 = pos[a]; x2, y2 = pos[b]
-        ax.plot([x1, x2], [y1, y2], color='#d73027', alpha=.45,
+        ax.plot([x1, x2], [y1, y2], color='#d73027', alpha=.5,
                 linewidth=.9 + .8 * w, zorder=1)
+
+    # nodes: concentric annual rings (outermost = latest decade)
     for name in counts:
         x, y = pos[name]
-        s = size(counts[name])
-        ax.scatter([x], [y], s=s * 4.2, color='#d73027', alpha=.13, linewidths=0, zorder=2)
-        ax.scatter([x], [y], s=s * 1.0, color='#c2261f', alpha=.95, linewidths=0, zorder=3)
-        ax.scatter([x], [y], s=s * .55, color='#f57c1f', alpha=.95, linewidths=0, zorder=4)
-        ax.scatter([x], [y], s=s * .22, color='#ffd24a', alpha=1, linewidths=0, zorder=5)
+        s_total = size(counts[name])
+        periods = node_periods[name]
+        total = sum(periods.values())
+        cum = {}
+        run = 0
+        for dec in sorted(periods):
+            run += periods[dec]
+            cum[dec] = run / total
+        for dec in sorted(periods, reverse=True):  # largest disc first
+            ax.scatter([x], [y], s=s_total * cum[dec], color=cmap(norm(dec)),
+                       linewidths=.5, edgecolors='white', zorder=3)
         label = SHORT.get(name, name).upper()
         ax.text(x, y, label, ha='center', va='center', zorder=6,
-                fontsize=6.5 + 5.5 * math.sqrt(counts[name]) / math.sqrt(vmax),
-                fontweight='bold', color='#3b0d0d')
+                fontsize=5.5 + 4.5 * math.sqrt(counts[name]) / math.sqrt(vmax),
+                fontweight='bold', color='#2b2b2b',
+                path_effects=[pe.withStroke(linewidth=1.6, foreground='white')])
+
+    # divider between core network and isolated-node strip
+    ax.plot([-1.95, 2.25], [-0.48, -0.48], color='#999999', lw=.8,
+            ls=(0, (4, 3)), zorder=1)
+    ax.text(-1.93, -0.56, 'No co-authorship links (isolated nodes)',
+            fontsize=8.5, color='#666666', va='center', style='italic')
+
+    # --- legend (bottom right)
+    lx, ly = 1.10, -1.86  # box lower-left corner
+    ax.add_patch(plt.Rectangle((lx, ly), 1.55, 1.60, facecolor='white',
+                               edgecolor='#999999', lw=.9, zorder=7))
+    ax.text(lx + .775, ly + 1.48, 'Legend', fontsize=10, fontweight='bold',
+            ha='center', zorder=8)
+    ax.text(lx + .10, ly + 1.28, 'Node area ∝ total publication output:',
+            fontsize=8, va='center', zorder=8)
+    for cx, c in [(lx + .42, 1), (lx + .80, 8), (lx + 1.22, 24)]:
+        ax.scatter([cx], [ly + 1.02], s=size(c), color='#8c8c8c', alpha=.9,
+                   linewidths=.4, edgecolors='white', zorder=8)
+        ax.text(cx, ly + .70, str(c), fontsize=8, ha='center', zorder=8)
+    ax.text(lx + .10, ly + .54, 'Ring color = publication period:',
+            fontsize=8, va='center', zorder=8)
+    gradient = np.linspace(0, 1, 256).reshape(1, -1)
+    ax.imshow(gradient, cmap=cmap, aspect='auto', zorder=8,
+              extent=(lx + .10, lx + 1.45, ly + .36, ly + .44))
+    ax.add_patch(plt.Rectangle((lx + .10, ly + .36), 1.35, .08, fill=False,
+                               edgecolor='#999999', lw=.6, zorder=9))
+    ax.text(lx + .10, ly + .24, str(smin), fontsize=7.5, ha='left',
+            va='center', zorder=8)
+    ax.text(lx + 1.45, ly + .24, str(smax), fontsize=7.5, ha='right',
+            va='center', zorder=8)
+    ax.plot([lx + .10, lx + .32], [ly + .10, ly + .10], color='#d73027',
+            alpha=.6, lw=1.7, zorder=8)
+    ax.text(lx + .38, ly + .10, 'Co-authorship link (shared record)',
+            fontsize=8, va='center', zorder=8)
+
     ax.text(.01, .985, 'Network visualization of international collaboration among countries',
             transform=ax.transAxes, fontsize=14, fontweight='bold', va='top')
-    ax.text(.01, .945, 'Node size is proportional to publication output; links indicate co-occurrence '
-            'within one record.', transform=ax.transAxes, fontsize=9.5, color='#444444', va='top')
+    ax.text(.01, .945, 'Node area ∝ publication output; ring color = period; '
+            'link = co-authorship.',
+            transform=ax.transAxes, fontsize=9.5, color='#444444', va='top')
     ax.axis('off')
-    xs = [p[0] for p in pos.values()]; ys = [p[1] for p in pos.values()]
-    ax.set_xlim(min(xs) - .45, max(xs) + .45)
-    ax.set_ylim(min(ys) - .38, max(ys) + .38)
+    ax.set_xlim(-1.98, 2.78)
+    ax.set_ylim(-1.96, 1.72)
     fig.savefig(path, facecolor='white', bbox_inches='tight')
     plt.close(fig)
 
@@ -407,7 +515,8 @@ def main():
         'table': ASSET_DIR / 'table_e1_top_first_authors.png',
     }
     draw_world_map(assets['map'], counts)
-    draw_glow_network(assets['network'], counts, edges)
+    draw_glow_network(assets['network'], counts, edges,
+                      country_years=load_country_year_stats())
     draw_top10_countries(assets['top10'], counts)
     draw_type_chart(assets['types'], type_counts, total)
     top_first = draw_first_author_table(assets['table'], records)
