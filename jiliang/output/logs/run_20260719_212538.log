@@ -1,0 +1,48 @@
+Pipeline log started at 2026-07-19 21:25:38
+Config: /Users/apple/Desktop/github.local/Li_Project/jiliang/config.yaml
+Python: /Users/apple/Desktop/github.local/Li_Project/jiliang/.venv/bin/python
+Steps: 1_parse_and_merge.py, 2_descriptive_analysis.py, 3_keyword_analysis.py, 4_generate_report.py
+
+[0_run_all] Running 1_parse_and_merge.py ...
+
+===== 1_parse_and_merge.py =====
+[1_parse_and_merge] Parsing PubMed MEDLINE...
+[1_parse_and_merge] Parsed 125 PubMed records.
+[1_parse_and_merge] Checking WoS file...
+[1_parse_and_merge] Parsed 89 WoS records.
+[1_parse_and_merge] Deduplication report saved to output/01_deduplication_report.txt
+[1_parse_and_merge] Merged records saved to output/01_merged_records.csv
+[1_parse_and_merge] CiteSpace input saved to output/01_citespace_input.txt
+
+[0_run_all] Running 2_descriptive_analysis.py ...
+
+===== 2_descriptive_analysis.py =====
+[2_descriptive_analysis] Loaded 159 records.
+[2_descriptive_analysis] General statistics:
+  total_records: 159
+  year_min: 1904
+  year_max: 2026
+  with_doi: 135
+  with_abstract: 123
+[2_descriptive_analysis] Saved output/figures/fig1_annual_trend.png
+[2_descriptive_analysis] Saved output/figures/fig2_top_journals.png
+[2_descriptive_analysis] Saved output/figures/fig3_top_countries.png
+[2_descriptive_analysis] Saved output/figures/fig4_top_authors.png
+[2_descriptive_analysis] Done.
+
+[0_run_all] Running 3_keyword_analysis.py ...
+
+===== 3_keyword_analysis.py =====
+[3_keyword_analysis] Loaded 159 records.
+[3_keyword_analysis] Top 20 keywords saved.
+[3_keyword_analysis] Saved output/figures/fig5_keyword_network.png
+[3_keyword_analysis] Saved output/figures/fig6_keyword_wordcloud.png
+[3_keyword_analysis] Done.
+
+[0_run_all] Running 4_generate_report.py ...
+
+===== 4_generate_report.py =====
+[4_generate_report] Report saved to output/report/False_Localizing_Sign_文献计量分析报告.docx
+
+Pipeline completed successfully at 2026-07-19 21:25:52
+Outputs: /Users/apple/Desktop/github.local/Li_Project/jiliang/output

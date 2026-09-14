@@ -1,0 +1,51 @@
+Pipeline log started at 2026-07-19 21:15:50
+Config: /Users/apple/Desktop/github.local/Li_Project/jiliang/config.yaml
+Python: /Users/apple/Desktop/github.local/Li_Project/jiliang/.venv/bin/python
+Steps: 1_parse_and_merge.py, 2_descriptive_analysis.py, 3_keyword_analysis.py, 4_generate_report.py
+
+[0_run_all] Running 1_parse_and_merge.py ...
+
+===== 1_parse_and_merge.py =====
+[1_parse_and_merge] Parsing PubMed MEDLINE...
+[1_parse_and_merge] Parsed 125 PubMed records.
+[1_parse_and_merge] Checking WoS file...
+[1_parse_and_merge] Parsed 89 WoS records.
+[1_parse_and_merge] Deduplication report saved to output/01_deduplication_report.txt
+[1_parse_and_merge] Merged records saved to output/01_merged_records.csv
+[1_parse_and_merge] CiteSpace input saved to output/01_citespace_input.txt
+
+[0_run_all] Running 2_descriptive_analysis.py ...
+
+===== 2_descriptive_analysis.py =====
+[2_descriptive_analysis] Loaded 162 records.
+[2_descriptive_analysis] General statistics:
+  total_records: 162
+  year_min: 1904
+  year_max: 2026
+  with_doi: 138
+  with_abstract: 124
+Traceback (most recent call last):
+  File "/Users/apple/Desktop/github.local/Li_Project/jiliang/2_descriptive_analysis.py", line 322, in <module>
+    main()
+    ~~~~^^
+  File "/Users/apple/Desktop/github.local/Li_Project/jiliang/2_descriptive_analysis.py", line 312, in main
+    plot_annual_trend(df, config)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/Users/apple/Desktop/github.local/Li_Project/jiliang/2_descriptive_analysis.py", line 125, in plot_annual_trend
+    counts.index = counts.index.astype(int)
+                   ~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/Users/apple/Desktop/github.local/Li_Project/jiliang/.venv/lib/python3.13/site-packages/pandas/core/indexes/base.py", line 1159, in astype
+    new_values = values.astype(dtype, copy=copy)
+  File "/Users/apple/Desktop/github.local/Li_Project/jiliang/.venv/lib/python3.13/site-packages/pandas/core/arrays/string_.py", line 946, in astype
+    return super().astype(dtype, copy)
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/apple/Desktop/github.local/Li_Project/jiliang/.venv/lib/python3.13/site-packages/pandas/core/arrays/numpy_.py", line 280, in astype
+    result = astype_array(self._ndarray, dtype=dtype, copy=copy)
+  File "/Users/apple/Desktop/github.local/Li_Project/jiliang/.venv/lib/python3.13/site-packages/pandas/core/dtypes/astype.py", line 185, in astype_array
+    values = _astype_nansafe(values, dtype, copy=copy)
+  File "/Users/apple/Desktop/github.local/Li_Project/jiliang/.venv/lib/python3.13/site-packages/pandas/core/dtypes/astype.py", line 134, in _astype_nansafe
+    return arr.astype(dtype, copy=True)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: '1965 ER'
+
+[0_run_all] 2_descriptive_analysis.py failed with exit code 1.

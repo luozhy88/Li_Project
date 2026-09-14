@@ -1,0 +1,159 @@
+{
+  "records": 159,
+  "full_network": {
+    "nodes": 480,
+    "links": 2937,
+    "density": 0.0255
+  },
+  "pruned_view": {
+    "min_freq": 3,
+    "min_link_weight": 2,
+    "nodes": 70,
+    "links": 206
+  },
+  "top3_frequency": [
+    {
+      "keyword": "Magnetic Resonance Imaging",
+      "freq": 28
+    },
+    {
+      "keyword": "False localizing sign",
+      "freq": 26
+    },
+    {
+      "keyword": "Diagnosis, Differential",
+      "freq": 21
+    }
+  ],
+  "betweenness_gt_0.1": [
+    {
+      "keyword": "False localizing sign",
+      "bc": 0.194
+    },
+    {
+      "keyword": "Magnetic Resonance Imaging",
+      "bc": 0.159
+    },
+    {
+      "keyword": "Tomography, X-Ray Computed",
+      "bc": 0.124
+    }
+  ],
+  "top3_betweenness_freq_ge5_bc_ge0.05": [
+    {
+      "keyword": "False localizing sign",
+      "bc": 0.194,
+      "freq": 26
+    },
+    {
+      "keyword": "Magnetic Resonance Imaging",
+      "bc": 0.159,
+      "freq": 28
+    },
+    {
+      "keyword": "Tomography, X-Ray Computed",
+      "bc": 0.124,
+      "freq": 19
+    }
+  ],
+  "clustering": {
+    "method": "greedy modularity communities; LLR labels",
+    "n_clusters": 6,
+    "modularity_Q": 0.466,
+    "weighted_mean_silhouette_S": 0.2707,
+    "clusters": [
+      {
+        "id": 0,
+        "label": "Magnetic Resonance Imaging",
+        "size": 22,
+        "members_top": [
+          "Magnetic Resonance Imaging",
+          "Diagnosis, Differential",
+          "Cervical Vertebrae",
+          "Spinal Cord Compression",
+          "Brain",
+          "Spinal Cord",
+          "Retrospective Studies",
+          "Abducens Nerve Diseases"
+        ]
+      },
+      {
+        "id": 1,
+        "label": "Brain Neoplasms",
+        "size": 14,
+        "members_top": [
+          "Brain Neoplasms",
+          "Trigeminal Neuralgia",
+          "Meningioma",
+          "Cranial Fossa, Posterior",
+          "Brain Diseases",
+          "Trigeminal Nerve",
+          "Meningeal Neoplasms",
+          "Facial Paralysis"
+        ]
+      },
+      {
+        "id": 2,
+        "label": "False localizing sign",
+        "size": 10,
+        "members_top": [
+          "False localizing sign",
+          "Kernohan-Woltman notch phenomenon",
+          "Paresis",
+          "Brain herniation",
+          "Ipsilateral hemiparesis",
+          "Paradoxical hemiparesis",
+          "Myelopathy",
+          "Cerebral Peduncle"
+        ]
+      },
+      {
+        "id": 3,
+        "label": "Tomography, X-Ray Computed",
+        "size": 10,
+        "members_top": [
+          "Tomography, X-Ray Computed",
+          "Papilledema",
+          "Pseudotumor Cerebri",
+          "Cerebral Hemorrhage",
+          "Functional Laterality",
+          "Intracranial Hypertension",
+          "Hydrocephalus",
+          "Follow-Up Studies"
+        ]
+      },
+      {
+        "id": 4,
+        "label": "Intracranial Hypotension",
+        "size": 7,
+        "members_top": [
+          "Intracranial Hypotension",
+          "Cerebrospinal Fluid Leak",
+          "Headache",
+          "Intracranial Pressure",
+          "Myelography",
+          "Blood Patch, Epidural",
+          "Subdural Effusion"
+        ]
+      },
+      {
+        "id": 5,
+        "label": "Syndrome",
+        "size": 7,
+        "members_top": [
+          "Syndrome",
+          "Ophthalmoplegia",
+          "History, 20th Century",
+          "History, 19th Century",
+          "Neurology",
+          "Neurosurgery",
+          "Nystagmus, Pathologic"
+        ]
+      }
+    ]
+  },
+  "figures": {
+    "network": "/Users/apple/Desktop/github.local/Li_Project/jiliang/output/figures/figB1_own_keyword_network.png",
+    "clusters": "/Users/apple/Desktop/github.local/Li_Project/jiliang/output/figures/figB2_own_keyword_clusters.png"
+  }
+}

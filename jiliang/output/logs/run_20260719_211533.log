@@ -1,0 +1,23 @@
+Pipeline log started at 2026-07-19 21:15:33
+Config: /Users/apple/Desktop/github.local/Li_Project/jiliang/config.yaml
+Python: /Users/apple/Desktop/github.local/Li_Project/jiliang/.venv/bin/python
+Steps: 1_parse_and_merge.py, 2_descriptive_analysis.py, 3_keyword_analysis.py, 4_generate_report.py
+
+[0_run_all] Running 1_parse_and_merge.py ...
+
+===== 1_parse_and_merge.py =====
+[1_parse_and_merge] Parsing PubMed MEDLINE...
+[1_parse_and_merge] Parsed 125 PubMed records.
+[1_parse_and_merge] Checking WoS file...
+Traceback (most recent call last):
+  File "/Users/apple/Desktop/github.local/Li_Project/jiliang/1_parse_and_merge.py", line 453, in <module>
+    main()
+    ~~~~^^
+  File "/Users/apple/Desktop/github.local/Li_Project/jiliang/1_parse_and_merge.py", line 433, in main
+    wos_df = parse_wos(config["input"]["wos_file"])
+  File "/Users/apple/Desktop/github.local/Li_Project/jiliang/1_parse_and_merge.py", line 203, in parse_wos
+    current[last] = (current.get(last, "") + " " + value).strip()
+                     ~~~~~~~~~~~~~~~~~~~~~~^~~~~
+TypeError: can only concatenate list (not "str") to list
+
+[0_run_all] 1_parse_and_merge.py failed with exit code 1.
