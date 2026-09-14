@@ -1,0 +1,80 @@
+False Localizing Sign 文献计量分析报告（Medicine 投稿版 v4）图片生成技术说明
+================================================================================
+
+生成日期：2026-09-06
+说明对象：output/report/10_False_Localizing_Sign_文献计量分析报告_Medicine投稿修订版v4.docx
+         （投稿用 JPG 图组已导出至 output/report/v4_figures_jpg/）
+
+一、总体结论
+--------------------------------------------------------------------------------
+Word 报告内所有图片（27 张嵌入 PNG，投稿 JPG 组 18 张）全部由 Python 脚本生成，
+不涉及 CiteSpace / VOSviewer / GraphPad 等软件出图。分析与绘图均在项目自带虚拟环境
+.venv 中完成（Python 3.13）。Word 文档本身由 python-docx 拼接图片与文字生成。
+
+二、语言与包清单（依据 requirements.txt 与各脚本 import 核对）
+--------------------------------------------------------------------------------
+| 环节                       | 语言/包                                          |
+|----------------------------|--------------------------------------------------|
+| 数据读取、清洗、去重、统计 | Python 3.13 + pandas (>=2.0)                    |
+| 基础统计图（柱/线/饼等）   | matplotlib (>=3.8) + seaborn (>=0.13)           |
+| 网络图（关键词/作者/国家） | networkx (>=3.2) + matplotlib                   |
+| 词云图                     | wordcloud (>=1.9)                               |
+| 世界地图（着色分布）       | matplotlib + Natural Earth GeoJSON (1:110m)     |
+| 表格式图片、部分装饰       | Pillow (PIL) + Arial 字体渲染                   |
+| 数值计算                   | numpy                                           |
+| 国家名规范化               | pycountry (>=22.0)                              |
+| Word 文档组装              | python-docx (>=1.1)                             |
+| 配置文件                   | PyYAML (>=6.0)                                  |
+
+对应脚本（项目根目录）：
+  1_parse_and_merge.py       PubMed/WoS 解析、合并、去重 -> output/01_merged_records.csv
+  2_descriptive_analysis.py  年度趋势/期刊/国家/作者等基础统计与图
+  3_keyword_analysis.py       关键词频次、共现网络、词云图
+  build_geo_style_report.py  世界地图、国际合作光晕网络、Top10 国家、
+                             出版类型、作者表格图（geo_style 图集）
+  build_info2_style_report.py 早期图表增强版（补充图 B 等）
+  revise_for_medicine.py      Medicine 投稿导向修订（v06 -> v07）
+  update_fig_c3_v09/v10.py   更新 Fig C3 国际合作网络图为最终版（v08->v09->v10/v4）
+
+三、v4 文档内各图来源
+--------------------------------------------------------------------------------
+正文主图：
+  Fig.1  发文量年度趋势与累计       -> 2_descriptive_analysis.py
+  Fig.2  出版类型分布（唯一分类）   -> build_geo_style_report.py (draw_type_chart)
+  Fig.3  发文期刊 Top 排名          -> 2_descriptive_analysis.py
+  Fig.4  国家/地区发文 Top 排名     -> 2_descriptive_analysis.py
+  Fig.5  高产作者                    -> 2_descriptive_analysis.py
+  Fig.6  关键词共现网络              -> 3_keyword_analysis.py
+  Fig.7  关键词词云                  -> 3_keyword_analysis.py
+补充材料：
+  Fig.B1  关键词共现与模块聚类      -> networkx + matplotlib（图表增强版脚本）
+  Fig.B2  研究主题时间跨度          -> matplotlib
+  Fig.B3  Top 期刊复图              -> matplotlib
+  Table.B1 机构列表图 / B2 关键词聚类表 -> Pillow 渲染
+  Fig.C1  全球发文分布世界地图      -> matplotlib + Natural Earth
+  Fig.C2  Top 10 国家横向条形图    -> build_geo_style_report.py (draw_top10_countries)
+  Fig.C3  国际合作网络（最终版）    -> build_geo_style_report.py (draw_glow_network)
+  Fig.C4  作者合作网络              -> networkx + matplotlib
+  Table.C1 Top 高产第一作者表       -> build_geo_style_report.py (draw_first_author_table)
+
+四、出图参数（见 config.yaml analysis/colors 节）
+--------------------------------------------------------------------------------
+  - 分辨率 300 dpi（地图/网络图源文件 200 dpi，插入 Word 后满足期刊 300dpi 要求）
+  - 格式：PNG；投稿前统一导出为 JPEG（v4_figures_jpg/）
+  - 配色：色盲友好调色板（Wong, Nature Methods 2011）
+  - 样式：seaborn whitegrid
+  - 字体：西文 Arial
+
+五、论文 Methods 可直接使用的英文段落
+--------------------------------------------------------------------------------
+Data parsing, deduplication, and descriptive statistics were performed with Python
+3.13 and pandas. All figures were generated programmatically with the Python
+libraries matplotlib (version >= 3.8) and seaborn (version >= 0.13); network
+visualizations (keyword co-occurrence, author and country collaboration) were
+constructed with NetworkX, and keyword word clouds with the wordcloud package.
+The worldwide distribution map was drawn with matplotlib using Natural Earth
+country boundaries (1:110 m). Tabular figures were rendered with the Python
+Imaging Library (Pillow). A color-blind-safe palette (Wong, Nature Methods 2011)
+was used for all multi-category figures, which were exported at 300 dpi in PNG
+format and converted to JPEG for submission. The final figures and tables were
+assembled into a Word document with python-docx.
