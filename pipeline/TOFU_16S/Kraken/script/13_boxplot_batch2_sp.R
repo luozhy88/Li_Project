@@ -77,7 +77,7 @@ for (i in colnames(df_boxplot_input)[-1] ){
   p <- ggboxplot(df_boxplot_input, x = "GROUP", y = i,
                  color = "GROUP", palette =c("#00AFBB",  "#FC4E07"),
                  add = "jitter")+ 
-    labs(title = i, x = "",y = "" )+
+    labs(title = i, x = "",y = "", color = "分组" )+
     theme(axis.title.y=element_blank(),
           plot.title = element_text(size = 8)
           )
