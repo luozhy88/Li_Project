@@ -1,0 +1,12 @@
+﻿指标,复算数值,分母,百分比,本地来源,使用范围
+原式检索记录,395,395,100.0,pubmed_*.xml + pubmed_esearch.json,检索候选数；非最终纳入数
+期刊记录,394,395,99.75,PubmedArticle节点,缺项统计分母
+英文标记,257,395,65.06,Article/Language及BookDocument/Language,语言字段；不表示合格纳入
+缺少KeywordList关键词,186,394,47.21,MedlineCitation/KeywordList,并非严格作者关键词缺失数
+缺少作者关键词,187,394,47.46,KeywordList[@Owner=NOTNLM],修订稿使用的作者关键词缺项数
+缺少机构字段,50,394,12.69,Author/AffiliationInfo/Affiliation,没有任何机构字段；不等于机构信息完整率
+扩展检索记录,604,604,100.0,pubmed_sensitivity_esearch.json,候选集
+扩展新增,209,395,52.91,扩展PMID集合减原式集合,相对原式增加；不是合格漏检率
+暂标排除,202,395,51.14,逐篇筛选CSV,初筛状态
+未暂标排除,193,395,48.86,逐篇筛选CSV,不是已纳入数
+最终决定已填,0,395,0.0,逐篇筛选CSV/final_decision,空白不等于最终纳入0篇
