@@ -1,0 +1,99 @@
+{
+  "passed": true,
+  "paired_patients": 24,
+  "observations": 48,
+  "measured_genes": 20848,
+  "DE_genes": 666,
+  "up_DE": 347,
+  "down_DE": 319,
+  "max_abs_logFC_error": 2.0941581801992015e-14,
+  "max_abs_BH_error": 1.3322676295501878e-15,
+  "fisher_checks": [
+    {
+      "set": "XYT",
+      "background": "all_measured",
+      "a": 111,
+      "b": 1407,
+      "c": 555,
+      "d": 18775,
+      "p_python": 1.0127725054478134e-16
+    },
+    {
+      "set": "XYT",
+      "background": "disease_measured",
+      "a": 111,
+      "b": 1407,
+      "c": 383,
+      "d": 8754,
+      "p_python": 3.1587221873366223e-07
+    },
+    {
+      "set": "XKC",
+      "background": "all_measured",
+      "a": 69,
+      "b": 736,
+      "c": 597,
+      "d": 19446,
+      "p_python": 8.123076469330004e-14
+    },
+    {
+      "set": "XKC",
+      "background": "disease_measured",
+      "a": 69,
+      "b": 736,
+      "c": 425,
+      "d": 9425,
+      "p_python": 3.537992570236795e-07
+    },
+    {
+      "set": "ZBM",
+      "background": "all_measured",
+      "a": 4,
+      "b": 73,
+      "c": 662,
+      "d": 20109,
+      "p_python": 0.23174380527413138
+    },
+    {
+      "set": "ZBM",
+      "background": "disease_measured",
+      "a": 4,
+      "b": 73,
+      "c": 490,
+      "d": 10088,
+      "p_python": 0.4816873357627727
+    }
+  ],
+  "prespecified_genes": [
+    {
+      "gene": "POLB",
+      "logFC": -0.069579376215278,
+      "AveExpr": 4.92373105898958,
+      "t": -3.87218291217654,
+      "P.Value": 0.0006744868834024,
+      "adj.P.Val": 0.0027078187069467,
+      "B": -0.912498033551574,
+      "DE_threshold": false
+    },
+    {
+      "gene": "CACNA1H",
+      "logFC": -0.0533014676979169,
+      "AveExpr": 5.70174475328646,
+      "t": -1.43952802323999,
+      "P.Value": 0.162235366769583,
+      "adj.P.Val": 0.27340416509678,
+      "B": -5.94089842595461,
+      "DE_threshold": false
+    },
+    {
+      "gene": "CYP3A4",
+      "logFC": -0.0312359108208334,
+      "AveExpr": 5.24917227337292,
+      "t": -1.27436469013181,
+      "P.Value": 0.214092114147066,
+      "adj.P.Val": 0.337930980900819,
+      "B": -6.15600511660938,
+      "DE_threshold": false
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+GSE60542 Series Matrix values treated as log2 fRMA-normalized per GEO processing metadata.
+Eligible samples: primary PTC and normal thyroid only; all other tissues excluded.
+Patient ID parsed from leading numeric portion of source/title; suffix letters indicate same patient blocks.
+Blocks aggregated by patient x tissue group; paired patient fixed-effect model; limma eBayes robust.
+GPL570 only single-symbol probes; gene expression is arithmetic mean of probe-level log2 values.
+BH correction across all measured genes; DE threshold FDR<0.05 and |log2FC|>=1.
+PCA uses centered, unscaled gene expression; no samples removed based on PCA.
+Enrichment over all measured genes and disease-associated measured genes; BH over six set/background tests.

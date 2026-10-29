@@ -1,0 +1,13 @@
+digraph graphical_abstract {
+  graph [rankdir=LR, bgcolor="white", pad=0.15, nodesep=0.3, ranksep=0.55, splines=ortho];
+  node  [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=14,
+         fillcolor="#EAF2F8", color="#2E4053", penwidth=1.4, margin="0.16,0.10"];
+  edge  [color="#2E4053", penwidth=1.4, arrowsize=0.9];
+
+  herbs [label="Xiao Ying Tang core herbs (XYT)\nZhe Bei Mu (ZBM) | Xia Ku Cao (XKC)", fillcolor="#FDEBD0"];
+  np    [label="Network pharmacology\nTCMSP -> PubChem CIDs\nBindingDB / BATMAN-TCM / IUPHAR"];
+  inter [label="Intersection with 12,987 GeneCards\nthyroid-tumour-associated genes\nCandidate sets: 78 / 842 / 1,595", fillcolor="#D5F5E3"];
+  out   [label="GO / KEGG enrichment\n\nTwo independent paired PTC cohorts\n(GSE60542 + GSE33630):\nreproducible enrichment of XYT and XKC\n\nExploratory docking of beta-sitosterol\n(CYP3A4, CaV3.2)", fillcolor="#E8DAEF"];
+
+  herbs -> np -> inter -> out;
+}

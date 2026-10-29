@@ -1,0 +1,18 @@
+digraph graphical_abstract {
+  graph [rankdir=TB, bgcolor="white", pad=0.10, nodesep=0.35, ranksep=0.25, splines=ortho];
+  node  [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=14,
+         fillcolor="#EAF2F8", color="#2E4053", penwidth=1.4, margin="0.16,0.10"];
+  edge  [color="#2E4053", penwidth=1.4, arrowsize=0.9];
+
+  herbs [label="Xiao Ying Tang\nselected herb inventory", fillcolor="#FDEBD0"];
+  np    [label="Compound-associated genes\nintersected with thyroid-disease genes"];
+  inter [label="Paired papillary thyroid carcinoma\n24 and 44 patients", fillcolor="#D5F5E3"];
+  out   [label="83 candidates replicated: DIO1, TPO\nDisease association\nTreatment response untested", fillcolor="#E8DAEF"];
+
+  {rank=same; herbs; np;}
+  {rank=same; inter; out;}
+  herbs -> np;
+  np -> out;
+  inter -> out;
+  herbs -> inter [style=invis];
+}

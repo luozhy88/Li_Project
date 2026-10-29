@@ -1,0 +1,142 @@
+{
+  "GSE60542": {
+    "genes": 20848,
+    "DE": 666,
+    "up": 347,
+    "BH_Fisher_OR_CI": "PASS",
+    "paired_logFC_max_error": 1.8943180357666733e-14
+  },
+  "GSE33630": {
+    "genes": 20848,
+    "DE": 745,
+    "up": 407,
+    "BH_Fisher_OR_CI": "PASS",
+    "paired_logFC_max_error": 1.733682641891221e-14
+  },
+  "cross_cohort": {
+    "rho": 0.7861008185580243,
+    "same_direction_first_DE": 664,
+    "replicated": 536,
+    "XYT_replicated": 83,
+    "XKC_replicated": 51
+  },
+  "set_relations": {
+    "XKC_subset_XYT": true,
+    "ZBM_subset_XYT": true,
+    "ZBM_subset_XKC": false
+  },
+  "T39_zero_adjusted_P_cells": 0,
+  "T39_top10": [
+    {
+      "gene": "DIO1",
+      "in_XYT": true,
+      "in_XKC": true,
+      "in_ZBM": false,
+      "log2FC_GSE60542": -4.857762,
+      "adj_P_GSE60542": 7.02569653102596e-09,
+      "log2FC_GSE33630": -3.237124,
+      "adj_P_GSE33630": 3.76004516230631e-12
+    },
+    {
+      "gene": "LRRK2",
+      "in_XYT": true,
+      "in_XKC": false,
+      "in_ZBM": false,
+      "log2FC_GSE60542": 3.592395,
+      "adj_P_GSE60542": 3.1798731311548e-07,
+      "log2FC_GSE33630": 4.294441,
+      "adj_P_GSE33630": 3.58135627805397e-15
+    },
+    {
+      "gene": "TPO",
+      "in_XYT": true,
+      "in_XKC": true,
+      "in_ZBM": false,
+      "log2FC_GSE60542": -4.612617,
+      "adj_P_GSE60542": 3.31236067174488e-09,
+      "log2FC_GSE33630": -3.244753,
+      "adj_P_GSE33630": 5.55373932198995e-14
+    },
+    {
+      "gene": "KCNJ2",
+      "in_XYT": true,
+      "in_XKC": false,
+      "in_ZBM": false,
+      "log2FC_GSE60542": 3.40334,
+      "adj_P_GSE60542": 8.9235284870245e-08,
+      "log2FC_GSE33630": 3.849821,
+      "adj_P_GSE33630": 1.03187527754124e-14
+    },
+    {
+      "gene": "DPP4",
+      "in_XYT": true,
+      "in_XKC": true,
+      "in_ZBM": false,
+      "log2FC_GSE60542": 3.452605,
+      "adj_P_GSE60542": 1.18074546793079e-08,
+      "log2FC_GSE33630": 3.595488,
+      "adj_P_GSE33630": 1.19682824668265e-15
+    },
+    {
+      "gene": "GABRB2",
+      "in_XYT": true,
+      "in_XKC": true,
+      "in_ZBM": true,
+      "log2FC_GSE60542": 3.37326,
+      "adj_P_GSE60542": 8.27952298584894e-09,
+      "log2FC_GSE33630": 3.664628,
+      "adj_P_GSE33630": 1.57581943485422e-16
+    },
+    {
+      "gene": "CLDN1",
+      "in_XYT": true,
+      "in_XKC": true,
+      "in_ZBM": false,
+      "log2FC_GSE60542": 3.308342,
+      "adj_P_GSE60542": 4.57530535108094e-07,
+      "log2FC_GSE33630": 3.675881,
+      "adj_P_GSE33630": 3.63872944503251e-14
+    },
+    {
+      "gene": "RXRG",
+      "in_XYT": true,
+      "in_XKC": true,
+      "in_ZBM": false,
+      "log2FC_GSE60542": 3.215398,
+      "adj_P_GSE60542": 1.18074546793079e-08,
+      "log2FC_GSE33630": 3.727396,
+      "adj_P_GSE33630": 1.85318692450543e-15
+    },
+    {
+      "gene": "QPCT",
+      "in_XYT": true,
+      "in_XKC": false,
+      "in_ZBM": false,
+      "log2FC_GSE60542": 3.244113,
+      "adj_P_GSE60542": 4.55545512830063e-08,
+      "log2FC_GSE33630": 2.995814,
+      "adj_P_GSE33630": 3.975820946389e-14
+    },
+    {
+      "gene": "KIT",
+      "in_XYT": true,
+      "in_XKC": false,
+      "in_ZBM": false,
+      "log2FC_GSE60542": -3.007864,
+      "adj_P_GSE60542": 2.0564240313095e-09,
+      "log2FC_GSE33630": -2.870914,
+      "adj_P_GSE33630": 2.72648024499383e-14
+    }
+  ],
+  "exclude_Bai_Mao_Xia_Ku_Cao": {
+    "original_genes": 2131,
+    "remaining_genes": 2128,
+    "removed": [
+      "EcR",
+      "MICAL1",
+      "usp"
+    ],
+    "candidate_set_unchanged": true
+  },
+  "exposure_sensitivity_BH": "PASS"
+}

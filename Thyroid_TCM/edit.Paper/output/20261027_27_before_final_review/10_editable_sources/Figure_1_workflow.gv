@@ -1,0 +1,43 @@
+digraph workflow {
+  graph [rankdir=TB, bgcolor="white", pad=0.2, nodesep=0.35, ranksep=0.45, splines=ortho];
+  node  [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11,
+         fillcolor="#EAF2F8", color="#2E4053", penwidth=1.2, margin="0.12,0.08"];
+  edge  [color="#2E4053", penwidth=1.1, arrowsize=0.8, fontname="Helvetica", fontsize=9];
+
+  /* ---- Data assembly ---- */
+  subgraph cluster_assembly {
+    label="Data assembly";
+    fontname="Helvetica"; fontsize=12; fontcolor="#2E4053";
+    style="dashed,rounded"; color="#85929E";
+
+    herbs  [label="Core herbs selected from\nXiao Ying Tang (XYT; 14 herbs)\nplus Zhe Bei Mu (ZBM) and\nXia Ku Cao (XKC) as separate sets", fillcolor="#FDEBD0"];
+    tcmsp  [label="TCMSP\nherb-ingredient records"];
+    pubchem [label="PubChem\ncompound identifiers (CIDs)\nZBM 16 / XKC 68 / XYT 803"];
+    targets [label="Compound-associated genes\nBindingDB, BATMAN-TCM (score > 0.80),\nIUPHAR/BPS Guide to PHARMACOLOGY\nZBM 107 / XKC 1,094 / XYT 2,131 genes"];
+    genecards [label="GeneCards\nthyroid-tumour-associated genes\n(12,987 symbols)", fillcolor="#FDEBD0"];
+    intersect [label="Intersection with disease list\nCandidate sets: ZBM 78 / XKC 842 / XYT 1,595", fillcolor="#D5F5E3"];
+
+    herbs -> tcmsp -> pubchem -> targets -> intersect;
+    genecards -> intersect;
+  }
+
+  /* ---- Downstream analyses ---- */
+  subgraph cluster_analysis {
+    label="Downstream analyses";
+    fontname="Helvetica"; fontsize=12; fontcolor="#2E4053";
+    style="dashed,rounded"; color="#85929E";
+
+    enrich [label="GO / KEGG enrichment\nclusterProfiler, BH correction\n(Figures 2-3)"];
+    geo    [label="Two independent paired PTC cohorts (GPL570)\nGSE60542: 24 patients\nGSE33630: 44 matched pairs", fillcolor="#FDEBD0"];
+    limma  [label="Paired limma models\nBH-adjusted P < 0.05 and |log2FC| >= 1\n666 and 745 differentially expressed genes"];
+    fisher [label="Candidate-set enrichment\none-sided Fisher tests vs all measured genes\nand disease-associated measured genes\n(Figure 4)"];
+    cross  [label="Cross-cohort validation\nSpearman rho = 0.786\n536 of 666 findings repeated\n(Supplementary Figure S3)"];
+    dock   [label="Exploratory molecular docking\nbeta-sitosterol (CID 222284)\nAutoDock Vina / smina\nCYP3A4 (6UNI), CaV3.2 (9AYG)\n(Supplementary Figure S2)"];
+
+    geo -> limma -> fisher -> cross;
+  }
+
+  intersect -> enrich;
+  intersect -> fisher [style=dashed];
+  intersect -> dock;
+}

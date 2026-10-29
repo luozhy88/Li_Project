@@ -1,0 +1,66 @@
+null device 
+          1 
+null device 
+          1 
+Failed to create bus connection: Operation not permitted
+Warning message:
+In system("timedatectl", intern = TRUE) :
+  running command 'timedatectl' had status 1
+  set       background background_n set_n DE_in_set odds_ratio      p_value
+1 XYT     all_measured        20848  1518       112  2.3527514 1.152783e-13
+2 XYT disease_measured        10655  1518       112  1.5857956 3.324348e-05
+3 XKC     all_measured        20848   805        68  2.6391856 4.226385e-11
+4 XKC disease_measured        10655   805        68  1.7970047 2.888288e-05
+5 ZBM     all_measured        20848    77         2  0.7188231 7.666842e-01
+6 ZBM disease_measured        10655    77         2  0.4890309 9.125611e-01
+    FDR_6tests     CI_low  CI_high
+1 6.916696e-13 1.89321889 2.903095
+2 4.986522e-05 1.26710782 1.971856
+3 1.267916e-10 2.00412545 3.430530
+4 4.986522e-05 1.35798048 2.348726
+5 9.125611e-01 0.08532066 2.698023
+6 9.125611e-01 0.05801061 1.838016
+           set     n spearman_rho first_DE first_DE_same_direction
+1 all_measured 20848    0.7861008      666                     664
+2          XYT  1518    0.8243169      111                     110
+3          XKC   805    0.8390919       69                      68
+4          ZBM    77    0.8876913        4                       4
+  first_DE_replicated_same_direction
+1                                536
+2                                 83
+3                                 51
+4                                  1
+           gene       logFC  AveExpr         t      P.Value   adj.P.Val
+POLB       POLB -0.11627048 5.117497 -3.821463 0.0003970132 0.001100656
+CACNA1H CACNA1H -0.05895935 6.323227 -1.643247 0.1071613698 0.168878996
+CYP3A4   CYP3A4  0.03430625 4.738012  1.210393 0.2323204722 0.323952726
+                 B DE_threshold
+POLB    -0.7300782        FALSE
+CACNA1H -5.8321567        FALSE
+CYP3A4  -6.4321680        FALSE
+   stratum n_patients set       background background_n background_DE set_n
+1       Ex         22 XYT     all_measured        20848           698  1518
+2       Ex         22 XYT disease_measured        10655           511  1518
+3       Ex         22 XKC     all_measured        20848           698   805
+4       Ex         22 XKC disease_measured        10655           511   805
+5       Ex         22 ZBM     all_measured        20848           698    77
+6       Ex         22 ZBM disease_measured        10655           511    77
+7       NE         22 XYT     all_measured        20848           811  1518
+8       NE         22 XYT disease_measured        10655           590  1518
+9       NE         22 XKC     all_measured        20848           811   805
+10      NE         22 XKC disease_measured        10655           590   805
+11      NE         22 ZBM     all_measured        20848           811    77
+12      NE         22 ZBM disease_measured        10655           590    77
+   DE_in_set odds_ratio      p_value  FDR_12tests
+1        101  2.2364371 1.954899e-11 7.819596e-11
+2        101  1.5170932 2.792551e-04 4.188826e-04
+3         62  2.5459835 9.405572e-10 2.821672e-09
+4         62  1.7470360 1.191240e-04 2.042126e-04
+5          2  0.7691642 7.341457e-01 8.806550e-01
+6          2  0.5275322 8.900048e-01 8.900048e-01
+7        124  2.4137497 1.409008e-15 1.690810e-14
+8        124  1.6550730 2.706873e-06 6.496496e-06
+9         75  2.6949049 2.066891e-12 1.240134e-11
+10        75  1.8622219 4.297654e-06 8.595309e-06
+11         3  1.0016222 5.806076e-01 7.741435e-01
+12         3  0.6900279 8.072671e-01 8.806550e-01

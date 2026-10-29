@@ -1,0 +1,11 @@
+# Second independent cohort: frozen analysis plan
+
+Chosen before examining expression results: GSE33630, based on primary PTC and normal thyroid availability and GPL570 compatibility. Exclude anaplastic cancers. Confirm sample identity, tissue labels, preprocessing and potential pairing from source metadata before modelling; do not assume pairing from sample ordering. Check overlap with GSE60542 using identifiers and source descriptions.
+
+Retain the original XYT/XKC/ZBM lists and the historical disease list. Same GPL570 annotation, discard ambiguous probes, mean log2 probes per gene. Use submitted normalized expression if appropriate, with log transformation only if metadata/scale require it. Fit limma with robust empirical Bayes; model pairing if supported by metadata. BH across all measured genes; DE requires BH<0.05 and |log2FC|>=1. Six one-sided Fisher tests for three sets by two measured-gene backgrounds; BH over six; two-sided exact 95% CI reported separately. No tuning to obtain favourable results.
+
+Concordance: compare gene-level log2FC across cohorts, signs and replication of first-cohort DE genes; assess XYT/XKC set enrichment under both backgrounds, and report ZBM and all three preselected genes regardless of significance. Broad fold-change correlation is descriptive, not treatment-response validation. No pooled analysis across datasets. Document technical or provenance obstacles; retain all results even if the manuscript inclusion criterion is not met. A valid but discordant cohort must not be represented as supportive replication.
+
+Metadata-only decision before expression analysis: 44 matched patients (88 samples), 5 unpaired PTC, 1 unpaired normal and 11 ATC excluded. Use paired fixed patient effects in the primary model.
+
+Clinical annotation check before modelling: matched bank identifiers confirm all 44 pairs; median age 16.82 years (range 12.38–24.55); 22 exposed (Ex) and 22 non-exposed (NE) patients. This young Chernobyl Tissue Bank cohort differs from the first cohort. Prespecify an exposure-stratified sensitivity check (same paired model and DE threshold within each stratum; BH across the 12 set/background/stratum enrichment tests), report alongside main results without treating stratum P differences as interaction evidence.
